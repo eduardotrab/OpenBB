@@ -48,3 +48,20 @@ async def ifdata(
 ) -> OBBject:
     """Get IF.data quarterly reports of financial institutions (default: credit cooperatives)."""
     return await OBBject.from_query(OBBQuery(**locals()))
+
+
+@router.command(
+    model="BcbSgs",
+    examples=[
+        APIEx(parameters={"provider": "bcb", "symbol": "selic_target,cdi"}),
+        APIEx(parameters={"provider": "bcb", "symbol": "25518"}),
+    ],
+)
+async def sgs(
+    cc: CommandContext,
+    provider_choices: ProviderChoices,
+    standard_params: StandardParams,
+    extra_params: ExtraParams,
+) -> OBBject:
+    """Get time series from the BCB SGS (Selic, CDI, IPCA, cooperative aggregates...)."""
+    return await OBBject.from_query(OBBQuery(**locals()))
