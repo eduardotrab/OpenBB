@@ -1,0 +1,123 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+    method: GET
+    uri: https://olinda.bcb.gov.br/olinda/servico/IFDATA/versao/v1/odata/IfDataValores(AnoMes=@AnoMes,TipoInstituicao=@TipoInstituicao,Relatorio=@Relatorio)?@AnoMes=202606&@TipoInstituicao=3&@Relatorio='1'&$filter=CodInst%20eq%20'02217068'&$format=json
+  response:
+    body:
+      string: "{\"@odata.context\":\"https://was-p.bcnet.bcb.gov.br/olinda/servico/IFDATA/versao/v1/odata$metadata#_IfDataValores\",\"value\":[{\"TipoInstituicao\":3,\"CodInst\":\"02217068\",\"AnoMes\":\"202606\",\"NomeRelatorio\":\"Resumo\",\"NumeroRelatorio\":\"1\",\"Grupo\":null,\"Conta\":\"140200\",\"NomeColuna\":\"T\xEDtulos
+        e Valores Mobili\xE1rios\",\"DescricaoColuna\":\"[1300000008]-[1330000009]\",\"Saldo\":2557720.51},{\"TipoInstituicao\":3,\"CodInst\":\"02217068\",\"AnoMes\":\"202606\",\"NomeRelatorio\":\"Resumo\",\"NumeroRelatorio\":\"1\",\"Grupo\":null,\"Conta\":\"140220\",\"NomeColuna\":\"Ativo
+        Total\",\"DescricaoColuna\":\"[1000000009] + [2000000008]\",\"Saldo\":91470436.17},{\"TipoInstituicao\":3,\"CodInst\":\"02217068\",\"AnoMes\":\"202606\",\"NomeRelatorio\":\"Resumo\",\"NumeroRelatorio\":\"1\",\"Grupo\":null,\"Conta\":\"140239\",\"NomeColuna\":\"Capta\xE7\xF5es\",\"DescricaoColuna\":\"[4100000009]
+        + [4200000002] + [4300000005] - [4391000007] - [4392000006] [4399910003] -
+        [4399920000] + [4600000004]\",\"Saldo\":75709472.5},{\"TipoInstituicao\":3,\"CodInst\":\"02217068\",\"AnoMes\":\"202606\",\"NomeRelatorio\":\"Resumo\",\"NumeroRelatorio\":\"1\",\"Grupo\":null,\"Conta\":\"140244\",\"NomeColuna\":\"Passivo
+        Exig\xEDvel\",\"DescricaoColuna\":\"[4000000006]\",\"Saldo\":77271380.33},{\"TipoInstituicao\":3,\"CodInst\":\"02217068\",\"AnoMes\":\"202606\",\"NomeRelatorio\":\"Resumo\",\"NumeroRelatorio\":\"1\",\"Grupo\":null,\"Conta\":\"140246\",\"NomeColuna\":\"Patrim\xF4nio
+        L\xEDquido\",\"DescricaoColuna\":\"[6000000004]+ [7000000003]+ [8000000002]\",\"Saldo\":14199055.84},{\"TipoInstituicao\":3,\"CodInst\":\"02217068\",\"AnoMes\":\"202606\",\"NomeRelatorio\":\"Resumo\",\"NumeroRelatorio\":\"1\",\"Grupo\":null,\"Conta\":\"141870\",\"NomeColuna\":\"Lucro
+        L\xEDquido\",\"DescricaoColuna\":\"[7000000003] + [8000000002] - [8195600001]\",\"Saldo\":1499481.63},{\"TipoInstituicao\":3,\"CodInst\":\"02217068\",\"AnoMes\":\"202606\",\"NomeRelatorio\":\"Resumo\",\"NumeroRelatorio\":\"1\",\"Grupo\":null,\"Conta\":\"141873\",\"NomeColuna\":\"Carteira
+        de Cr\xE9dito\",\"DescricaoColuna\":\"[1600000007] + [1741000007] + [1810000000]
+        + [1887900009] + [1899600005]\",\"Saldo\":5746367.04}]}"
+    headers:
+      Connection:
+      - keep-alive
+      Content-Language:
+      - en-US
+      Content-Type:
+      - application/json;charset=UTF-8;odata.metadata=minimal
+      Date:
+      - Mon, 19 Oct 2026 05:23:19 GMT
+      Expires:
+      - '0'
+      OData-Version:
+      - '4.0'
+      Pragma:
+      - no-cache
+      Set-Cookie:
+      - JSESSIONID=0000NJbEXl1FQ_UyEJhvOG9DsEB:1cn7m3fq4; Path=/; HttpOnly
+      - BIGipServer~was_p_as3~was_p~pool_was_443_p=4275048876.47873.0000; path=/;
+        Httponly; Secure
+      - TS013694c2=012e4f88b372c4297b8fe5930233b99bfeb0241e635d4f4a5657a874e7e1d3daaab5b461b3b204f710508662dc8afbb11b27024a8b;
+        Path=/
+      Strict-Transport-Security:
+      - max-age=31536000 ; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Application-Context:
+      - application
+      X-Cache:
+      - CONFIG_NOCACHE
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      X-XSS-Protection:
+      - 1; mode=block
+      x-azure-ref:
+      - 20261019T052319Z-r1fbb66b4c5bcfn7hC1CPQv6d000000001s00000000036ev
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+    method: GET
+    uri: https://olinda.bcb.gov.br/olinda/servico/IFDATA/versao/v1/odata/IfDataCadastro(AnoMes=@AnoMes)?@AnoMes=202606&$filter=CodInst%20eq%20'02217068'&$format=json
+  response:
+    body:
+      string: "{\"@odata.context\":\"https://was-p.bcnet.bcb.gov.br/olinda/servico/IFDATA/versao/v1/odata$metadata#_IfDataCadastro\",\"value\":[{\"CodInst\":\"02217068\",\"Data\":\"202606\",\"NomeInstituicao\":\"COOPERATIVA
+        DE CR\xC9DITO DOS CONTADORES, ADMINISTRADORES DE EMPRESAS, ECONOMISTAS E CORRETORES
+        DE SEGUROS LTDA. - SICOOB CREDITABIL\",\"DataInicioAtividade\":199805,\"Tcb\":\"B3S\",\"Td\":\"I\",\"Tc\":2,\"SegmentoTb\":\"Cooperativa
+        de Cr\xE9dito\",\"Atividade\":\"At\xEDpicas\",\"Uf\":\"MG\",\"Municipio\":\"Belo
+        Horizonte\",\"Sr\":\"S5\",\"CodConglomeradoFinanceiro\":null,\"CodConglomeradoPrudencial\":null,\"CnpjInstituicaoLider\":null,\"Situacao\":\"A\"}]}"
+    headers:
+      Connection:
+      - keep-alive
+      Content-Language:
+      - en-US
+      Content-Type:
+      - application/json;charset=UTF-8;odata.metadata=minimal
+      Date:
+      - Mon, 19 Oct 2026 05:23:25 GMT
+      Expires:
+      - '0'
+      OData-Version:
+      - '4.0'
+      Pragma:
+      - no-cache
+      Set-Cookie:
+      - JSESSIONID=0000ljl_-eduRmu3Gy35_rrBEcc:1dof85j5r; Path=/; HttpOnly
+      - BIGipServer~was_p_as3~was_p~pool_was_443_p=1020268972.47873.0000; path=/;
+        Httponly; Secure
+      - TS013694c2=012e4f88b35b9c1ba6ba7312568caba402fb0a03ebdcbf15b09f7f3ed99c78216c7cfb12fbd8b4a0e0b0ab5683e2cf7a5f3d2a92da;
+        Path=/
+      Strict-Transport-Security:
+      - max-age=31536000 ; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Application-Context:
+      - application
+      X-Cache:
+      - CONFIG_NOCACHE
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      X-XSS-Protection:
+      - 1; mode=block
+      x-azure-ref:
+      - 20261019T052319Z-r1fbb66b4c56w5nqhC1CPQsbn400000001r0000000004kp3
+    status:
+      code: 200
+      message: OK
+version: 1

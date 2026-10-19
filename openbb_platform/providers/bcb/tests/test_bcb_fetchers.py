@@ -7,6 +7,7 @@ from openbb_core.app.service.user_service import UserService
 
 from openbb_bcb.models.currency_historical import BcbCurrencyHistoricalFetcher
 from openbb_bcb.models.focus import BcbFocusFetcher
+from openbb_bcb.models.ifdata import BcbIfDataFetcher
 
 test_credentials = UserService().default_user_settings.credentials.model_dump(
     mode="json"
@@ -40,5 +41,14 @@ def test_bcb_focus_fetcher(credentials=test_credentials):
     }
 
     fetcher = BcbFocusFetcher()
+    result = fetcher.test(params, credentials)
+    assert result is None
+
+
+@pytest.mark.record_http
+def test_bcb_ifdata_fetcher(credentials=test_credentials):
+    params = {"period": "202606", "institution": "02217068", "use_cache": False}
+
+    fetcher = BcbIfDataFetcher()
     result = fetcher.test(params, credentials)
     assert result is None
