@@ -5,6 +5,7 @@ from openbb_bcb.models.currency_historical import BcbCurrencyHistoricalFetcher
 from openbb_bcb.models.focus import BcbFocusFetcher
 from openbb_bcb.models.ifdata import BcbIfDataFetcher
 from openbb_bcb.models.sgs import BcbSgsFetcher
+from openbb_bcb.models.world_news import BcbWorldNewsFetcher
 
 
 def test_fetcher_dict():
@@ -13,4 +14,5 @@ def test_fetcher_dict():
         "BcbFocus": BcbFocusFetcher,
         "BcbIfData": BcbIfDataFetcher,
         "BcbSgs": BcbSgsFetcher,
+        "WorldNews": BcbWorldNewsFetcher,
     }
