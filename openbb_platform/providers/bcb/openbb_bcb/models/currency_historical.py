@@ -18,7 +18,9 @@ from openbb_core.provider.standard_models.currency_historical import (
 from openbb_core.provider.utils.errors import EmptyDataError
 from pydantic import Field
 
-PTAX_BASE_URL = "https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/"
+from openbb_bcb.utils.olinda import OLINDA_BASE_URL
+
+PTAX_BASE_URL = f"{OLINDA_BASE_URL}PTAX/versao/v1/odata/"
 CLOSING_BULLETIN = "Fechamento"
 DEFAULT_LOOKBACK_DAYS = 30
 
@@ -90,20 +92,11 @@ class BcbCurrencyHistoricalFetcher(
         # pylint: disable=import-outside-toplevel
         import asyncio
 
-        from openbb_core.provider.utils.helpers import amake_request
-
-        async def response_callback(response, _):
-            if "json" not in response.headers.get("Content-Type", ""):
-                raise OpenBBError(
-                    f"BCB Olinda returned {response.status} with non-JSON content."
-                )
-            return (await response.json())["value"]
+        from openbb_bcb.utils.olinda import olinda_get
 
         async def get_currency(currency: str) -> list[dict]:
             url = build_ptax_url(currency, query.start_date, query.end_date)  # type: ignore[arg-type]
-            rows = await amake_request(
-                url, timeout=30, response_callback=response_callback, **kwargs
-            )
+            rows = await olinda_get(url, **kwargs)
             return [{**row, "_currency": currency} for row in rows]  # type: ignore[dict-item]
 
         currencies = sorted(

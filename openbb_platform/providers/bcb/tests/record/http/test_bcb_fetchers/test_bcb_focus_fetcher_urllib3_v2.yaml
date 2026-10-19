@@ -1,0 +1,56 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+    method: GET
+    uri: https://olinda.bcb.gov.br/olinda/servico/Expectativas/versao/v1/odata/ExpectativasMercadoAnuais?$filter=Indicador%20eq%20'IPCA'%20and%20Data%20ge%20'2026-10-01'%20and%20Data%20le%20'2026-10-09'%20and%20baseCalculo%20eq%200&$orderby=Data%20desc&$format=json
+  response:
+    body:
+      string: '{"@odata.context":"https://was-p.bcnet.bcb.gov.br/olinda/servico/Expectativas/versao/v1/odata$metadata#ExpectativasMercadoAnuais","value":[{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-09","DataReferencia":"2026","Media":5.2056,"Mediana":5.2245,"DesvioPadrao":0.1947,"Minimo":4.5000,"Maximo":5.8750,"numeroRespondentes":144,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-09","DataReferencia":"2027","Media":4.3246,"Mediana":4.3000,"DesvioPadrao":0.4298,"Minimo":3.1700,"Maximo":6.0000,"numeroRespondentes":144,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-09","DataReferencia":"2028","Media":3.7723,"Mediana":3.7900,"DesvioPadrao":0.4520,"Minimo":2.8000,"Maximo":6.0000,"numeroRespondentes":121,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-09","DataReferencia":"2029","Media":3.6227,"Mediana":3.5000,"DesvioPadrao":0.4603,"Minimo":3.0000,"Maximo":6.0000,"numeroRespondentes":113,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-09","DataReferencia":"2030","Media":3.6076,"Mediana":3.5000,"DesvioPadrao":0.4805,"Minimo":3.0000,"Maximo":6.0000,"numeroRespondentes":106,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-08","DataReferencia":"2026","Media":5.0151,"Mediana":5.0159,"DesvioPadrao":0.2261,"Minimo":4.3380,"Maximo":5.8963,"numeroRespondentes":142,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-08","DataReferencia":"2027","Media":4.3361,"Mediana":4.3007,"DesvioPadrao":0.4334,"Minimo":3.1700,"Maximo":6.0000,"numeroRespondentes":142,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-08","DataReferencia":"2028","Media":3.8244,"Mediana":3.8000,"DesvioPadrao":0.4650,"Minimo":3.0000,"Maximo":6.0000,"numeroRespondentes":117,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-08","DataReferencia":"2029","Media":3.6685,"Mediana":3.5000,"DesvioPadrao":0.4880,"Minimo":3.0000,"Maximo":6.0000,"numeroRespondentes":109,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-08","DataReferencia":"2030","Media":3.6559,"Mediana":3.5000,"DesvioPadrao":0.5179,"Minimo":3.0000,"Maximo":6.0000,"numeroRespondentes":104,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-07","DataReferencia":"2026","Media":5.0144,"Mediana":5.0159,"DesvioPadrao":0.2261,"Minimo":4.3380,"Maximo":5.8963,"numeroRespondentes":142,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-07","DataReferencia":"2027","Media":4.3404,"Mediana":4.3064,"DesvioPadrao":0.4315,"Minimo":3.1700,"Maximo":6.0000,"numeroRespondentes":142,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-07","DataReferencia":"2028","Media":3.8288,"Mediana":3.8000,"DesvioPadrao":0.4643,"Minimo":3.0000,"Maximo":6.0000,"numeroRespondentes":117,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-07","DataReferencia":"2029","Media":3.6732,"Mediana":3.5005,"DesvioPadrao":0.4887,"Minimo":3.0000,"Maximo":6.0000,"numeroRespondentes":109,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-07","DataReferencia":"2030","Media":3.6607,"Mediana":3.5000,"DesvioPadrao":0.5187,"Minimo":3.0000,"Maximo":6.0000,"numeroRespondentes":104,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-06","DataReferencia":"2026","Media":5.0107,"Mediana":5.0159,"DesvioPadrao":0.2236,"Minimo":4.3380,"Maximo":5.8963,"numeroRespondentes":142,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-06","DataReferencia":"2027","Media":4.3416,"Mediana":4.3118,"DesvioPadrao":0.4240,"Minimo":3.1700,"Maximo":6.0000,"numeroRespondentes":142,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-06","DataReferencia":"2028","Media":3.8267,"Mediana":3.8000,"DesvioPadrao":0.4606,"Minimo":3.0000,"Maximo":6.0000,"numeroRespondentes":117,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-06","DataReferencia":"2029","Media":3.6695,"Mediana":3.5005,"DesvioPadrao":0.4824,"Minimo":3.0000,"Maximo":6.0000,"numeroRespondentes":109,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-06","DataReferencia":"2030","Media":3.6520,"Mediana":3.5000,"DesvioPadrao":0.5011,"Minimo":3.0000,"Maximo":6.0000,"numeroRespondentes":104,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-05","DataReferencia":"2026","Media":5.0096,"Mediana":5.0159,"DesvioPadrao":0.2245,"Minimo":4.3380,"Maximo":5.8963,"numeroRespondentes":142,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-05","DataReferencia":"2027","Media":4.3416,"Mediana":4.3118,"DesvioPadrao":0.4240,"Minimo":3.1700,"Maximo":6.0000,"numeroRespondentes":142,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-05","DataReferencia":"2028","Media":3.8338,"Mediana":3.8007,"DesvioPadrao":0.4561,"Minimo":3.0000,"Maximo":6.0000,"numeroRespondentes":116,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-05","DataReferencia":"2029","Media":3.6757,"Mediana":3.5108,"DesvioPadrao":0.4803,"Minimo":3.0000,"Maximo":6.0000,"numeroRespondentes":108,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-05","DataReferencia":"2030","Media":3.6584,"Mediana":3.5000,"DesvioPadrao":0.4994,"Minimo":3.0000,"Maximo":6.0000,"numeroRespondentes":103,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-02","DataReferencia":"2026","Media":5.0046,"Mediana":5.0129,"DesvioPadrao":0.2248,"Minimo":4.3380,"Maximo":5.8963,"numeroRespondentes":144,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-02","DataReferencia":"2027","Media":4.3348,"Mediana":4.3007,"DesvioPadrao":0.4243,"Minimo":3.1700,"Maximo":6.0000,"numeroRespondentes":144,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-02","DataReferencia":"2028","Media":3.8324,"Mediana":3.8007,"DesvioPadrao":0.4535,"Minimo":3.0000,"Maximo":6.0000,"numeroRespondentes":118,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-02","DataReferencia":"2029","Media":3.6771,"Mediana":3.5108,"DesvioPadrao":0.4772,"Minimo":3.0000,"Maximo":6.0000,"numeroRespondentes":110,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-02","DataReferencia":"2030","Media":3.6601,"Mediana":3.5000,"DesvioPadrao":0.4960,"Minimo":3.0000,"Maximo":6.0000,"numeroRespondentes":105,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-01","DataReferencia":"2026","Media":4.9958,"Mediana":5.0000,"DesvioPadrao":0.2318,"Minimo":4.2447,"Maximo":5.8963,"numeroRespondentes":144,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-01","DataReferencia":"2027","Media":4.3386,"Mediana":4.3007,"DesvioPadrao":0.4174,"Minimo":3.1700,"Maximo":6.0000,"numeroRespondentes":144,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-01","DataReferencia":"2028","Media":3.8335,"Mediana":3.8000,"DesvioPadrao":0.4510,"Minimo":3.0000,"Maximo":6.0000,"numeroRespondentes":118,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-01","DataReferencia":"2029","Media":3.6767,"Mediana":3.5003,"DesvioPadrao":0.4746,"Minimo":3.0000,"Maximo":6.0000,"numeroRespondentes":110,"baseCalculo":0},{"Indicador":"IPCA","IndicadorDetalhe":null,"Data":"2026-10-01","DataReferencia":"2030","Media":3.6600,"Mediana":3.5000,"DesvioPadrao":0.4962,"Minimo":3.0000,"Maximo":6.0000,"numeroRespondentes":105,"baseCalculo":0}]}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Language:
+      - en-US
+      Content-Type:
+      - application/json;charset=UTF-8;odata.metadata=minimal
+      Date:
+      - Mon, 19 Oct 2026 05:17:38 GMT
+      Expires:
+      - '0'
+      OData-Version:
+      - '4.0'
+      Pragma:
+      - no-cache
+      Set-Cookie:
+      - JSESSIONID=0000ssWtJpG3pOnz3sfCF5pqBRV:1cn7jtfnj; Path=/; HttpOnly
+      - BIGipServer~was_p_as3~was_p~pool_was_443_p=1020268972.47873.0000; path=/;
+        Httponly; Secure
+      - TS013694c2=012e4f88b3d1d6a6a88f6a81fe7303ed56bd66655f9cb8646a0c26259adf5582a527270f6a421eed0772e52132383d6f974abf43a9;
+        Path=/
+      Strict-Transport-Security:
+      - max-age=31536000 ; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Application-Context:
+      - application
+      X-Cache:
+      - CONFIG_NOCACHE
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      X-XSS-Protection:
+      - 1; mode=block
+      x-azure-ref:
+      - 20261019T051738Z-1868899d6d9cdtwshC1CPQmre400000001d00000000003az
+    status:
+      code: 200
+      message: OK
+version: 1

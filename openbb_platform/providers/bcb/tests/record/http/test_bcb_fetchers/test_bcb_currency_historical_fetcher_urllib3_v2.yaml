@@ -9,80 +9,6 @@ interactions:
       Connection:
       - keep-alive
     method: GET
-    uri: https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoMoedaPeriodo(moeda=@moeda,dataInicial=@dataInicial,dataFinalCotacao=@dataFinalCotacao)?@moeda='EUR'&@dataInicial='10-13-2026'&@dataFinalCotacao='10-16-2026'&$format=json
-  response:
-    body:
-      string: "{\"@odata.context\":\"https://was-p.bcnet.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata$metadata#_CotacaoMoedaPeriodo\",\"value\":[{\"paridadeCompra\":1.11960,\"paridadeVenda\":1.11970,\"cotacaoCompra\":5.62180,\"cotacaoVenda\":5.62300,\"dataHoraCotacao\":\"2026-10-13
-        10:07:12.847778\",\"tipoBoletim\":\"Abertura\"},{\"paridadeCompra\":1.11870,\"paridadeVenda\":1.11880,\"cotacaoCompra\":5.60330,\"cotacaoVenda\":5.60450,\"dataHoraCotacao\":\"2026-10-13
-        11:06:12.263447\",\"tipoBoletim\":\"Intermedi\xE1rio\"},{\"paridadeCompra\":1.11930,\"paridadeVenda\":1.11950,\"cotacaoCompra\":5.60630,\"cotacaoVenda\":5.60800,\"dataHoraCotacao\":\"2026-10-13
-        12:06:12.958305\",\"tipoBoletim\":\"Intermedi\xE1rio\"},{\"paridadeCompra\":1.11950,\"paridadeVenda\":1.11970,\"cotacaoCompra\":5.59440,\"cotacaoVenda\":5.59600,\"dataHoraCotacao\":\"2026-10-13
-        13:04:26.753383\",\"tipoBoletim\":\"Intermedi\xE1rio\"},{\"paridadeCompra\":1.11950,\"paridadeVenda\":1.11970,\"cotacaoCompra\":5.60760,\"cotacaoVenda\":5.60920,\"dataHoraCotacao\":\"2026-10-13
-        13:04:26.866133\",\"tipoBoletim\":\"Fechamento\"},{\"paridadeCompra\":1.11280,\"paridadeVenda\":1.11290,\"cotacaoCompra\":5.61470,\"cotacaoVenda\":5.61590,\"dataHoraCotacao\":\"2026-10-14
-        10:08:09.608789\",\"tipoBoletim\":\"Abertura\"},{\"paridadeCompra\":1.11140,\"paridadeVenda\":1.11160,\"cotacaoCompra\":5.61150,\"cotacaoVenda\":5.61320,\"dataHoraCotacao\":\"2026-10-14
-        11:09:09.305156\",\"tipoBoletim\":\"Intermedi\xE1rio\"},{\"paridadeCompra\":1.11210,\"paridadeVenda\":1.11220,\"cotacaoCompra\":5.60570,\"cotacaoVenda\":5.60680,\"dataHoraCotacao\":\"2026-10-14
-        12:02:12.209802\",\"tipoBoletim\":\"Intermedi\xE1rio\"},{\"paridadeCompra\":1.11220,\"paridadeVenda\":1.11240,\"cotacaoCompra\":5.60400,\"cotacaoVenda\":5.60570,\"dataHoraCotacao\":\"2026-10-14
-        13:05:17.635812\",\"tipoBoletim\":\"Intermedi\xE1rio\"},{\"paridadeCompra\":1.11220,\"paridadeVenda\":1.11240,\"cotacaoCompra\":5.60940,\"cotacaoVenda\":5.61110,\"dataHoraCotacao\":\"2026-10-14
-        13:05:17.833426\",\"tipoBoletim\":\"Fechamento\"},{\"paridadeCompra\":1.12140,\"paridadeVenda\":1.12150,\"cotacaoCompra\":5.67370,\"cotacaoVenda\":5.67490,\"dataHoraCotacao\":\"2026-10-15
-        10:03:45.504865\",\"tipoBoletim\":\"Abertura\"},{\"paridadeCompra\":1.12180,\"paridadeVenda\":1.12200,\"cotacaoCompra\":5.66710,\"cotacaoVenda\":5.66880,\"dataHoraCotacao\":\"2026-10-15
-        11:10:13.747529\",\"tipoBoletim\":\"Intermedi\xE1rio\"},{\"paridadeCompra\":1.12000,\"paridadeVenda\":1.12020,\"cotacaoCompra\":5.64730,\"cotacaoVenda\":5.64890,\"dataHoraCotacao\":\"2026-10-15
-        12:11:13.941787\",\"tipoBoletim\":\"Intermedi\xE1rio\"},{\"paridadeCompra\":1.12030,\"paridadeVenda\":1.12050,\"cotacaoCompra\":5.66030,\"cotacaoVenda\":5.66200,\"dataHoraCotacao\":\"2026-10-15
-        13:05:33.212634\",\"tipoBoletim\":\"Intermedi\xE1rio\"},{\"paridadeCompra\":1.12030,\"paridadeVenda\":1.12050,\"cotacaoCompra\":5.65920,\"cotacaoVenda\":5.66090,\"dataHoraCotacao\":\"2026-10-15
-        13:05:33.305854\",\"tipoBoletim\":\"Fechamento\"},{\"paridadeCompra\":1.12430,\"paridadeVenda\":1.12440,\"cotacaoCompra\":5.70740,\"cotacaoVenda\":5.70860,\"dataHoraCotacao\":\"2026-10-16
-        10:08:09.499681\",\"tipoBoletim\":\"Abertura\"},{\"paridadeCompra\":1.12580,\"paridadeVenda\":1.12590,\"cotacaoCompra\":5.72220,\"cotacaoVenda\":5.72340,\"dataHoraCotacao\":\"2026-10-16
-        11:09:10.605689\",\"tipoBoletim\":\"Intermedi\xE1rio\"},{\"paridadeCompra\":1.12530,\"paridadeVenda\":1.12540,\"cotacaoCompra\":5.71790,\"cotacaoVenda\":5.71910,\"dataHoraCotacao\":\"2026-10-16
-        12:02:14.311456\",\"tipoBoletim\":\"Intermedi\xE1rio\"},{\"paridadeCompra\":1.12310,\"paridadeVenda\":1.12320,\"cotacaoCompra\":5.71390,\"cotacaoVenda\":5.71510,\"dataHoraCotacao\":\"2026-10-16
-        13:04:14.444554\",\"tipoBoletim\":\"Intermedi\xE1rio\"},{\"paridadeCompra\":1.12310,\"paridadeVenda\":1.12320,\"cotacaoCompra\":5.70760,\"cotacaoVenda\":5.70880,\"dataHoraCotacao\":\"2026-10-16
-        13:04:14.548156\",\"tipoBoletim\":\"Fechamento\"}]}"
-    headers:
-      Connection:
-      - keep-alive
-      Content-Language:
-      - en-US
-      Content-Type:
-      - application/json;charset=UTF-8;odata.metadata=minimal
-      Date:
-      - Mon, 19 Oct 2026 05:03:39 GMT
-      Expires:
-      - '0'
-      OData-Version:
-      - '4.0'
-      Pragma:
-      - no-cache
-      Set-Cookie:
-      - JSESSIONID=0000SNzB_6V3mHD91l95C4GLWmv:1dof89mke; Path=/; HttpOnly
-      - BIGipServer~was_p_as3~was_p~pool_was_443_p=4275048876.47873.0000; path=/;
-        Httponly; Secure
-      - TS013694c2=012e4f88b30ade66c02c1911ea3624d774896ba8f2c5e88444f695191ad46092127f8a23d46e35c4f2bd0bbe30c59c5e4e493f60d7;
-        Path=/
-      Strict-Transport-Security:
-      - max-age=31536000 ; includeSubDomains
-      Transfer-Encoding:
-      - chunked
-      X-Application-Context:
-      - application
-      X-Cache:
-      - CONFIG_NOCACHE
-      X-Content-Type-Options:
-      - nosniff
-      X-Frame-Options:
-      - DENY
-      X-XSS-Protection:
-      - 1; mode=block
-      x-azure-ref:
-      - 20261019T050339Z-r1fbb66b4c59wbzfhC1CPQ389w000000019g0000000032ez
-    status:
-      code: 200
-      message: OK
-- request:
-    body: null
-    headers:
-      Accept:
-      - application/json
-      Accept-Encoding:
-      - gzip, deflate
-      Connection:
-      - keep-alive
-    method: GET
     uri: https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoMoedaPeriodo(moeda=@moeda,dataInicial=@dataInicial,dataFinalCotacao=@dataFinalCotacao)?@moeda='USD'&@dataInicial='10-13-2026'&@dataFinalCotacao='10-16-2026'&$format=json
   response:
     body:
@@ -115,7 +41,7 @@ interactions:
       Content-Type:
       - application/json;charset=UTF-8;odata.metadata=minimal
       Date:
-      - Mon, 19 Oct 2026 05:03:39 GMT
+      - Mon, 19 Oct 2026 05:17:38 GMT
       Expires:
       - '0'
       OData-Version:
@@ -123,10 +49,10 @@ interactions:
       Pragma:
       - no-cache
       Set-Cookie:
-      - JSESSIONID=0000H_jycXlZbeX06Ly-ov5GhnY:1cn7m3fq4; Path=/; HttpOnly
-      - BIGipServer~was_p_as3~was_p~pool_was_443_p=1020268972.47873.0000; path=/;
+      - JSESSIONID=0000D_gcJiM-rV3l5pHN9iEd3gT:1dof85j5r; Path=/; HttpOnly
+      - BIGipServer~was_p_as3~was_p~pool_was_443_p=4275048876.47873.0000; path=/;
         Httponly; Secure
-      - TS013694c2=012e4f88b39fd3e4dba8b0a52e69b9739f4ffd9d7176adca34e5327f442dd276b38ca068c45b7eab6a2c1acf68937da1eee589c1c3;
+      - TS013694c2=012e4f88b3a5811fcb8faf3a9a6cba564403279c638d868b0d2ad57eddcd743d736aa58450e8ceeb68373b4143cc728131021482ac;
         Path=/
       Strict-Transport-Security:
       - max-age=31536000 ; includeSubDomains
@@ -143,7 +69,81 @@ interactions:
       X-XSS-Protection:
       - 1; mode=block
       x-azure-ref:
-      - 20261019T050339Z-r1fbb66b4c5f4hr7hC1CPQzywn00000001t0000000004ewv
+      - 20261019T051738Z-1868899d6d97zhrzhC1CPQaxqn000000018g00000000265c
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+    method: GET
+    uri: https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoMoedaPeriodo(moeda=@moeda,dataInicial=@dataInicial,dataFinalCotacao=@dataFinalCotacao)?@moeda='EUR'&@dataInicial='10-13-2026'&@dataFinalCotacao='10-16-2026'&$format=json
+  response:
+    body:
+      string: "{\"@odata.context\":\"https://was-p.bcnet.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata$metadata#_CotacaoMoedaPeriodo\",\"value\":[{\"paridadeCompra\":1.11960,\"paridadeVenda\":1.11970,\"cotacaoCompra\":5.62180,\"cotacaoVenda\":5.62300,\"dataHoraCotacao\":\"2026-10-13
+        10:07:12.847778\",\"tipoBoletim\":\"Abertura\"},{\"paridadeCompra\":1.11870,\"paridadeVenda\":1.11880,\"cotacaoCompra\":5.60330,\"cotacaoVenda\":5.60450,\"dataHoraCotacao\":\"2026-10-13
+        11:06:12.263447\",\"tipoBoletim\":\"Intermedi\xE1rio\"},{\"paridadeCompra\":1.11930,\"paridadeVenda\":1.11950,\"cotacaoCompra\":5.60630,\"cotacaoVenda\":5.60800,\"dataHoraCotacao\":\"2026-10-13
+        12:06:12.958305\",\"tipoBoletim\":\"Intermedi\xE1rio\"},{\"paridadeCompra\":1.11950,\"paridadeVenda\":1.11970,\"cotacaoCompra\":5.59440,\"cotacaoVenda\":5.59600,\"dataHoraCotacao\":\"2026-10-13
+        13:04:26.753383\",\"tipoBoletim\":\"Intermedi\xE1rio\"},{\"paridadeCompra\":1.11950,\"paridadeVenda\":1.11970,\"cotacaoCompra\":5.60760,\"cotacaoVenda\":5.60920,\"dataHoraCotacao\":\"2026-10-13
+        13:04:26.866133\",\"tipoBoletim\":\"Fechamento\"},{\"paridadeCompra\":1.11280,\"paridadeVenda\":1.11290,\"cotacaoCompra\":5.61470,\"cotacaoVenda\":5.61590,\"dataHoraCotacao\":\"2026-10-14
+        10:08:09.608789\",\"tipoBoletim\":\"Abertura\"},{\"paridadeCompra\":1.11140,\"paridadeVenda\":1.11160,\"cotacaoCompra\":5.61150,\"cotacaoVenda\":5.61320,\"dataHoraCotacao\":\"2026-10-14
+        11:09:09.305156\",\"tipoBoletim\":\"Intermedi\xE1rio\"},{\"paridadeCompra\":1.11210,\"paridadeVenda\":1.11220,\"cotacaoCompra\":5.60570,\"cotacaoVenda\":5.60680,\"dataHoraCotacao\":\"2026-10-14
+        12:02:12.209802\",\"tipoBoletim\":\"Intermedi\xE1rio\"},{\"paridadeCompra\":1.11220,\"paridadeVenda\":1.11240,\"cotacaoCompra\":5.60400,\"cotacaoVenda\":5.60570,\"dataHoraCotacao\":\"2026-10-14
+        13:05:17.635812\",\"tipoBoletim\":\"Intermedi\xE1rio\"},{\"paridadeCompra\":1.11220,\"paridadeVenda\":1.11240,\"cotacaoCompra\":5.60940,\"cotacaoVenda\":5.61110,\"dataHoraCotacao\":\"2026-10-14
+        13:05:17.833426\",\"tipoBoletim\":\"Fechamento\"},{\"paridadeCompra\":1.12140,\"paridadeVenda\":1.12150,\"cotacaoCompra\":5.67370,\"cotacaoVenda\":5.67490,\"dataHoraCotacao\":\"2026-10-15
+        10:03:45.504865\",\"tipoBoletim\":\"Abertura\"},{\"paridadeCompra\":1.12180,\"paridadeVenda\":1.12200,\"cotacaoCompra\":5.66710,\"cotacaoVenda\":5.66880,\"dataHoraCotacao\":\"2026-10-15
+        11:10:13.747529\",\"tipoBoletim\":\"Intermedi\xE1rio\"},{\"paridadeCompra\":1.12000,\"paridadeVenda\":1.12020,\"cotacaoCompra\":5.64730,\"cotacaoVenda\":5.64890,\"dataHoraCotacao\":\"2026-10-15
+        12:11:13.941787\",\"tipoBoletim\":\"Intermedi\xE1rio\"},{\"paridadeCompra\":1.12030,\"paridadeVenda\":1.12050,\"cotacaoCompra\":5.66030,\"cotacaoVenda\":5.66200,\"dataHoraCotacao\":\"2026-10-15
+        13:05:33.212634\",\"tipoBoletim\":\"Intermedi\xE1rio\"},{\"paridadeCompra\":1.12030,\"paridadeVenda\":1.12050,\"cotacaoCompra\":5.65920,\"cotacaoVenda\":5.66090,\"dataHoraCotacao\":\"2026-10-15
+        13:05:33.305854\",\"tipoBoletim\":\"Fechamento\"},{\"paridadeCompra\":1.12430,\"paridadeVenda\":1.12440,\"cotacaoCompra\":5.70740,\"cotacaoVenda\":5.70860,\"dataHoraCotacao\":\"2026-10-16
+        10:08:09.499681\",\"tipoBoletim\":\"Abertura\"},{\"paridadeCompra\":1.12580,\"paridadeVenda\":1.12590,\"cotacaoCompra\":5.72220,\"cotacaoVenda\":5.72340,\"dataHoraCotacao\":\"2026-10-16
+        11:09:10.605689\",\"tipoBoletim\":\"Intermedi\xE1rio\"},{\"paridadeCompra\":1.12530,\"paridadeVenda\":1.12540,\"cotacaoCompra\":5.71790,\"cotacaoVenda\":5.71910,\"dataHoraCotacao\":\"2026-10-16
+        12:02:14.311456\",\"tipoBoletim\":\"Intermedi\xE1rio\"},{\"paridadeCompra\":1.12310,\"paridadeVenda\":1.12320,\"cotacaoCompra\":5.71390,\"cotacaoVenda\":5.71510,\"dataHoraCotacao\":\"2026-10-16
+        13:04:14.444554\",\"tipoBoletim\":\"Intermedi\xE1rio\"},{\"paridadeCompra\":1.12310,\"paridadeVenda\":1.12320,\"cotacaoCompra\":5.70760,\"cotacaoVenda\":5.70880,\"dataHoraCotacao\":\"2026-10-16
+        13:04:14.548156\",\"tipoBoletim\":\"Fechamento\"}]}"
+    headers:
+      Connection:
+      - keep-alive
+      Content-Language:
+      - en-US
+      Content-Type:
+      - application/json;charset=UTF-8;odata.metadata=minimal
+      Date:
+      - Mon, 19 Oct 2026 05:17:38 GMT
+      Expires:
+      - '0'
+      OData-Version:
+      - '4.0'
+      Pragma:
+      - no-cache
+      Set-Cookie:
+      - JSESSIONID=00007n_BUUf3O7v4lbEqyG-DGM5:1dof85j5r; Path=/; HttpOnly
+      - BIGipServer~was_p_as3~was_p~pool_was_443_p=1020268972.47873.0000; path=/;
+        Httponly; Secure
+      - TS013694c2=012e4f88b379f8dc00e97d31d0993ea54650a6361952497fd841265586936b9a319c1057fc5ab75d14b5a9acd4d91528dd2c0a3e1f;
+        Path=/
+      Strict-Transport-Security:
+      - max-age=31536000 ; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      X-Application-Context:
+      - application
+      X-Cache:
+      - CONFIG_NOCACHE
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      X-XSS-Protection:
+      - 1; mode=block
+      x-azure-ref:
+      - 20261019T051738Z-1868899d6d9sbnw9hC1CPQn0fg00000001g0000000003fgr
     status:
       code: 200
       message: OK

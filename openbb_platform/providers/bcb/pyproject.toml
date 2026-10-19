@@ -11,6 +11,9 @@ dependencies = ["openbb-core>=2.0.0"]
 [project.entry-points."openbb_provider_extension"]
 bcb = "openbb_bcb:bcb_provider"
 
+[project.entry-points."openbb_core_extension"]
+bcb = "openbb_bcb.bcb_router:router"
+
 [project.urls]
 Repository = "https://github.com/eduardotrab/openbb"
 
