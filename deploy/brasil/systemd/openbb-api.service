@@ -1,0 +1,16 @@
+[Unit]
+Description=OpenBB Platform API (Brazil providers) on 127.0.0.1:6900
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Runs from the project root so openbb.toml (ports, news feeds) is found.
+WorkingDirectory=@PROJECT_DIR@
+ExecStart="@PROJECT_DIR@/openbb/.venv/bin/openbb-api"
+Restart=on-failure
+RestartSec=5
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=default.target

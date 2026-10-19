@@ -1,0 +1,42 @@
+# OpenBB runtime config for this project (outside the fork on purpose).
+# Found by openbb-api / openbb-mcp walking up from the working directory.
+# Ports 8000-8050 and 9000-9050 are reserved for another system on this machine.
+
+[launcher]
+host = "127.0.0.1"
+port = 6900
+
+[mcp]
+host = "127.0.0.1"
+port = 6901
+
+# Brazilian public-sector news feeds for openbb-news (obb.news.rss / Workspace Newsfeed).
+# gov.br ministry feeds live in per-month folders (/noticias/AAAA/mes/RSS), so they
+# are not listed here: a static URL would go stale every month.
+[news.rss_providers]
+gov_br = "Brasil — Órgãos públicos"
+
+[news.rss_feeds.agencia_brasil_economia]
+url = "https://agenciabrasil.ebc.com.br/rss/economia/feed.xml"
+provider = "gov_br"
+label = "Agência Brasil — Economia"
+
+[news.rss_feeds.agencia_brasil_ultimas]
+url = "https://agenciabrasil.ebc.com.br/rss/ultimasnoticias/feed.xml"
+provider = "gov_br"
+label = "Agência Brasil — Últimas notícias"
+
+[news.rss_feeds.agencia_brasil_politica]
+url = "https://agenciabrasil.ebc.com.br/rss/politica/feed.xml"
+provider = "gov_br"
+label = "Agência Brasil — Política"
+
+[news.rss_feeds.bcb_noticias]
+url = "https://www.bcb.gov.br/api/feed/sitebcb/sitefeeds/noticias"
+provider = "gov_br"
+label = "Banco Central — Notícias"
+
+[news.rss_feeds.planalto_noticias]
+url = "https://www.gov.br/planalto/pt-br/acompanhe-o-planalto/noticias/RSS"
+provider = "gov_br"
+label = "Planalto — Notícias"
