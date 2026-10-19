@@ -1,0 +1,55 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+    method: GET
+    uri: https://servicodados.ibge.gov.br/api/v3/noticias/?qtd=3&de=10-01-2026&ate=10-16-2026
+  response:
+    body:
+      string: "{\"count\":24,\"page\":1,\"totalPages\":8,\"nextPage\":2,\"previousPage\":0,\"showingFrom\":1,\"showingTo\":3,\"items\":[{\"id\":48310,\"tipo\":\"Not\xEDcia\",\"titulo\":\"Em
+        Xangai, IBGE debate uso de dados e tecnologia digital a servi\xE7o das pessoas\",\"introducao\":\"Como
+        garantir que os avan\xE7os na produ\xE7\xE3o de dados e nas tecnologias digitais
+        contribuam efetivamente para melhorar a vida das pessoas? Essa \xE9 a quest\xE3o
+        central do evento \u201COs dados e a tecnologia digital a servi\xE7o das pessoas\u201D,
+        realizado no dia 16 de...\",\"data_publicacao\":\"16/10/2026 01:28:30\",\"produto_id\":0,\"produtos\":\"\",\"editorias\":\"ibge\",\"imagens\":\"{\\\"image_intro\\\":\\\"images\\\\/agenciadenoticias\\\\/ibge\\\\/2026_10\\\\/IBGE_Xangai_ACT2026_011.jpg\\\",\\\"float_intro\\\":\\\"\\\",\\\"image_intro_alt\\\":\\\"\\\",\\\"image_intro_caption\\\":\\\"\\\",\\\"image_fulltext\\\":\\\"images\\\\/agenciadenoticias\\\\/ibge\\\\/2026_10\\\\/IBGE_Xangai_ACT2026_011.jpg\\\",\\\"float_fulltext\\\":\\\"\\\",\\\"image_fulltext_alt\\\":\\\"\\\",\\\"image_fulltext_caption\\\":\\\"\\\"}\",\"produtos_relacionados\":\"\",\"destaque\":true,\"link\":\"http://agenciadenoticias.ibge.gov.br/agencia-noticias/2012-agencia-de-noticias/noticias/48310-em-xangai-ibge-participa-de-debate-sobre-como-colocar-os-dados-e-a-tecnologia-digital-a-servico-das-pessoas.html\"},{\"id\":48309,\"tipo\":\"Not\xEDcia\",\"titulo\":\"ENDEF
+        \xE9 destaque do terceiro semin\xE1rio do projeto Mem\xF3ria e Hist\xF3ria
+        do IBGE\",\"introducao\":\"O IBGE realiza, na pr\xF3xima quarta-feira (21/10),
+        das 9h \xE0s 11h, o terceiro semin\xE1rio do projeto Mem\xF3ria e Hist\xF3ria,
+        com o tema \\\"O conflito entre a autonomia t\xE9cnica e a interfer\xEAncia
+        pol\xEDtica\\\", com destaque para o Estudo Nacional de Despesa Familiar...\",\"data_publicacao\":\"16/10/2026
+        01:17:24\",\"produto_id\":0,\"produtos\":\"\",\"editorias\":\"ibge\",\"imagens\":\"{\\\"image_intro\\\":\\\"images\\\\/agenciadenoticias\\\\/ibge\\\\/2026_10\\\\/youtube_1920x1080px_memoria_e_historia_03.jpg\\\",\\\"float_intro\\\":\\\"\\\",\\\"image_intro_alt\\\":\\\"\\\",\\\"image_intro_caption\\\":\\\"\\\",\\\"image_fulltext\\\":\\\"images\\\\/agenciadenoticias\\\\/ibge\\\\/2026_10\\\\/youtube_1920x1080px_memoria_e_historia_03.jpg\\\",\\\"float_fulltext\\\":\\\"\\\",\\\"image_fulltext_alt\\\":\\\"\\\",\\\"image_fulltext_caption\\\":\\\"\\\"}\",\"produtos_relacionados\":\"\",\"destaque\":true,\"link\":\"http://agenciadenoticias.ibge.gov.br/agencia-noticias/2012-agencia-de-noticias/noticias/48309-estudo-nacional-de-despesa-familiar-endef-e-o-destaque-do-terceiro-seminario-do-projeto-memoria-e-historia-do-ibge.html\"},{\"id\":48304,\"tipo\":\"Not\xEDcia\",\"titulo\":\"Pa\xEDs
+        tinha 1,5 milh\xE3o de crian\xE7as e adolescentes em situa\xE7\xE3o de trabalho
+        infantil em 2025\",\"introducao\":\"Na an\xE1lise por grupos et\xE1rios, o
+        trabalho infantil tende a aumentar com o avan\xE7o da idade. - Foto: Minist\xE9rio
+        do Trabalho O pa\xEDs tinha 1,499 milh\xE3o de crian\xE7as e adolescentes
+        entre 5 e 17 anos em situa\xE7\xE3o de trabalho infantil em 2025, o que representa...\",\"data_publicacao\":\"16/10/2026
+        10:00:00\",\"produto_id\":17270,\"produtos\":\"17270|Divulga\xE7\xE3o anual#pnadc3|pnad-continua|2511\",\"editorias\":\"sociais\",\"imagens\":\"{\\\"image_intro\\\":\\\"images\\\\/agenciadenoticias\\\\/ibge\\\\/2026_10\\\\/pnad_trabalho_infantil_capa.jpg\\\",\\\"float_intro\\\":\\\"\\\",\\\"image_intro_alt\\\":\\\"\\\",\\\"image_intro_caption\\\":\\\"\\\",\\\"image_fulltext\\\":\\\"images\\\\/agenciadenoticias\\\\/ibge\\\\/2026_10\\\\/pnad_trabalho_infantil_capa.jpg\\\",\\\"float_fulltext\\\":\\\"\\\",\\\"image_fulltext_alt\\\":\\\"\\\",\\\"image_fulltext_caption\\\":\\\"\\\"}\",\"produtos_relacionados\":\"17270\",\"destaque\":true,\"link\":\"http://agenciadenoticias.ibge.gov.br/agencia-noticias/2012-agencia-de-noticias/noticias/48304-pais-tinha-1-5-milhao-de-criancas-e-adolescentes-em-situacao-de-trabalho-infantil-em-2025.html\"}]}"
+    headers:
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Cache-Control:
+      - max-age=1238.597
+      Connection:
+      - Keep-Alive
+      Content-Length:
+      - '3551'
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 19 Oct 2026 05:39:20 GMT
+      Expires:
+      - Mon, 19 Oct 2026 05:59:59 GMT
+      Keep-Alive:
+      - timeout=5, max=100
+    status:
+      code: 200
+      message: OK
+version: 1

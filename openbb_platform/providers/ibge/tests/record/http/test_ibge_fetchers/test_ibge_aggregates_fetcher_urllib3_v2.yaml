@@ -1,0 +1,39 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+    method: GET
+    uri: https://servicodados.ibge.gov.br/api/v3/agregados/1737/periodos/202608-202609/variaveis/63%7C2265?localidades=N1%5Ball%5D
+  response:
+    body:
+      string: "[{\"id\":\"63\",\"variavel\":\"IPCA - Varia\xE7\xE3o mensal\",\"unidade\":\"%\",\"resultados\":[{\"classificacoes\":[],\"series\":[{\"localidade\":{\"id\":\"1\",\"nivel\":{\"id\":\"N1\",\"nome\":\"Brasil\"},\"nome\":\"Brasil\"},\"serie\":{\"202608\":\"-0.32\",\"202609\":\"0.82\"}}]}]},{\"id\":\"2265\",\"variavel\":\"IPCA
+        - Varia\xE7\xE3o acumulada em 12 meses\",\"unidade\":\"%\",\"resultados\":[{\"classificacoes\":[],\"series\":[{\"localidade\":{\"id\":\"1\",\"nivel\":{\"id\":\"N1\",\"nome\":\"Brasil\"},\"nome\":\"Brasil\"},\"serie\":{\"202608\":\"4.22\",\"202609\":\"4.58\"}}]}]}]"
+    headers:
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Cache-Control:
+      - max-age=1239.022
+      Connection:
+      - Keep-Alive
+      Content-Length:
+      - '483'
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 19 Oct 2026 05:39:20 GMT
+      Expires:
+      - Mon, 19 Oct 2026 06:00:00 GMT
+      Keep-Alive:
+      - timeout=5, max=100
+    status:
+      code: 200
+      message: OK
+version: 1
