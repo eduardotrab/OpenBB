@@ -70,3 +70,39 @@ def test_unknown_path_shows_not_found():
 
 def test_world_page_is_served():
     assert _client().get("/mundo").status_code == 200
+
+
+def test_routing_callback_runs_through_dash():
+    payload = {
+        "output": "..pagina.children...menu.children..",
+        "outputs": [
+            {"id": "pagina", "property": "children"},
+            {"id": "menu", "property": "children"},
+        ],
+        "inputs": [{"id": "url", "property": "pathname", "value": "/mundo"}],
+        "changedPropIds": ["url.pathname"],
+    }
+    response = _client().post("/_dash-update-component", json=payload)
+    assert response.status_code == 200
+    assert "mundo-eua" in response.get_data(as_text=True)
+
+
+def test_warm_up_touches_slow_sources_and_survives_failures():
+    from brasil_painel.app import aquecer
+    from brasil_painel.dados.api import FonteIndisponivel
+
+    class Falha:
+        def __init__(self):
+            self.rotas = set()
+
+        def get(self, path, **params):
+            self.rotas.add(path)
+            raise FonteIndisponivel(path)
+
+    client = Falha()
+    aquecer(client).join(timeout=5)
+    assert {
+        "tesouro/direto",
+        "economy/cpi",
+        "economy/indicators",
+    } <= client.rotas

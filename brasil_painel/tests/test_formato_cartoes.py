@@ -90,3 +90,15 @@ def test_cartao_with_decimals_and_percent_change():
     )
     texto = _texto(cartao(r))
     assert "1,1225" in texto and "▲ +2,0% em 30 dias" in texto
+
+
+def test_cartao_annual_reference_shows_the_year():
+    r = Resumo(
+        "PIB 2026 (projeção)",
+        "%",
+        "FMI (WEO)",
+        valor=4.47,
+        data_ref=dt.date(2026, 12, 31),
+        anual=True,
+    )
+    assert "FMI (WEO) · ref. 2026" in _texto(cartao(r))

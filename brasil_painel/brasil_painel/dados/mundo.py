@@ -1,6 +1,8 @@
-"""World page data from sources without API keys (Fed, OECD, IMF, ECB).
+"""World page data from sources without API keys (Fed, IMF, ECB).
 
-OECD/IMF/Fed rates come as fractions (0.0388) and are shown in % (3.88).
+IMF CPI and Fed rates come as fractions (0.0388) and are shown in % (3.88).
+The OECD provider is avoided: its first call loads ~1.6 GB of metadata into
+the API process (see docs/palacio/04-aprendizados).
 """
 
 import datetime as dt
@@ -13,12 +15,15 @@ from brasil_painel.dados.indicadores import Ponto, Resumo
 Series = dict[str, list[Ponto]]
 
 ECB_DEPOSITO = "FM::B.U2.EUR.4F.KR.DFR.LEV"  # only the dates of change
-EUA, OECD_CHINA, OECD_ZONA_EURO = (
+ECB_DESEMPREGO = "LFSI::M.U2.S.UNEHRT.TOTAL0.15_74.T"
+IMF_DESEMPREGO = "LS::U"
+IMF_PIB = "WEO::NGDP_RPCH"  # real GDP growth, with IMF projections
+EUA, IMF_CHINA, IMF_ZONA_EURO = (
     "United States",
-    "China (People’s Republic of)",
-    "Euro area",
+    "China, People's Republic of",
+    "Euro Area (EA)",
 )
-IMF_CHINA = "China, People's Republic of"
+UNIDADE_PERCENTUAL = "Percent"
 
 # IMF primary commodity prices: symbol → (label, unit)
 COMMODITIES = {
@@ -58,9 +63,14 @@ def por_pais(rows: list[dict], escala: float = 1.0) -> Series:
 
 def precos_commodities(rows: list[dict]) -> Series:
     """Dollar prices per symbol (the IMF also returns index and % rows)."""
+    return por_simbolo(rows, UNIDADE_DOLAR)
+
+
+def por_simbolo(rows: list[dict], unidade: str) -> Series:
+    """IMF indicator rows of one unit, split by symbol."""
     series: Series = defaultdict(list)
     for r in rows:
-        if r.get("unit") == UNIDADE_DOLAR and r.get("value") is not None:
+        if r.get("unit") == unidade and r.get("value") is not None:
             series[r["symbol"]].append(Ponto(_data(r["date"]), r["value"]))
     return {simbolo: _ordenar(pontos) for simbolo, pontos in series.items()}
 
@@ -118,16 +128,6 @@ def _treasury_10a(client: OpenBBClient, desde: dt.date) -> list[Ponto]:
     return serie(rows, "year_10", 100)
 
 
-def _oecd(
-    client: OpenBBClient, rota: str, pais: str, desde: dt.date, **extra
-) -> Series:
-    """US + China (or + euro area) in one call, since the OECD is slow (~8–20 s)."""
-    rows = client.get(
-        rota, provider="oecd", country=pais, start_date=desde.isoformat(), **extra
-    )
-    return por_pais(rows, 1 if rota.endswith("leading_indicator") else 100)
-
-
 def _cpi(client: OpenBBClient, desde: dt.date) -> Series:
     """US and China CPI from the IMF (the OECD drops older US months)."""
     rows = client.get(
@@ -139,13 +139,35 @@ def _cpi(client: OpenBBClient, desde: dt.date) -> Series:
     return por_pais(rows, 100)
 
 
-def _desemprego(client: OpenBBClient, desde: dt.date) -> Series:
-    return _oecd(client, "economy/unemployment", "united_states,EA", desde)
+def _desemprego_eua(client: OpenBBClient, desde: dt.date) -> list[Ponto]:
+    rows = client.get(
+        "economy/indicators",
+        provider="imf",
+        symbol=IMF_DESEMPREGO,
+        country="USA",
+        frequency="month",
+        start_date=desde.isoformat(),
+    )
+    return por_simbolo(rows, UNIDADE_PERCENTUAL).get(IMF_DESEMPREGO, [])
 
 
-def _cli_china(client: OpenBBClient, desde: dt.date) -> list[Ponto]:
-    serie_ = _oecd(client, "economy/composite_leading_indicator", "china", desde)
-    return serie_.get(OECD_CHINA, [])
+def _desemprego_zona_euro(client: OpenBBClient) -> list[Ponto]:
+    rows = client.get("economy/indicators", provider="ecb", symbol=ECB_DESEMPREGO)
+    return serie(rows, "value")
+
+
+def _pib(client: OpenBBClient, hoje: dt.date) -> Series:
+    """IMF WEO real GDP growth: last year and the current-year projection."""
+    rows = client.get(
+        "economy/indicators",
+        provider="imf",
+        symbol=IMF_PIB,
+        country="USA,G163,CHN",
+        frequency="annual",
+        start_date=f"{hoje.year - 1}-01-01",
+        end_date=f"{hoje.year}-12-31",
+    )
+    return por_pais([r for r in rows if r.get("unit") == UNIDADE_PERCENTUAL])
 
 
 def _do_pais(series: Series, pais: str) -> list[Ponto]:
@@ -219,6 +241,15 @@ def cartoes(
     cambio = dict(
         dias=30, max_dias=5, comparacao="em 30 dias", casas=4, percentual=True
     )
+    pib = dict(
+        unidade="%",
+        fonte="FMI (WEO)",
+        passos=1,
+        max_dias=400,
+        comparacao=f"vs. {hoje.year - 1}",
+        anual=True,
+    )
+    nome_pib = f"PIB {hoje.year} (projeção)"
     commodity = dict(
         passos=12,
         max_dias=80,
@@ -252,9 +283,10 @@ def cartoes(
             ),
             (
                 "Desemprego",
-                lambda: _do_pais(_desemprego(client, mensal), EUA),
-                dict(fonte="OCDE", **mensal_12m),
+                lambda: _desemprego_eua(client, mensal),
+                dict(fonte="IMF", **mensal_12m),
             ),
+            (nome_pib, lambda: _do_pais(_pib(client, hoje), EUA), pib),
         ],
         "mundo-europa": [
             (
@@ -269,9 +301,10 @@ def cartoes(
             ),
             (
                 "Desemprego",
-                lambda: _do_pais(_desemprego(client, mensal), OECD_ZONA_EURO),
-                dict(fonte="OCDE", **mensal_cpi),
+                lambda: _desemprego_zona_euro(client),
+                dict(fonte="BCE", **mensal_12m),
             ),
+            (nome_pib, lambda: _do_pais(_pib(client, hoje), IMF_ZONA_EURO), pib),
         ],
         "mundo-china": [
             (
@@ -279,18 +312,7 @@ def cartoes(
                 lambda: _do_pais(_cpi(client, mensal), IMF_CHINA),
                 dict(fonte="IMF", **mensal_cpi),
             ),
-            (
-                "Indicador antecedente",
-                lambda: _cli_china(client, mensal),
-                dict(
-                    fonte="OCDE (CLI, 100 = tendência)",
-                    unidade="pts",
-                    passos=1,
-                    max_dias=80,
-                    comparacao="vs. mês anterior",
-                    mensal=True,
-                ),
-            ),
+            (nome_pib, lambda: _do_pais(_pib(client, hoje), IMF_CHINA), pib),
         ],
         "mundo-cambio": [
             (

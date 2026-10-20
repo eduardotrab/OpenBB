@@ -124,3 +124,28 @@ def test_figures_have_one_axis_per_panel_and_legend():
     fig = figura_curva(curvas_tesouro(ROWS_TESOURO, dias=30))
     nomes = {t.name for t in fig.data}
     assert nomes == {"15/10/2026", "15/09/2026"}
+
+
+def test_line_chart_labels_last_points_and_keeps_entity_colors():
+    import datetime as dt
+
+    from brasil_painel.componentes.graficos import CORES_ENTIDADE, figura_linhas
+    from brasil_painel.dados.indicadores import Ponto
+
+    series = {
+        "Brasil": [Ponto(dt.date(2026, 8, 1), 4.7), Ponto(dt.date(2026, 9, 1), 4.58)],
+        "China": [Ponto(dt.date(2026, 9, 1), 0.9)],
+    }
+    fig = figura_linhas(series, "%", mensal=True)
+    assert [t.line.color for t in fig.data] == [
+        CORES_ENTIDADE["Brasil"],
+        CORES_ENTIDADE["China"],
+    ]
+    assert [a.text for a in fig.layout.annotations] == ["Brasil 4,58", "China 0,90"]
+    assert len(fig.layout.yaxis.ticksuffix) == 1
+
+
+def test_end_labels_are_pushed_apart():
+    from brasil_painel.componentes.graficos import afastar
+
+    assert afastar([100.0, 104.0, 50.0], 14) == [100.0, 114.0, 50.0]

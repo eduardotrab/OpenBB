@@ -50,3 +50,6 @@ body { margin: 0; background: var(--fundo); color: var(--texto);
 .menu a { color: #fff; text-decoration: none; padding: 6px 12px; border-radius: 4px; opacity: .85; }
 .menu a:hover { opacity: 1; background: rgba(255, 255, 255, .12); }
 .menu a.ativo { opacity: 1; background: rgba(255, 255, 255, .2); font-weight: 600; }
+.grade-blocos { display: grid; grid-template-columns: repeat(auto-fit, minmax(440px, 1fr)); column-gap: 20px; }
+.grade-graficos { display: grid; grid-template-columns: repeat(auto-fit, minmax(460px, 1fr)); column-gap: 20px; }
+@media (max-width: 520px) { .grade-blocos, .grade-graficos { grid-template-columns: 1fr; } }

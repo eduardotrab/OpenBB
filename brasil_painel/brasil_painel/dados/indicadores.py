@@ -30,6 +30,7 @@ class Resumo:
     mensal: bool = False
     casas: int = 2
     percentual: bool = False
+    anual: bool = False
 
 
 def tendencia(atual: float, anterior: float, tolerancia: float = 1e-9) -> str:
@@ -67,6 +68,7 @@ def resumir(
     mensal: bool = False,
     casas: int = 2,
     percentual: bool = False,
+    anual: bool = False,
 ) -> Resumo:
     """Summarise a series: last value vs `passos` observations or `dias` days back.
 
@@ -74,7 +76,11 @@ def resumir(
     `percentual` reports the change in % of the previous value.
     """
     extra = dict(
-        comparacao=comparacao, mensal=mensal, casas=casas, percentual=percentual
+        comparacao=comparacao,
+        mensal=mensal,
+        casas=casas,
+        percentual=percentual,
+        anual=anual,
     )
     if not pontos:
         return Resumo(nome, unidade, fonte, erro="Sem dados da fonte.", **extra)

@@ -2,12 +2,13 @@
 
 import contextlib
 import threading
+import time
 
 from dash import Dash, Input, Output, dcc, html
 
 from brasil_painel.auth import setup_auth
 from brasil_painel.config import Settings
-from brasil_painel.dados import abertura
+from brasil_painel.dados import abertura, mundo
 from brasil_painel.dados.api import FonteIndisponivel, OpenBBClient
 from brasil_painel.paginas import (
     abertura as pagina_abertura,
@@ -75,18 +76,34 @@ def register_callbacks(app: Dash, client: OpenBBClient) -> None:
     def rotear(caminho):
         return pagina(caminho)
 
-    for _, pagina in PAGINAS.values():
-        pagina.register(app, client)
+    for _, modulo in PAGINAS.values():
+        modulo.register(app, client)
 
 
-def aquecer(client: OpenBBClient) -> None:
-    """Fetch slow sources in the background so the first visitor does not wait."""
+def aquecer(client: OpenBBClient, intervalo: float | None = None) -> threading.Thread:
+    """Fetch slow sources in the background so the first visitor does not wait.
 
-    def tarefa():
+    With `intervalo` (seconds) it repeats, refreshing the cache as it expires.
+    """
+
+    def uma_vez():
         with contextlib.suppress(FonteIndisponivel):
             abertura.tesouro(client)
+        # World loaders isolate their own failures; the OECD routes take ~20 s.
+        mundo.cartoes(client)
+        mundo.juros(client)
+        mundo.inflacao(client)
+        mundo.agro(client)
 
-    threading.Thread(target=tarefa, daemon=True, name="aquecer-tesouro").start()
+    def tarefa():
+        uma_vez()
+        while intervalo:
+            time.sleep(intervalo)
+            uma_vez()
+
+    thread = threading.Thread(target=tarefa, daemon=True, name="aquecer")
+    thread.start()
+    return thread
 
 
 def create_app(
@@ -115,5 +132,6 @@ def create_app(
     client = client or OpenBBClient(settings.api_url)
     register_callbacks(app, client)
     if settings.aquecer:
-        aquecer(client)
+        # Just after expiry, so each round refetches instead of hitting the cache.
+        aquecer(client, intervalo=client.ttl + 5)
     return app

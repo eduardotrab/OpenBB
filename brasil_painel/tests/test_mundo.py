@@ -179,3 +179,46 @@ def test_charts_report_missing_series():
     series, falhas = mundo.inflacao(FakeClient(respostas), HOJE)
     assert series == {}
     assert falhas == ["EUA", "China", "Zona do euro", "Brasil"]
+
+
+def test_gdp_cards_use_the_imf_projection_for_this_year():
+    respostas = {
+        ("economy/indicators", "WEO::NGDP_RPCH"): [
+            {
+                "date": "2025-12-31",
+                "country": "China, People's Republic of",
+                "unit": "Percent",
+                "value": 5.0,
+            },
+            {
+                "date": "2026-12-31",
+                "country": "China, People's Republic of",
+                "unit": "Percent",
+                "value": 4.47,
+            },
+            {
+                "date": "2026-12-31",
+                "country": "United States",
+                "unit": "Percent",
+                "value": 2.33,
+            },
+        ],
+        ("economy/indicators", "LS::U"): [
+            {"date": "2025-08-31", "symbol": "LS::U", "unit": "Percent", "value": 4.3},
+            {
+                "date": "2026-08-31",
+                "symbol": "LS::U",
+                "unit": "Percent change",
+                "value": -4.6,
+            },
+            {"date": "2026-08-31", "symbol": "LS::U", "unit": "Percent", "value": 4.1},
+        ],
+    }
+    blocos = mundo.cartoes(FakeClient(respostas), HOJE)
+    china = {c.nome: c for c in blocos["mundo-china"]}["PIB 2026 (projeção)"]
+    assert (china.valor, china.anual, china.comparacao) == (4.47, True, "vs. 2025")
+    assert round(china.variacao, 2) == -0.53
+    eua = {c.nome: c for c in blocos["mundo-eua"]}
+    assert eua["Desemprego"].valor == 4.1
+    assert round(eua["Desemprego"].variacao, 2) == -0.2
+    assert eua["PIB 2026 (projeção)"].tendencia is None
