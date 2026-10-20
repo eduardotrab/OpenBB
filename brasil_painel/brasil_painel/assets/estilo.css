@@ -40,3 +40,9 @@ body { margin: 0; background: var(--fundo); color: var(--texto);
 .noticias .origem { font-size: .7rem; background: #edf2f7; color: #2d3748; padding: 1px 6px; border-radius: 4px; margin-right: 6px; }
 .noticias a { color: var(--texto); text-decoration: none; display: block; margin-top: 2px; }
 .noticias a:hover { text-decoration: underline; }
+.coluna-noticias h2 { font-size: 1.05rem; margin: 4px 0 8px; }
+.agenda { list-style: none; margin: 0 0 18px; padding: 0; }
+.agenda li { display: grid; grid-template-columns: 74px 1fr; column-gap: 8px; padding: 6px 0; border-bottom: 1px solid #edf0f3; font-size: .86rem; }
+.agenda .dia { color: #4a5568; font-weight: 600; grid-row: span 2; }
+.agenda .dia.hoje { color: var(--destaque); }
+.agenda .detalhe { color: #718096; font-size: .75rem; }

@@ -54,3 +54,21 @@ def test_cartao_flags_stale_and_error():
     assert "desatualizado" in _texto(cartao(velho))
     erro = Resumo("X", "%", "F", erro="timeout")
     assert "Fonte indisponível" in _texto(cartao(erro))
+
+
+def test_agenda_marks_today():
+    from brasil_painel.componentes.agenda import agenda
+    from brasil_painel.dados.agenda import Evento
+
+    hoje = dt.date(2026, 10, 20)
+    texto = _texto(
+        agenda(
+            [
+                Evento(hoje, "8h", "Copom — ata", "BCB"),
+                Evento(dt.date(2026, 10, 23), "12h", "IPCA-15", "IBGE"),
+            ],
+            [],
+            hoje,
+        )
+    )
+    assert "hoje" in texto and "sex 23/10" in texto and "Copom — ata" in texto

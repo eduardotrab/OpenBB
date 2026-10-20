@@ -1,0 +1,15 @@
+# Copom meeting calendar (two-day meetings; the decision comes out on the second day).
+# Source: BCB announcement of 2025-06-24 ("BC publica calendário de reuniões do Copom em 2026"),
+# cross-checked with https://www.bcb.gov.br/api/servico/sitebcb/historicotaxasjuros
+# (meetings 280 on 2026-08-05 and 281 on 2026-09-16). Update every year when the BCB publishes
+# the next calendar (usually in June). The BCB site has no public API for this calendar.
+reunioes = [
+  ["2026-01-27", "2026-01-28"],
+  ["2026-03-17", "2026-03-18"],
+  ["2026-04-28", "2026-04-29"],
+  ["2026-06-16", "2026-06-17"],
+  ["2026-08-04", "2026-08-05"],
+  ["2026-09-15", "2026-09-16"],
+  ["2026-11-03", "2026-11-04"],
+  ["2026-12-08", "2026-12-09"],
+]

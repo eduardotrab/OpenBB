@@ -7,10 +7,11 @@ from dash import Dash, Input, Output, dcc, html
 
 from brasil_painel.auth import setup_auth
 from brasil_painel.componentes import noticias as noticias_ui
+from brasil_painel.componentes.agenda import agenda as agenda_ui
 from brasil_painel.componentes.cartoes import cartoes
 from brasil_painel.componentes.graficos import figura_curva, figura_focus
 from brasil_painel.config import Settings
-from brasil_painel.dados import abertura, noticias
+from brasil_painel.dados import abertura, agenda, noticias
 from brasil_painel.dados.api import FonteIndisponivel, OpenBBClient
 from brasil_painel.usuarios import UserStore
 
@@ -68,6 +69,10 @@ def build_layout() -> html.Div:
                             ),
                             html.Aside(
                                 [
+                                    html.H2("Agenda — próximos 7 dias"),
+                                    dcc.Loading(
+                                        html.Div(id="agenda-lista"), type="dot"
+                                    ),
                                     html.H2("Notícias"),
                                     noticias_ui.filtro(),
                                     dcc.Loading(
@@ -116,6 +121,11 @@ def register_callbacks(app: Dash, client: OpenBBClient) -> None:
         except FonteIndisponivel as error:
             return aviso(str(error))
         return dcc.Graph(figure=figura_curva(curvas), config=CONFIG_GRAFICO)
+
+    @app.callback(Output("agenda-lista", "children"), Input("atualizar", "n_intervals"))
+    def preencher_agenda(_):
+        eventos, falhas = agenda.semana()
+        return agenda_ui(eventos, falhas)
 
     @app.callback(Output("noticias-dados", "data"), Input("atualizar", "n_intervals"))
     def carregar_noticias(_):
