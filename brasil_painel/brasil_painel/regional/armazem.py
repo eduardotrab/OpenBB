@@ -1,0 +1,49 @@
+"""Local store of the regional datasets: one Parquet file per dataset."""
+
+import os
+from pathlib import Path
+
+import pandas as pd
+import pyarrow as pa
+import pyarrow.parquet as pq
+
+DIRETORIO_PADRAO = "~/.local/share/openbb-painel/regional"
+
+
+class SchemaInvalido(ValueError):
+    """The data does not match the dataset contract; nothing was written."""
+
+
+def diretorio() -> Path:
+    """Store directory (`PAINEL_DADOS_DIR`, default under ~/.local/share)."""
+    return Path(os.environ.get("PAINEL_DADOS_DIR", DIRETORIO_PADRAO)).expanduser()
+
+
+def gravar(
+    df: pd.DataFrame, nome: str, schema: pa.Schema, pasta: Path | None = None
+) -> Path:
+    """Validate against `schema` and atomically replace `<nome>.parquet`."""
+    if list(df.columns) != schema.names:
+        raise SchemaInvalido(f"{nome}: colunas {list(df.columns)} ≠ {schema.names}")
+    try:
+        tabela = pa.Table.from_pandas(df, schema=schema, preserve_index=False)
+    except (pa.ArrowInvalid, pa.ArrowTypeError) as error:
+        raise SchemaInvalido(f"{nome}: {error}") from error
+    nulos = [c for c in schema.names if tabela.column(c).null_count]
+    if nulos:
+        raise SchemaInvalido(f"{nome}: valores vazios em {nulos}")
+    pasta = pasta or diretorio()
+    pasta.mkdir(parents=True, exist_ok=True)
+    destino = pasta / f"{nome}.parquet"
+    temporario = pasta / f"{nome}.parquet.tmp"
+    pq.write_table(tabela, temporario)
+    os.replace(temporario, destino)
+    return destino
+
+
+def ler(nome: str, pasta: Path | None = None) -> pd.DataFrame | None:
+    """Read a dataset, or None when it was never ingested."""
+    caminho = (pasta or diretorio()) / f"{nome}.parquet"
+    if not caminho.exists():
+        return None
+    return pq.read_table(caminho).to_pandas()

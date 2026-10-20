@@ -5,8 +5,11 @@ description = "Painel próprio (Dash) sobre a API OpenBB com fontes públicas br
 requires-python = ">=3.10"
 dependencies = [
     "dash==4.4.1",
+    "duckdb==1.5.6",
     "flask-login==0.6.3",
     "gunicorn==26.1.0",
+    "pandas",
+    "pyarrow",
     "requests",
 ]
 
@@ -16,6 +19,7 @@ test = ["pytest"]
 [project.scripts]
 painel = "brasil_painel.__main__:main"
 painel-usuarios = "brasil_painel.cli:main"
+painel-dados = "brasil_painel.regional.cli:main"
 
 [build-system]
 requires = ["setuptools>=68"]
@@ -33,3 +37,4 @@ extend = "../ruff.toml"
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["D", "S101", "S105", "S106"]
 "brasil_painel/cli.py" = ["T201"]
+"brasil_painel/regional/cli.py" = ["T201"]
