@@ -29,7 +29,7 @@ build-backend = "setuptools.build_meta"
 include = ["brasil_painel*"]
 
 [tool.setuptools.package-data]
-brasil_painel = ["assets/*"]
+brasil_painel = ["assets/*", "assets/topojson/*", "dados/*.toml", "dados/*.json"]
 
 [tool.ruff]
 extend = "../ruff.toml"
