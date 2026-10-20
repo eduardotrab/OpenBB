@@ -1,0 +1,17 @@
+[Unit]
+Description=Painel Brasil (Dash/gunicorn) on port 6902
+After=network-online.target openbb-api.service
+Wants=network-online.target openbb-api.service
+
+[Service]
+Type=simple
+WorkingDirectory=@PROJECT_DIR@
+# PAINEL_SECRET_KEY, PAINEL_HOST, PAINEL_CERTFILE/KEYFILE... (created by install_services.sh)
+EnvironmentFile=%h/.config/openbb-painel/painel.env
+ExecStart="@PROJECT_DIR@/openbb/.venv/bin/gunicorn" -c python:brasil_painel.gunicorn_conf
+Restart=on-failure
+RestartSec=5
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=default.target
