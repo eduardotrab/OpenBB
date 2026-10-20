@@ -24,6 +24,7 @@ PRICES_CSV_URL = (
     "796d2059-14e9-44e3-80c9-2d9e30b405c1/download/precotaxatesourodireto.csv"
 )
 CACHE_TTL_HOURS = 12
+DOWNLOAD_TIMEOUT = 300
 DEFAULT_LOOKBACK_DAYS = 30
 COLUMNS = {
     "Taxa Compra Manha": "buy_rate",
@@ -130,10 +131,15 @@ class TesouroDiretoFetcher(Fetcher[TesouroDiretoQueryParams, list[TesouroDiretoD
             except UnicodeDecodeError:
                 return raw.decode("latin-1")
 
+        # `amake_request` replaces `timeout` with `preferences.request_timeout`
+        # (60 s by default), which is shorter than this ~80 s download.
+        preferences = kwargs.pop("preferences", None) or {}
+        timeout = max(DOWNLOAD_TIMEOUT, preferences.get("request_timeout") or 0)
+
         async def load() -> str:
             return await amake_request(  # type: ignore[return-value]
                 PRICES_CSV_URL,
-                timeout=300,
+                timeout=timeout,
                 response_callback=response_callback,
                 **kwargs,
             )

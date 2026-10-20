@@ -80,3 +80,24 @@ def test_cached_text_reuses_file_within_ttl(tmp_path, monkeypatch):
     os.utime(entry, (old, old))
     asyncio.run(cached_text("k", loader, ttl_hours=12))
     assert len(calls) == 2
+
+
+def test_download_timeout_is_not_cut_by_request_timeout_preference(monkeypatch):
+    """The 60 s default of `preferences.request_timeout` must not cut the slow download."""
+    from openbb_core.provider.utils import helpers
+
+    captured: dict = {}
+
+    async def fake_request(url, **kwargs):
+        captured.update(kwargs)
+        return CSV
+
+    monkeypatch.setattr(helpers, "amake_request", fake_request)
+    query = TesouroDiretoQueryParams(use_cache=False)
+    asyncio.run(
+        TesouroDiretoFetcher.aextract_data(
+            query, None, preferences={"request_timeout": 60}
+        )
+    )
+    assert "preferences" not in captured
+    assert captured["timeout"] >= 300
