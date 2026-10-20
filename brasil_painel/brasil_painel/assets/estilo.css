@@ -1,0 +1,7 @@
+/* Base styles; branding comes in plan 10. System fonts only (no web fonts). */
+:root { --fundo: #f6f7f9; --texto: #1d2430; --borda: #d8dce3; --destaque: #00714a; }
+body { margin: 0; background: var(--fundo); color: var(--texto);
+       font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+.topo { background: var(--destaque); color: #fff; padding: 12px 24px; }
+.topo h1 { margin: 0; font-size: 1.3rem; }
+.conteudo { padding: 16px 24px; }
