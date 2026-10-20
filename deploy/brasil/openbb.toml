@@ -15,6 +15,7 @@ port = 6901
 # are not listed here: a static URL would go stale every month.
 [news.rss_providers]
 gov_br = "Brasil — Órgãos públicos"
+agro = "Agronegócio"
 
 [news.rss_feeds.agencia_brasil_economia]
 url = "https://agenciabrasil.ebc.com.br/rss/economia/feed.xml"
@@ -40,3 +41,10 @@ label = "Banco Central — Notícias"
 url = "https://www.gov.br/planalto/pt-br/acompanhe-o-planalto/noticias/RSS"
 provider = "gov_br"
 label = "Planalto — Notícias"
+
+# Private media outlet (headlines and links only): there is no working public agro feed
+# (MAPA RSS 404, Embrapa 403, CONAB unreachable on 2026-10-20).
+[news.rss_feeds.canal_rural]
+url = "https://www.canalrural.com.br/feed/"
+provider = "agro"
+label = "Canal Rural"
