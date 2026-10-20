@@ -53,3 +53,14 @@ body { margin: 0; background: var(--fundo); color: var(--texto);
 .grade-blocos { display: grid; grid-template-columns: repeat(auto-fit, minmax(440px, 1fr)); column-gap: 20px; }
 .grade-graficos { display: grid; grid-template-columns: repeat(auto-fit, minmax(460px, 1fr)); column-gap: 20px; }
 @media (max-width: 520px) { .grade-blocos, .grade-graficos { grid-template-columns: 1fr; } }
+.controles-mapa { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; margin: 8px 0; }
+.seletor-indicador { min-width: 360px; flex: 1 1 360px; max-width: 520px; }
+.grade-mapa { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 20px; align-items: start; }
+@media (max-width: 900px) { .grade-mapa { grid-template-columns: 1fr; } .seletor-indicador { min-width: 0; } }
+.grade-mapa .dash-graph { background: #fff; border: 1px solid var(--borda); border-radius: 8px; }
+.ranking { background: #fff; border: 1px solid var(--borda); border-radius: 8px; padding: 8px 12px; max-height: 520px; overflow-y: auto; }
+.ranking table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+.ranking th { text-align: left; color: #718096; font-weight: 600; border-bottom: 1px solid var(--borda); padding: 4px; position: sticky; top: 0; background: #fff; }
+.ranking td { padding: 3px 4px; border-bottom: 1px solid #edf0f3; }
+.ranking .num { text-align: right; font-variant-numeric: tabular-nums; }
+.ranking .linha-brasil td { font-weight: 700; background: #eef5ee; }

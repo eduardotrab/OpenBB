@@ -148,9 +148,12 @@ def figura_linhas(
     degrau: bool = False,
     base_100: bool = False,
     mensal: bool = False,
+    cores: dict[str, str] | None = None,
+    casas: int = 2,
 ) -> go.Figure:
     """Several series on one axis, each labelled at its last point."""
     fig = go.Figure()
+    sufixo = unidade if unidade in ("%", "") else f" {unidade}"
     valores = [p.valor for pontos in series.values() for p in pontos]
     folga = (max(valores) - min(valores)) * 0.06 or 1
     y0, y1 = min(valores) - folga, max(valores) + folga
@@ -161,7 +164,7 @@ def figura_linhas(
         novo - velho for novo, velho in zip(afastar(em_px, RECUO_ROTULO), em_px)
     ]
     for (nome, pontos), deslocamento in zip(series.items(), deslocamentos):
-        cor = CORES_ENTIDADE.get(nome, COMPARACAO)
+        cor = (cores or {}).get(nome) or CORES_ENTIDADE.get(nome, COMPARACAO)
         fig.add_trace(
             go.Scatter(
                 x=[p.data for p in pontos],
@@ -169,14 +172,14 @@ def figura_linhas(
                 name=nome,
                 mode="lines",
                 line=dict(width=2, color=cor, shape="hv" if degrau else "linear"),
-                hovertemplate=f"{nome}: %{{y:.2f}}{unidade}<extra></extra>",
+                hovertemplate=f"{nome}: %{{y:,.{casas}f}}{sufixo}<extra></extra>",
             )
         )
         ultimo = pontos[-1]
         fig.add_annotation(
             x=ultimo.data,
             y=ultimo.valor,
-            text=f"{nome} {formato.numero(ultimo.valor, 1 if base_100 else 2)}",
+            text=f"{nome} {formato.numero(ultimo.valor, 1 if base_100 else casas)}",
             showarrow=False,
             xanchor="left",
             xshift=6,
@@ -192,5 +195,5 @@ def figura_linhas(
         range=[min(datas), max(datas)],
         hoverformat="%m/%Y" if mensal else "%d/%m/%Y",
     )
-    fig.update_yaxes(range=[y0, y1], ticksuffix=unidade)
+    fig.update_yaxes(range=[y0, y1], ticksuffix=sufixo)
     return fig

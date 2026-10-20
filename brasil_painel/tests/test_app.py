@@ -56,7 +56,7 @@ def _ids(componente) -> set[str]:
 def test_routing_picks_the_page_and_highlights_the_menu():
     corpo, links = pagina("/mundo/")
     assert "mundo-eua" in _ids(corpo)
-    assert [link.className for link in links] == ["", "ativo"]
+    assert [link.className for link in links] == ["", "ativo", ""]
     corpo, links = pagina(None)
     assert "abertura-cartoes" in _ids(corpo)
     assert links[0].className == "ativo"
@@ -106,3 +106,9 @@ def test_warm_up_touches_slow_sources_and_survives_failures():
         "economy/cpi",
         "economy/indicators",
     } <= client.rotas
+
+
+def test_map_page_is_served_and_routed():
+    assert _client().get("/mapa").status_code == 200
+    corpo, _ = pagina("/mapa")
+    assert {"mapa-grafico", "mapa-ranking", "mapa-evolucao"} <= _ids(corpo)

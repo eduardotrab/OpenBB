@@ -12,6 +12,7 @@ from brasil_painel.dados import abertura, mundo
 from brasil_painel.dados.api import FonteIndisponivel, OpenBBClient
 from brasil_painel.paginas import (
     abertura as pagina_abertura,
+    mapa as pagina_mapa,
     mundo as pagina_mundo,
 )
 from brasil_painel.usuarios import UserStore
@@ -23,6 +24,7 @@ ATUALIZACAO_MS = 15 * 60 * 1000
 PAGINAS = {
     "/": ("Abertura", pagina_abertura),
     "/mundo": ("Mundo", pagina_mundo),
+    "/mapa": ("Mapa", pagina_mapa),
 }
 
 
