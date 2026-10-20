@@ -46,3 +46,7 @@ body { margin: 0; background: var(--fundo); color: var(--texto);
 .agenda .dia { color: #4a5568; font-weight: 600; grid-row: span 2; }
 .agenda .dia.hoje { color: var(--destaque); }
 .agenda .detalhe { color: #718096; font-size: .75rem; }
+.menu { display: flex; gap: 4px; margin-left: 32px; flex: 1; }
+.menu a { color: #fff; text-decoration: none; padding: 6px 12px; border-radius: 4px; opacity: .85; }
+.menu a:hover { opacity: 1; background: rgba(255, 255, 255, .12); }
+.menu a.ativo { opacity: 1; background: rgba(255, 255, 255, .2); font-weight: 600; }

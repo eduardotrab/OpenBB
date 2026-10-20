@@ -2,7 +2,7 @@
 
 import re
 
-from brasil_painel.app import create_app
+from brasil_painel.app import create_app, pagina
 from brasil_painel.config import Settings
 
 URL_ATTR = re.compile(r'(?:src|href)="([^"]+)"')
@@ -39,3 +39,34 @@ def test_settings_from_env(monkeypatch):
     monkeypatch.setenv("OPENBB_API_URL", "http://x:1/api/v1/")
     settings = Settings.from_env()
     assert (settings.port, settings.api_url) == (7000, "http://x:1/api/v1")
+
+
+def _ids(componente) -> set[str]:
+    """Every component id inside a layout tree."""
+    ids = {getattr(componente, "id", None)}
+    filhos = getattr(componente, "children", None)
+    if not isinstance(filhos, list | tuple):
+        filhos = [filhos]
+    for filho in filhos:
+        if filho is not None and not isinstance(filho, str):
+            ids |= _ids(filho)
+    return ids - {None}
+
+
+def test_routing_picks_the_page_and_highlights_the_menu():
+    corpo, links = pagina("/mundo/")
+    assert "mundo-eua" in _ids(corpo)
+    assert [link.className for link in links] == ["", "ativo"]
+    corpo, links = pagina(None)
+    assert "abertura-cartoes" in _ids(corpo)
+    assert links[0].className == "ativo"
+
+
+def test_unknown_path_shows_not_found():
+    corpo, links = pagina("/nada")
+    assert "não encontrada" in corpo.children
+    assert all(link.className == "" for link in links)
+
+
+def test_world_page_is_served():
+    assert _client().get("/mundo").status_code == 200

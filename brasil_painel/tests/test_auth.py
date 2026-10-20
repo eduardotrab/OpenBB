@@ -117,3 +117,15 @@ def test_cookie_is_secure_under_https(store):
 def test_missing_secret_key_refuses_to_start(store):
     with pytest.raises(RuntimeError):
         create_app(Settings(users_file=str(store.path)))
+
+
+def test_every_page_requires_login_and_opens_after_it(client):
+    anonymous = client.get("/mundo")
+    assert anonymous.status_code == 302
+    assert anonymous.headers["Location"] == "/login?next=/mundo"
+    response = client.post(
+        "/login",
+        data={"usuario": "ana", "senha": "senha-forte-123", "next": "/mundo"},
+    )
+    assert response.headers["Location"] == "/mundo"
+    assert client.get("/mundo").status_code == 200

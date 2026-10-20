@@ -6,141 +6,77 @@ import threading
 from dash import Dash, Input, Output, dcc, html
 
 from brasil_painel.auth import setup_auth
-from brasil_painel.componentes import noticias as noticias_ui
-from brasil_painel.componentes.agenda import agenda as agenda_ui
-from brasil_painel.componentes.cartoes import cartoes
-from brasil_painel.componentes.graficos import figura_curva, figura_focus
 from brasil_painel.config import Settings
-from brasil_painel.dados import abertura, agenda, noticias
+from brasil_painel.dados import abertura
 from brasil_painel.dados.api import FonteIndisponivel, OpenBBClient
+from brasil_painel.paginas import (
+    abertura as pagina_abertura,
+    mundo as pagina_mundo,
+)
 from brasil_painel.usuarios import UserStore
 
 TITLE = "Painel Brasil"
 ATUALIZACAO_MS = 15 * 60 * 1000
-CONFIG_GRAFICO = {"displaylogo": False, "responsive": True}
+
+# path → (menu label, page module)
+PAGINAS = {
+    "/": ("Abertura", pagina_abertura),
+    "/mundo": ("Mundo", pagina_mundo),
+}
 
 
-def secao(titulo: str, id_: str, nota: str = "") -> html.Section:
-    """Build a titled block whose body is filled by a callback."""
-    return html.Section(
-        [
-            html.H2(titulo),
-            html.P(nota, className="nota") if nota else None,
-            dcc.Loading(html.Div(id=id_), type="dot"),
-        ],
-        className="secao",
-    )
+def menu(caminho: str) -> list[dcc.Link]:
+    """Navigation links; the current page is highlighted."""
+    return [
+        dcc.Link(
+            rotulo,
+            href=href,
+            className="ativo" if href == caminho else "",
+        )
+        for href, (rotulo, _) in PAGINAS.items()
+    ]
 
 
-def aviso(texto: str) -> html.P:
-    """Message shown when a source fails."""
-    return html.P(f"Fonte indisponível no momento: {texto}", className="aviso")
+def pagina(caminho: str | None) -> tuple:
+    """Body and menu for a path; unknown paths get a not-found message."""
+    caminho = (caminho or "/").rstrip("/") or "/"
+    if caminho not in PAGINAS:
+        return html.P("Página não encontrada.", className="aviso"), menu(caminho)
+    return PAGINAS[caminho][1].layout(), menu(caminho)
 
 
 def build_layout() -> html.Div:
-    """Return the page layout."""
+    """Return the page shell: header with menu, page body and refresh timer."""
     return html.Div(
         [
+            dcc.Location(id="url"),
             html.Header(
-                [html.H1(TITLE), html.A("Sair", href="/logout", className="sair")],
+                [
+                    html.H1(TITLE),
+                    html.Nav(id="menu", className="menu"),
+                    html.A("Sair", href="/logout", className="sair"),
+                ],
                 className="topo",
             ),
-            html.Main(
-                [
-                    secao("Cenário macro — Brasil", "abertura-cartoes"),
-                    html.Div(
-                        [
-                            html.Div(
-                                [
-                                    secao(
-                                        "Expectativas de mercado (Focus)",
-                                        "abertura-focus",
-                                        "Mediana das projeções para este ano e o próximo"
-                                        " — BCB, pesquisa diária.",
-                                    ),
-                                    secao(
-                                        "Curva de juros — Tesouro Direto",
-                                        "abertura-tesouro",
-                                        "Taxa de compra por vencimento: última data"
-                                        " vs. 30 dias antes.",
-                                    ),
-                                ],
-                                className="coluna-principal",
-                            ),
-                            html.Aside(
-                                [
-                                    html.H2("Agenda — próximos 7 dias"),
-                                    dcc.Loading(
-                                        html.Div(id="agenda-lista"), type="dot"
-                                    ),
-                                    html.H2("Notícias"),
-                                    noticias_ui.filtro(),
-                                    dcc.Loading(
-                                        html.Div(id="noticias-lista"), type="dot"
-                                    ),
-                                ],
-                                className="coluna-noticias secao",
-                            ),
-                        ],
-                        className="grade-abertura",
-                    ),
-                ],
-                className="conteudo",
-            ),
-            dcc.Store(id="noticias-dados"),
+            html.Main(id="pagina", className="conteudo"),
             dcc.Interval(id="atualizar", interval=ATUALIZACAO_MS),
         ]
     )
 
 
 def register_callbacks(app: Dash, client: OpenBBClient) -> None:
-    """Callbacks that fill the opening screen."""
+    """Routing plus the callbacks of every page."""
 
     @app.callback(
-        Output("abertura-cartoes", "children"), Input("atualizar", "n_intervals")
+        Output("pagina", "children"),
+        Output("menu", "children"),
+        Input("url", "pathname"),
     )
-    def preencher_cartoes(_):
-        return cartoes(abertura.indicadores(client))
+    def rotear(caminho):
+        return pagina(caminho)
 
-    @app.callback(
-        Output("abertura-focus", "children"), Input("atualizar", "n_intervals")
-    )
-    def preencher_focus(_):
-        try:
-            figura = figura_focus(abertura.focus(client))
-        except FonteIndisponivel as error:
-            return aviso(str(error))
-        return dcc.Graph(figure=figura, config=CONFIG_GRAFICO)
-
-    @app.callback(
-        Output("abertura-tesouro", "children"), Input("atualizar", "n_intervals")
-    )
-    def preencher_tesouro(_):
-        try:
-            curvas = abertura.tesouro(client)
-        except FonteIndisponivel as error:
-            return aviso(str(error))
-        return dcc.Graph(figure=figura_curva(curvas), config=CONFIG_GRAFICO)
-
-    @app.callback(Output("agenda-lista", "children"), Input("atualizar", "n_intervals"))
-    def preencher_agenda(_):
-        eventos, falhas = agenda.semana()
-        return agenda_ui(eventos, falhas)
-
-    @app.callback(Output("noticias-dados", "data"), Input("atualizar", "n_intervals"))
-    def carregar_noticias(_):
-        itens, falhas = noticias.coletar(client)
-        return {"itens": noticias_ui.para_store(itens), "falhas": falhas}
-
-    @app.callback(
-        Output("noticias-lista", "children"),
-        Input("noticias-filtro", "value"),
-        Input("noticias-dados", "data"),
-    )
-    def mostrar_noticias(origens, dados):
-        if not dados:
-            return None
-        return noticias_ui.lista(dados["itens"], origens or [], dados["falhas"])
+    for _, pagina in PAGINAS.values():
+        pagina.register(app, client)
 
 
 def aquecer(client: OpenBBClient) -> None:
@@ -163,6 +99,7 @@ def create_app(
         title=TITLE,
         serve_locally=True,
         update_title=None,
+        suppress_callback_exceptions=True,
     )
     app.server.config["PAINEL_SETTINGS"] = settings
     if settings.users_file is not None:
