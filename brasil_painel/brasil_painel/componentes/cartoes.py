@@ -8,6 +8,13 @@ from brasil_painel.dados.indicadores import Resumo
 SETAS = {"sobe": "▲", "desce": "▼", "estavel": "■"}
 
 
+def variacao(resumo: Resumo) -> str:
+    """Change as '+0,25' in the card's unit, or '+2,0%' when percentual."""
+    if resumo.percentual:
+        return formato.numero(resumo.variacao, 1, sinal=True) + "%"
+    return formato.numero(resumo.variacao, resumo.casas, sinal=True)
+
+
 def cartao(resumo: Resumo) -> html.Div:
     """One card: value, unit, reference date, change and trend arrow."""
     if resumo.erro or resumo.valor is None:
@@ -24,7 +31,7 @@ def cartao(resumo: Resumo) -> html.Div:
         html.H3(resumo.nome),
         html.P(
             [
-                formato.numero(resumo.valor, 4 if resumo.unidade == "R$" else 2),
+                formato.numero(resumo.valor, resumo.casas),
                 html.Span(f" {resumo.unidade}", className="unidade"),
             ],
             className="valor",
@@ -33,8 +40,7 @@ def cartao(resumo: Resumo) -> html.Div:
     if resumo.tendencia:
         filhos.append(
             html.P(
-                f"{SETAS[resumo.tendencia]} {formato.numero(resumo.variacao, 4 if resumo.unidade == 'R$' else 2, sinal=True)}"
-                f" {resumo.comparacao}",
+                f"{SETAS[resumo.tendencia]} {variacao(resumo)} {resumo.comparacao}",
                 className=f"variacao {resumo.tendencia}",
             )
         )

@@ -8,7 +8,8 @@ from brasil_painel.dados.indicadores import Ponto, Resumo, data_de_periodo, resu
 from brasil_painel.dados.mercado import Curvas, curvas_tesouro, series_focus
 
 
-def _sgs(client: OpenBBClient, codigo: int, desde: dt.date) -> list[Ponto]:
+def serie_sgs(client: OpenBBClient, codigo: int, desde: dt.date) -> list[Ponto]:
+    """BCB SGS series from `desde`."""
     rows = client.get("bcb/sgs", symbol=str(codigo), start_date=desde.isoformat())
     return [
         Ponto(dt.date.fromisoformat(r["date"]), r["value"])
@@ -17,9 +18,10 @@ def _sgs(client: OpenBBClient, codigo: int, desde: dt.date) -> list[Ponto]:
     ]
 
 
-def _ibge(
+def serie_ibge(
     client: OpenBBClient, tabela: int, variavel: int, periodos: int
 ) -> list[Ponto]:
+    """Last `periodos` of an IBGE SIDRA table variable."""
     rows = client.get(
         "ibge/aggregates",
         table=str(tabela),
@@ -43,65 +45,11 @@ def _ptax(client: OpenBBClient, desde: dt.date) -> list[Ponto]:
     return [Ponto(dt.date.fromisoformat(r["date"][:10]), r["close"]) for r in rows]
 
 
-def indicadores(client: OpenBBClient, hoje: dt.date | None = None) -> list[Resumo]:
-    """Cards of the opening screen; a failing source becomes an error card."""
-    hoje = hoje or dt.date.today()
-    ano_atras = hoje - dt.timedelta(days=400)
-    specs: list[tuple[str, Callable[[], list[Ponto]], dict]] = [
-        (
-            "Dólar (PTAX venda)",
-            lambda: _ptax(client, hoje - dt.timedelta(days=45)),
-            dict(
-                unidade="R$", fonte="BCB", dias=30, max_dias=4, comparacao="em 30 dias"
-            ),
-        ),
-        (
-            "Selic meta",
-            lambda: _sgs(client, 432, ano_atras),
-            dict(
-                unidade="% a.a.",
-                fonte="BCB",
-                dias=365,
-                max_dias=4,
-                comparacao="em 12 meses",
-            ),
-        ),
-        (
-            "CDI",
-            lambda: _sgs(client, 4389, ano_atras),
-            dict(
-                unidade="% a.a.",
-                fonte="BCB",
-                dias=365,
-                max_dias=6,
-                comparacao="em 12 meses",
-            ),
-        ),
-        (
-            "IPCA 12 meses",
-            lambda: _ibge(client, 1737, 2265, 13),
-            dict(
-                unidade="%",
-                fonte="IBGE",
-                passos=1,
-                max_dias=75,
-                comparacao="vs. mês anterior",
-                mensal=True,
-            ),
-        ),
-        (
-            "Desemprego",
-            lambda: _ibge(client, 6381, 4099, 13),
-            dict(
-                unidade="%",
-                fonte="IBGE (PNAD)",
-                passos=12,
-                max_dias=130,
-                comparacao="vs. 12 meses antes",
-                mensal=True,
-            ),
-        ),
-    ]
+Spec = tuple[str, Callable[[], list[Ponto]], dict]
+
+
+def montar_cartoes(specs: list[Spec], hoje: dt.date) -> list[Resumo]:
+    """Load and summarise each (name, loader, options); a failing source becomes an error card."""
     resumos = []
     for nome, carregar, opcoes in specs:
         try:
@@ -113,6 +61,73 @@ def indicadores(client: OpenBBClient, hoje: dt.date | None = None) -> list[Resum
             continue
         resumos.append(resumir(nome, pontos, hoje=hoje, **opcoes))
     return resumos
+
+
+def indicadores(client: OpenBBClient, hoje: dt.date | None = None) -> list[Resumo]:
+    """Cards of the opening screen; a failing source becomes an error card."""
+    hoje = hoje or dt.date.today()
+    ano_atras = hoje - dt.timedelta(days=400)
+    specs: list[Spec] = [
+        (
+            "Dólar (PTAX venda)",
+            lambda: _ptax(client, hoje - dt.timedelta(days=45)),
+            dict(
+                unidade="R$",
+                fonte="BCB",
+                dias=30,
+                max_dias=4,
+                comparacao="em 30 dias",
+                casas=4,
+            ),
+        ),
+        (
+            "Selic meta",
+            lambda: serie_sgs(client, 432, ano_atras),
+            dict(
+                unidade="% a.a.",
+                fonte="BCB",
+                dias=365,
+                max_dias=4,
+                comparacao="em 12 meses",
+            ),
+        ),
+        (
+            "CDI",
+            lambda: serie_sgs(client, 4389, ano_atras),
+            dict(
+                unidade="% a.a.",
+                fonte="BCB",
+                dias=365,
+                max_dias=6,
+                comparacao="em 12 meses",
+            ),
+        ),
+        (
+            "IPCA 12 meses",
+            lambda: serie_ibge(client, 1737, 2265, 13),
+            dict(
+                unidade="%",
+                fonte="IBGE",
+                passos=1,
+                max_dias=75,
+                comparacao="vs. mês anterior",
+                mensal=True,
+            ),
+        ),
+        (
+            "Desemprego",
+            lambda: serie_ibge(client, 6381, 4099, 13),
+            dict(
+                unidade="%",
+                fonte="IBGE (PNAD)",
+                passos=12,
+                max_dias=130,
+                comparacao="vs. 12 meses antes",
+                mensal=True,
+            ),
+        ),
+    ]
+    return montar_cartoes(specs, hoje)
 
 
 FOCUS_INDICADORES = ("IPCA", "Selic", "PIB Total", "Câmbio")

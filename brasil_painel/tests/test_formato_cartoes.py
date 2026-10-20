@@ -72,3 +72,21 @@ def test_agenda_marks_today():
         )
     )
     assert "hoje" in texto and "sex 23/10" in texto and "Copom — ata" in texto
+
+
+def test_cartao_with_decimals_and_percent_change():
+    r = Resumo(
+        "EUR/USD",
+        "US$",
+        "ECB",
+        valor=1.1225,
+        data_ref=dt.date(2026, 10, 19),
+        anterior=1.10,
+        variacao=2.0455,
+        tendencia="sobe",
+        comparacao="em 30 dias",
+        casas=4,
+        percentual=True,
+    )
+    texto = _texto(cartao(r))
+    assert "1,1225" in texto and "▲ +2,0% em 30 dias" in texto

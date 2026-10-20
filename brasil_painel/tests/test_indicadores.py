@@ -104,3 +104,20 @@ def test_resumir_empty_series_is_an_error_card():
 )
 def test_data_de_periodo(periodo, esperado):
     assert data_de_periodo(periodo) == esperado
+
+
+def test_percent_change_and_decimals():
+    pontos = [Ponto(dt.date(2025, 9, 30), 400.0), Ponto(dt.date(2026, 9, 30), 480.0)]
+    resumo = resumir(
+        "Soja",
+        pontos,
+        unidade="US$/t",
+        fonte="IMF",
+        max_dias=75,
+        hoje=dt.date(2026, 10, 20),
+        passos=1,
+        percentual=True,
+        casas=1,
+    )
+    assert resumo.variacao == pytest.approx(20.0)
+    assert (resumo.percentual, resumo.casas) == (True, 1)

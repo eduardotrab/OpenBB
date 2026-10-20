@@ -28,6 +28,8 @@ class Resumo:
     erro: str | None = None
     comparacao: str = ""
     mensal: bool = False
+    casas: int = 2
+    percentual: bool = False
 
 
 def tendencia(atual: float, anterior: float, tolerancia: float = 1e-9) -> str:
@@ -63,12 +65,17 @@ def resumir(
     tolerancia: float = 1e-4,
     comparacao: str = "",
     mensal: bool = False,
+    casas: int = 2,
+    percentual: bool = False,
 ) -> Resumo:
     """Summarise a series: last value vs `passos` observations or `dias` days back.
 
-    `defasado` is set when the last observation is older than `max_dias`.
+    `defasado` is set when the last observation is older than `max_dias`;
+    `percentual` reports the change in % of the previous value.
     """
-    extra = dict(comparacao=comparacao, mensal=mensal)
+    extra = dict(
+        comparacao=comparacao, mensal=mensal, casas=casas, percentual=percentual
+    )
     if not pontos:
         return Resumo(nome, unidade, fonte, erro="Sem dados da fonte.", **extra)
     pontos = sorted(pontos, key=lambda p: p.data)
@@ -91,7 +98,11 @@ def resumir(
         unidade,
         fonte,
         anterior=anterior.valor,
-        variacao=ultimo.valor - anterior.valor,
+        variacao=(
+            (ultimo.valor / anterior.valor - 1) * 100
+            if percentual
+            else ultimo.valor - anterior.valor
+        ),
         tendencia=tendencia(ultimo.valor, anterior.valor, tolerancia),
         **base,
     )
