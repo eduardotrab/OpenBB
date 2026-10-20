@@ -49,7 +49,7 @@ fi
 step "Creating the virtual environment"
 [ -x "$PROJECT_DIR/openbb/.venv/bin/python" ] || uv venv --python python3 "$PROJECT_DIR/openbb/.venv"
 
-step "Installing OpenBB and providers (takes ~15 minutes the first time)"
+step "Installing OpenBB and providers (takes ~50 minutes the first time: the IMF and ECB metadata caches are built)"
 VIRTUAL_ENV="$PROJECT_DIR/openbb/.venv" \
   "$PROJECT_DIR/openbb/.venv/bin/python" "$PROJECT_DIR/openbb/deploy/brasil/install_openbb.py" --routers
 
