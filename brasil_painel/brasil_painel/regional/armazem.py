@@ -9,6 +9,16 @@ import pyarrow.parquet as pq
 
 DIRETORIO_PADRAO = "~/.local/share/openbb-painel/regional"
 
+# Shared long format: one value per date × UF ("BR" = official national figure).
+SCHEMA_LONGO = pa.schema(
+    [
+        ("data", pa.date32()),
+        ("uf", pa.string()),
+        ("indicador", pa.string()),
+        ("valor", pa.float64()),
+    ]
+)
+
 
 class SchemaInvalido(ValueError):
     """The data does not match the dataset contract; nothing was written."""
@@ -47,3 +57,10 @@ def ler(nome: str, pasta: Path | None = None) -> pd.DataFrame | None:
     if not caminho.exists():
         return None
     return pq.read_table(caminho).to_pandas()
+
+
+def ordenar_longo(df: pd.DataFrame) -> pd.DataFrame:
+    """Columns and row order of the long format."""
+    return df[SCHEMA_LONGO.names].sort_values(
+        ["indicador", "uf", "data"], ignore_index=True
+    )

@@ -4,9 +4,15 @@ import argparse
 import sys
 import time
 
-from brasil_painel.regional import armazem, scr
+from brasil_painel.regional import armazem, ibge, maquininhas, pix, scr
 
-DATASETS = {"scr": scr.atualizar}
+DATASETS = {
+    "scr": scr.atualizar,
+    "pix": pix.atualizar,
+    "maquininhas": maquininhas.atualizar,
+    "desemprego": ibge.atualizar_desemprego,
+    "populacao": ibge.atualizar_populacao,
+}
 
 
 def main(argv: list[str] | None = None) -> int:
