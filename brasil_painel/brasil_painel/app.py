@@ -6,10 +6,11 @@ import threading
 from dash import Dash, Input, Output, dcc, html
 
 from brasil_painel.auth import setup_auth
+from brasil_painel.componentes import noticias as noticias_ui
 from brasil_painel.componentes.cartoes import cartoes
 from brasil_painel.componentes.graficos import figura_curva, figura_focus
 from brasil_painel.config import Settings
-from brasil_painel.dados import abertura
+from brasil_painel.dados import abertura, noticias
 from brasil_painel.dados.api import FonteIndisponivel, OpenBBClient
 from brasil_painel.usuarios import UserStore
 
@@ -46,19 +47,42 @@ def build_layout() -> html.Div:
             html.Main(
                 [
                     secao("Cenário macro — Brasil", "abertura-cartoes"),
-                    secao(
-                        "Expectativas de mercado (Focus)",
-                        "abertura-focus",
-                        "Mediana das projeções para este ano e o próximo — BCB, pesquisa diária.",
-                    ),
-                    secao(
-                        "Curva de juros — Tesouro Direto",
-                        "abertura-tesouro",
-                        "Taxa de compra por vencimento: última data vs. 30 dias antes.",
+                    html.Div(
+                        [
+                            html.Div(
+                                [
+                                    secao(
+                                        "Expectativas de mercado (Focus)",
+                                        "abertura-focus",
+                                        "Mediana das projeções para este ano e o próximo"
+                                        " — BCB, pesquisa diária.",
+                                    ),
+                                    secao(
+                                        "Curva de juros — Tesouro Direto",
+                                        "abertura-tesouro",
+                                        "Taxa de compra por vencimento: última data"
+                                        " vs. 30 dias antes.",
+                                    ),
+                                ],
+                                className="coluna-principal",
+                            ),
+                            html.Aside(
+                                [
+                                    html.H2("Notícias"),
+                                    noticias_ui.filtro(),
+                                    dcc.Loading(
+                                        html.Div(id="noticias-lista"), type="dot"
+                                    ),
+                                ],
+                                className="coluna-noticias secao",
+                            ),
+                        ],
+                        className="grade-abertura",
                     ),
                 ],
                 className="conteudo",
             ),
+            dcc.Store(id="noticias-dados"),
             dcc.Interval(id="atualizar", interval=ATUALIZACAO_MS),
         ]
     )
@@ -92,6 +116,21 @@ def register_callbacks(app: Dash, client: OpenBBClient) -> None:
         except FonteIndisponivel as error:
             return aviso(str(error))
         return dcc.Graph(figure=figura_curva(curvas), config=CONFIG_GRAFICO)
+
+    @app.callback(Output("noticias-dados", "data"), Input("atualizar", "n_intervals"))
+    def carregar_noticias(_):
+        itens, falhas = noticias.coletar(client)
+        return {"itens": noticias_ui.para_store(itens), "falhas": falhas}
+
+    @app.callback(
+        Output("noticias-lista", "children"),
+        Input("noticias-filtro", "value"),
+        Input("noticias-dados", "data"),
+    )
+    def mostrar_noticias(origens, dados):
+        if not dados:
+            return None
+        return noticias_ui.lista(dados["itens"], origens or [], dados["falhas"])
 
 
 def aquecer(client: OpenBBClient) -> None:
