@@ -1,16 +1,38 @@
 """Dash application factory."""
 
+import contextlib
+import threading
+
 from dash import Dash, Input, Output, dcc, html
 
 from brasil_painel.auth import setup_auth
 from brasil_painel.componentes.cartoes import cartoes
+from brasil_painel.componentes.graficos import figura_curva, figura_focus
 from brasil_painel.config import Settings
 from brasil_painel.dados import abertura
-from brasil_painel.dados.api import OpenBBClient
+from brasil_painel.dados.api import FonteIndisponivel, OpenBBClient
 from brasil_painel.usuarios import UserStore
 
 TITLE = "Painel Brasil"
 ATUALIZACAO_MS = 15 * 60 * 1000
+CONFIG_GRAFICO = {"displaylogo": False, "responsive": True}
+
+
+def secao(titulo: str, id_: str, nota: str = "") -> html.Section:
+    """Build a titled block whose body is filled by a callback."""
+    return html.Section(
+        [
+            html.H2(titulo),
+            html.P(nota, className="nota") if nota else None,
+            dcc.Loading(html.Div(id=id_), type="dot"),
+        ],
+        className="secao",
+    )
+
+
+def aviso(texto: str) -> html.P:
+    """Message shown when a source fails."""
+    return html.P(f"Fonte indisponível no momento: {texto}", className="aviso")
 
 
 def build_layout() -> html.Div:
@@ -23,8 +45,17 @@ def build_layout() -> html.Div:
             ),
             html.Main(
                 [
-                    html.H2("Cenário macro — Brasil"),
-                    dcc.Loading(html.Div(id="abertura-cartoes"), type="dot"),
+                    secao("Cenário macro — Brasil", "abertura-cartoes"),
+                    secao(
+                        "Expectativas de mercado (Focus)",
+                        "abertura-focus",
+                        "Mediana das projeções para este ano e o próximo — BCB, pesquisa diária.",
+                    ),
+                    secao(
+                        "Curva de juros — Tesouro Direto",
+                        "abertura-tesouro",
+                        "Taxa de compra por vencimento: última data vs. 30 dias antes.",
+                    ),
                 ],
                 className="conteudo",
             ),
@@ -41,6 +72,36 @@ def register_callbacks(app: Dash, client: OpenBBClient) -> None:
     )
     def preencher_cartoes(_):
         return cartoes(abertura.indicadores(client))
+
+    @app.callback(
+        Output("abertura-focus", "children"), Input("atualizar", "n_intervals")
+    )
+    def preencher_focus(_):
+        try:
+            figura = figura_focus(abertura.focus(client))
+        except FonteIndisponivel as error:
+            return aviso(str(error))
+        return dcc.Graph(figure=figura, config=CONFIG_GRAFICO)
+
+    @app.callback(
+        Output("abertura-tesouro", "children"), Input("atualizar", "n_intervals")
+    )
+    def preencher_tesouro(_):
+        try:
+            curvas = abertura.tesouro(client)
+        except FonteIndisponivel as error:
+            return aviso(str(error))
+        return dcc.Graph(figure=figura_curva(curvas), config=CONFIG_GRAFICO)
+
+
+def aquecer(client: OpenBBClient) -> None:
+    """Fetch slow sources in the background so the first visitor does not wait."""
+
+    def tarefa():
+        with contextlib.suppress(FonteIndisponivel):
+            abertura.tesouro(client)
+
+    threading.Thread(target=tarefa, daemon=True, name="aquecer-tesouro").start()
 
 
 def create_app(
@@ -65,5 +126,8 @@ def create_app(
             https=settings.https,
         )
     app.layout = build_layout
-    register_callbacks(app, client or OpenBBClient(settings.api_url))
+    client = client or OpenBBClient(settings.api_url)
+    register_callbacks(app, client)
+    if settings.aquecer:
+        aquecer(client)
     return app

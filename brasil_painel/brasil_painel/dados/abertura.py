@@ -5,6 +5,7 @@ from collections.abc import Callable
 
 from brasil_painel.dados.api import FonteIndisponivel, OpenBBClient
 from brasil_painel.dados.indicadores import Ponto, Resumo, data_de_periodo, resumir
+from brasil_painel.dados.mercado import Curvas, curvas_tesouro, series_focus
 
 
 def _sgs(client: OpenBBClient, codigo: int, desde: dt.date) -> list[Ponto]:
@@ -112,3 +113,30 @@ def indicadores(client: OpenBBClient, hoje: dt.date | None = None) -> list[Resum
             continue
         resumos.append(resumir(nome, pontos, hoje=hoje, **opcoes))
     return resumos
+
+
+FOCUS_INDICADORES = ("IPCA", "Selic", "PIB Total", "Câmbio")
+
+
+def focus(client: OpenBBClient, hoje: dt.date | None = None, dias: int = 180) -> dict:
+    """Focus medians for the current and next year, per indicator."""
+    hoje = hoje or dt.date.today()
+    desde = (hoje - dt.timedelta(days=dias)).isoformat()
+    anos = [hoje.year, hoje.year + 1]
+    return {
+        nome: series_focus(
+            client.get("bcb/focus", indicator=nome, start_date=desde), anos
+        )
+        for nome in FOCUS_INDICADORES
+    }
+
+
+def tesouro(
+    client: OpenBBClient, hoje: dt.date | None = None, dias: int = 45
+) -> Curvas:
+    """Tesouro Direto curves (the first call can take ~90 s; see warm-up)."""
+    hoje = hoje or dt.date.today()
+    rows = client.get(
+        "tesouro/direto", start_date=(hoje - dt.timedelta(days=dias)).isoformat()
+    )
+    return curvas_tesouro(rows, dias=30)

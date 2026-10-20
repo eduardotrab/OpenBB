@@ -19,6 +19,7 @@ class Settings:
     secret_key: str | None = None
     users_file: str | None = DEFAULT_USERS_FILE
     https: bool = False
+    aquecer: bool = False
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -30,4 +31,5 @@ class Settings:
             secret_key=os.environ.get("PAINEL_SECRET_KEY") or None,
             users_file=os.environ.get("PAINEL_USERS_FILE", DEFAULT_USERS_FILE),
             https=bool(os.environ.get("PAINEL_CERTFILE")),
+            aquecer=os.environ.get("PAINEL_AQUECER", "1") == "1",
         )
