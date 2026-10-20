@@ -9,7 +9,8 @@ URL_ATTR = re.compile(r'(?:src|href)="([^"]+)"')
 
 
 def _client():
-    return create_app(Settings()).server.test_client()
+    """Client with authentication disabled (`users_file=None`) to test the page itself."""
+    return create_app(Settings(users_file=None)).server.test_client()
 
 
 def test_index_responds():

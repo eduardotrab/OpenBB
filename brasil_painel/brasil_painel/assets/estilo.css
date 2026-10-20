@@ -5,3 +5,11 @@ body { margin: 0; background: var(--fundo); color: var(--texto);
 .topo { background: var(--destaque); color: #fff; padding: 12px 24px; }
 .topo h1 { margin: 0; font-size: 1.3rem; }
 .conteudo { padding: 16px 24px; }
+.topo { display: flex; align-items: center; justify-content: space-between; }
+.topo .sair { color: #fff; }
+.login form { max-width: 320px; margin: 48px auto; display: flex; flex-direction: column; gap: 12px;
+              background: #fff; border: 1px solid var(--borda); border-radius: 8px; padding: 24px; }
+.login label { display: flex; flex-direction: column; gap: 4px; }
+.login input { padding: 8px; border: 1px solid var(--borda); border-radius: 4px; font: inherit; }
+.login button { padding: 10px; background: var(--destaque); color: #fff; border: 0; border-radius: 4px; font: inherit; cursor: pointer; }
+.erro { color: #b00020; margin: 0; }
