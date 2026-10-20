@@ -38,7 +38,12 @@ def _safe_next(target: str | None) -> str:
     if not target:
         return "/"
     parsed = urlparse(target)
-    if parsed.scheme or parsed.netloc or not target.startswith("/") or target.startswith("//"):
+    if (
+        parsed.scheme
+        or parsed.netloc
+        or not target.startswith("/")
+        or target.startswith("//")
+    ):
         return "/"
     return target
 

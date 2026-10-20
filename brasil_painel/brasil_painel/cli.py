@@ -12,7 +12,9 @@ def main(argv: list[str] | None = None) -> int:
     """Entry point."""
     parser = argparse.ArgumentParser(prog="painel-usuarios", description=__doc__)
     sub = parser.add_subparsers(dest="comando", required=True)
-    sub.add_parser("add", help="cadastrar usuário (pede a senha)").add_argument("usuario")
+    sub.add_parser("add", help="cadastrar usuário (pede a senha)").add_argument(
+        "usuario"
+    )
     sub.add_parser("remove", help="remover usuário").add_argument("usuario")
     sub.add_parser("list", help="listar usuários")
     args = parser.parse_args(argv)

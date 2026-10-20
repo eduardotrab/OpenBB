@@ -13,3 +13,14 @@ body { margin: 0; background: var(--fundo); color: var(--texto);
 .login input { padding: 8px; border: 1px solid var(--borda); border-radius: 4px; font: inherit; }
 .login button { padding: 10px; background: var(--destaque); color: #fff; border: 0; border-radius: 4px; font: inherit; cursor: pointer; }
 .erro { color: #b00020; margin: 0; }
+.cartoes { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.cartao { background: #fff; border: 1px solid var(--borda); border-radius: 8px; padding: 12px 16px; position: relative; }
+.cartao h3 { margin: 0 0 6px; font-size: .9rem; font-weight: 600; color: #4a5568; }
+.cartao .valor { margin: 0; font-size: 1.7rem; font-weight: 700; }
+.cartao .unidade { font-size: .9rem; font-weight: 400; color: #4a5568; }
+.cartao .variacao { margin: 4px 0 0; font-size: .85rem; color: #4a5568; }
+.cartao .rodape { margin: 8px 0 0; font-size: .75rem; color: #718096; }
+.cartao-erro .valor { font-size: 1rem; color: #b00020; }
+.cartao-defasado { border-color: #d69e2e; }
+.selo-defasado { position: absolute; top: 8px; right: 10px; margin: 0; font-size: .7rem;
+                 background: #fefcbf; color: #744210; padding: 2px 6px; border-radius: 4px; }
