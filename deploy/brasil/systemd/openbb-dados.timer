@@ -1,0 +1,10 @@
+[Unit]
+Description=Daily refresh of the Painel Brasil regional datasets
+
+[Timer]
+OnCalendar=*-*-* 04:30
+RandomizedDelaySec=15min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

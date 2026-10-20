@@ -68,6 +68,7 @@ step "Smoke test"
 (cd "$PROJECT_DIR" && openbb/.venv/bin/python -c \
   "from openbb import obb; p = obb.coverage.providers; missing = {'bcb','ibge','tesouro','cvm','receita'} - set(p); assert not missing, missing; print('providers ok:', sorted(p))")
 "$PROJECT_DIR/openbb/.venv/bin/python" -c "import brasil_painel.app; print('dashboard ok')"
+"$PROJECT_DIR/openbb/.venv/bin/painel-dados" --help >/dev/null && echo "regional data ok"
 
 if [ "$INSTALL_SERVICES" = 1 ]; then
   step "Installing systemd user services"

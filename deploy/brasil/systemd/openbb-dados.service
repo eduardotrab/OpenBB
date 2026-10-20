@@ -1,0 +1,15 @@
+[Unit]
+Description=Painel Brasil: refresh the regional datasets (SCR.data, Pix, POS, IBGE)
+After=network-online.target openbb-api.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=@PROJECT_DIR@
+# OPENBB_API_URL (IBGE series go through the local API); PAINEL_DADOS_DIR optional.
+EnvironmentFile=%h/.config/openbb-painel/painel.env
+ExecStart="@PROJECT_DIR@/openbb/.venv/bin/painel-dados" atualizar
+Nice=10
+# DuckDB is capped at 512 MB; this guards the machine if a source misbehaves.
+MemoryMax=1500M
+TimeoutStartSec=1h
