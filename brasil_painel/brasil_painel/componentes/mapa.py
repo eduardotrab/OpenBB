@@ -38,6 +38,8 @@ def figura_mapa(
     *,
     casas: int = 2,
     divergente: bool = False,
+    destaque: str | None = None,
+    altura: int = 520,
 ) -> go.Figure:
     """Color each state by its value; hover shows Brazil and the difference."""
     siglas = list(valores)
@@ -69,6 +71,20 @@ def figura_mapa(
             colorbar=dict(title=dict(text=unidade), thickness=12, len=0.7),
         )
     )
+    if destaque in valores:
+        # outline of the selected state, drawn on top without changing its color
+        fig.add_trace(
+            go.Choropleth(
+                geojson=geojson(),
+                featureidkey="properties.codarea",
+                locations=[CODIGOS[destaque]],
+                z=[0],
+                colorscale=[[0, "rgba(0,0,0,0)"], [1, "rgba(0,0,0,0)"]],
+                showscale=False,
+                marker=dict(line=dict(color=marca.VERDE_ESCURO, width=3)),
+                hoverinfo="skip",
+            )
+        )
     fig.update_geos(
         visible=False,
         fitbounds="locations",
@@ -76,7 +92,7 @@ def figura_mapa(
         bgcolor="rgba(0,0,0,0)",
     )
     fig.update_layout(
-        height=520,
+        height=altura,
         margin=dict(l=0, r=0, t=0, b=0),
         paper_bgcolor="rgba(0,0,0,0)",
     )

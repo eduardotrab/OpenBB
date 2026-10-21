@@ -123,7 +123,7 @@ def test_warm_up_touches_slow_sources_and_survives_failures():
 def test_map_page_is_served_and_routed():
     assert _client().get("/mapa").status_code == 200
     corpo, _, _ = pagina("/mapa")
-    assert {"mapa-grafico", "mapa-ranking", "mapa-evolucao"} <= _ids(corpo)
+    assert {"mapa-grafico", "mapa-ranking", "mapa-painel", "mapa-classe"} <= _ids(corpo)
 
 
 def test_gallery_is_routed_but_hidden_from_the_menu():

@@ -108,20 +108,25 @@ def test_catalog_flags_polarity():
     )
 
 
-def _callback(cliente_http, saidas, entradas):
+def _callback(cliente_http, saidas, entradas, mudou=()):
     """POST to Dash's callback endpoint, as the browser does."""
     ids = [f"{i}.{p}" for i, p in saidas]
     output = ids[0] if len(ids) == 1 else ".." + "...".join(ids) + ".."
     payload = {
         "output": output,
-        "outputs": [{"id": i, "property": p} for i, p in saidas],
+        # Dash expects a single output as an object, several as a list
+        "outputs": (
+            [{"id": i, "property": p} for i, p in saidas]
+            if len(saidas) > 1
+            else {"id": saidas[0][0], "property": saidas[0][1]}
+        ),
         "inputs": [{"id": i, "property": p, "value": v} for i, p, v in entradas],
-        "changedPropIds": [],
+        "changedPropIds": list(mudou),
     }
     return cliente_http.post("/_dash-update-component", json=payload)
 
 
-def test_map_callback_draws_states_ranking_and_brazil(loja):
+def test_map_callback_draws_states_ranking_brazil_and_the_state_panel(loja):
     from brasil_painel.app import create_app
     from brasil_painel.config import Settings
 
@@ -132,15 +137,35 @@ def test_map_callback_draws_states_ranking_and_brazil(loja):
             ("mapa-grafico", "figure"),
             ("mapa-cabecalho", "children"),
             ("mapa-ranking", "children"),
+            ("mapa-painel", "children"),
         ],
         [
             ("mapa-indicador", "value", "inadimplencia"),
             ("mapa-cliente", "value", "todos"),
             ("mapa-segmento", "value", "todos"),
+            ("mapa-classe", "value", ""),
+            ("mapa-produto", "value", ""),
+            ("filtros", "data", {"uf": "MG", "data": ""}),
         ],
     )
     assert resposta.status_code == 200
     texto = json.dumps(resposta.get_json(), ensure_ascii=False)
     assert "choropleth" in texto
-    assert "linha-brasil" in texto
+    assert "linha-brasil" in texto and "linha-escolhida" in texto
+    assert "Minas Gerais" in texto and "Posição:" in texto
     assert "Dado de ago/2026" in texto
+
+
+def test_clicking_a_state_sets_the_global_uf_filter(loja):
+    from brasil_painel.app import create_app
+    from brasil_painel.config import Settings
+
+    http = create_app(Settings(users_file=None)).server.test_client()
+    resposta = _callback(
+        http,
+        [("filtro-uf", "value")],
+        [("mapa-grafico", "clickData", {"points": [{"location": "35"}]})],
+        mudou=["mapa-grafico.clickData"],
+    )
+    assert resposta.status_code == 200, resposta.get_data(as_text=True)[:300]
+    assert resposta.get_json()["response"]["filtro-uf"]["value"] == "SP"
