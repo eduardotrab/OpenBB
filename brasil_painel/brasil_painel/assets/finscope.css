@@ -331,3 +331,14 @@ input[type="radio"], input[type="checkbox"] { accent-color: var(--fs-turquesa); 
   .fs-bol-grade.dupla { grid-template-columns: 1fr 1fr; }
   #bol-conteudo > div { display: block; }
 }
+
+/* ---- stock monitor ---- */
+.fs-grade-bolsa { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: var(--fs-e-4); align-items: start; }
+@media (max-width: 1200px) { .fs-grade-bolsa { grid-template-columns: 1fr; } }
+.fs-ibov { grid-template-columns: 240px minmax(0, 1fr); align-items: center; }
+.fs-var.sobe { color: #00796E; font-weight: 700; }
+.fs-var.desce { color: #B4432C; font-weight: 700; }
+.fs-filtro-ativo { width: 200px; }
+.fs-lista-bolsa th, .fs-lista-bolsa td { padding: 6px 10px; }
+.fs-grade-produtos.fs-meio { grid-template-columns: 1fr 1fr; }
+.fs-cartao-tabela.fs-pad { padding: var(--fs-e-3); }

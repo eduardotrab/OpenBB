@@ -99,9 +99,14 @@ def test_routing_callback_runs_through_dash():
     assert "mundo-eua" in response.get_data(as_text=True)
 
 
-def test_warm_up_touches_slow_sources_and_survives_failures():
+def test_warm_up_touches_slow_sources_and_survives_failures(monkeypatch):
     from brasil_painel.app import aquecer
+    from brasil_painel.dados import boletim, bolsa
     from brasil_painel.dados.api import FonteIndisponivel
+
+    # no network in tests: crypto and B3 quotes are replaced
+    monkeypatch.setattr(boletim, "cripto", lambda: [])
+    monkeypatch.setattr(bolsa, "cotacoes", lambda tickers: [])
 
     class Falha:
         def __init__(self):
@@ -195,5 +200,6 @@ def test_every_screen_of_the_roadmap_so_far_is_routed():
         "/comparativo",
         "/produtos",
         "/boletim",
+        "/bolsa",
     ):
         assert caminho in POR_CAMINHO, caminho

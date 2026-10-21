@@ -368,3 +368,112 @@ def figura_share_produtos(resumos, brasil: float | None) -> go.Figure:
     fig.update_xaxes(ticksuffix="%", range=[0, maior * 1.2])
     fig.update_traces(cliponaxis=False)
     return fig
+
+
+QUEDA = "#B4432C"
+
+
+def figura_candles(df) -> go.Figure:
+    """Daily candles with 21/50-day moving averages and volume below."""
+    fig = make_subplots(
+        rows=2,
+        cols=1,
+        shared_xaxes=True,
+        row_heights=[0.76, 0.24],
+        vertical_spacing=0.03,
+    )
+    fig.add_trace(
+        go.Candlestick(
+            x=df.data,
+            open=df.abertura,
+            high=df.maxima,
+            low=df.minima,
+            close=df.fechamento,
+            name="Preço",
+            increasing=dict(line=dict(color=marca.TURQUESA), fillcolor=marca.TURQUESA),
+            decreasing=dict(line=dict(color=QUEDA), fillcolor=QUEDA),
+        ),  # fmt: skip
+        row=1,
+        col=1,
+    )
+    for janela, cor in ((21, marca.VERDE_ESCURO), (50, marca.ROXO)):
+        fig.add_trace(
+            go.Scatter(
+                x=df.data,
+                y=df.fechamento.rolling(janela).mean(),
+                name=f"Média {janela} dias",
+                mode="lines",
+                line=dict(width=1.5, color=cor),
+            ),  # fmt: skip
+            row=1,
+            col=1,
+        )
+    cores = [
+        marca.TURQUESA if f >= a else QUEDA for a, f in zip(df.abertura, df.fechamento)
+    ]
+    fig.add_trace(
+        go.Bar(
+            x=df.data,
+            y=df.volume,
+            name="Volume (R$)",
+            marker=dict(color=cores),
+            opacity=0.6,
+        ),
+        row=2,
+        col=1,
+    )
+    fig.update_layout(height=460, margin=dict(l=56, r=16, t=36, b=24), hovermode="x unified",
+                      legend=dict(orientation="h", yanchor="top", y=1.0, yref="container", x=0),
+                      xaxis_rangeslider_visible=False)  # fmt: skip
+    fig.update_xaxes(rangebreaks=[dict(bounds=["sat", "mon"])])
+    fig.update_yaxes(title=None)
+    return fig
+
+
+def figura_intradia(pontos: list[tuple[str, float]], altura: int = 180) -> go.Figure:
+    """Minute closes of the session."""
+    fig = go.Figure(
+        go.Scatter(
+            x=[p[0] for p in pontos],
+            y=[p[1] for p in pontos],
+            mode="lines",
+            line=dict(width=2, color=marca.TURQUESA),
+            hovertemplate="%{x|%H:%M}: %{y:,.2f}<extra></extra>",
+        )  # fmt: skip
+    )
+    fig.update_layout(
+        height=altura, margin=dict(l=48, r=8, t=8, b=24), showlegend=False
+    )
+    fig.update_xaxes(tickformat="%H:%M", showgrid=False)
+    return fig
+
+
+def figura_mapa_calor(carteira, quotes: dict) -> go.Figure:
+    """Ibovespa treemap: area = weight, color = change of the day."""
+    itens = [(r.ticker, r.peso, quotes.get(r.ticker)) for r in carteira.itertuples()]
+    variacoes = [
+        q.variacao if q and q.variacao is not None else 0.0 for _, _, q in itens
+    ]
+    # scale by the bulk of the index, so one outlier does not wash out the rest
+    absolutos = sorted(abs(v) for v in variacoes)
+    limite = max(absolutos[int(len(absolutos) * 0.9) - 1] if absolutos else 1, 0.5)
+    fig = go.Figure(
+        go.Treemap(
+            labels=[t for t, _, _ in itens],
+            parents=[""] * len(itens),
+            values=[p for _, p, _ in itens],
+            customdata=variacoes,
+            texttemplate="<b>%{label}</b><br>%{customdata:+.2f}%",
+            hovertemplate="<b>%{label}</b><br>Peso: %{value:.2f}%<br>Variação: %{customdata:+.2f}%<extra></extra>",
+            marker=dict(
+                colors=variacoes,
+                colorscale=[[0, QUEDA], [0.5, "#EEF1F1"], [1, "#00796E"]],
+                cmin=-limite,
+                cmax=limite,
+                line=dict(color="#FFFFFF", width=1),
+            ),  # fmt: skip
+            branchvalues="total",
+        )
+    )
+    fig.update_layout(height=420, margin=dict(l=0, r=0, t=0, b=0))
+    return fig

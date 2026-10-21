@@ -11,12 +11,13 @@ from brasil_painel import navegacao
 from brasil_painel.auth import setup_auth
 from brasil_painel.componentes import filtros
 from brasil_painel.config import Settings
-from brasil_painel.dados import abertura, mundo
+from brasil_painel.dados import abertura, boletim, bolsa, mundo
 from brasil_painel.dados.api import FonteIndisponivel, OpenBBClient
 from brasil_painel.navegacao import Pagina
 from brasil_painel.paginas import (
     abertura as pagina_abertura,
     boletim as pagina_boletim,
+    bolsa as pagina_bolsa,
     comparativo as pagina_comparativo,
     estilo as pagina_estilo,
     mapa as pagina_mapa,
@@ -42,6 +43,7 @@ PAGINAS = [
     ),
     Pagina("/produtos", "Produtos", "Produtos", "produtos", pagina_produtos),
     Pagina("/boletim", "Boletim Econômico", "Boletim", "boletim", pagina_boletim),
+    Pagina("/bolsa", "Bolsa", "Bolsa", "bolsa", pagina_bolsa),
     Pagina("/estilo", "Galeria", None, "radar", pagina_estilo),  # internal
 ]
 POR_CAMINHO = {p.caminho: p for p in PAGINAS}
@@ -172,11 +174,22 @@ def aquecer(client: OpenBBClient, intervalo: float | None = None) -> threading.T
     def uma_vez():
         with contextlib.suppress(FonteIndisponivel):
             abertura.tesouro(client)
-        # World loaders isolate their own failures; the OECD routes take ~20 s.
+        # World loaders isolate their own failures.
         mundo.cartoes(client)
         mundo.juros(client)
         mundo.inflacao(client)
         mundo.agro(client)
+        # Bulletin and stock monitor: a failing source must not stop the warm-up.
+        for carregar in (
+            lambda: boletim.expectativas(client),
+            lambda: boletim.moedas(client),
+            lambda: boletim.metais_petroleo(client),
+            lambda: boletim.agro(client),
+            boletim.cripto,
+            lambda: bolsa.cotacoes(["IBOV", *bolsa.carteira().ticker]),
+        ):
+            with contextlib.suppress(Exception):
+                carregar()
 
     def tarefa():
         uma_vez()
