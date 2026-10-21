@@ -3,7 +3,7 @@
 from dash import Dash, Input, Output, dcc, html, no_update
 
 from brasil_painel.componentes.blocos import aviso, grafico
-from brasil_painel.componentes.graficos import SERIE_1, SERIE_2, figura_linhas
+from brasil_painel.componentes.graficos import SERIE_1, figura_linhas
 from brasil_painel.componentes.mapa import CONFIG_MAPA, figura_mapa
 from brasil_painel.dados import formato, regional
 from brasil_painel.dados.api import OpenBBClient
@@ -192,11 +192,16 @@ def register(app: Dash, client: OpenBBClient) -> None:
         except regional.DadosAusentes as error:
             return titulo, aviso(str(error))
         series = {"Brasil": _pontos(df, BRASIL)}
-        cores = {"Brasil": SERIE_1}
+        cores = {}
         if uf:
             series[NOMES[uf]] = _pontos(df, uf)
-            cores[NOMES[uf]] = SERIE_2
+            cores[NOMES[uf]] = SERIE_1
         figura = figura_linhas(
-            series, indicador.unidade, mensal=True, cores=cores, casas=indicador.casas
+            series,
+            indicador.unidade,
+            mensal=True,
+            cores=cores,
+            casas=indicador.casas,
+            referencia="Brasil",
         )
         return titulo, grafico(figura)

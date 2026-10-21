@@ -10,7 +10,7 @@ import json
 
 import plotly.graph_objects as go
 
-from brasil_painel.componentes.graficos import TEXTO
+from brasil_painel import marca
 from brasil_painel.dados import formato
 from brasil_painel.regional import malha
 from brasil_painel.regional.ufs import NOMES, SIGLAS
@@ -21,8 +21,8 @@ CONFIG_MAPA = {
     "responsive": True,
     "topojsonURL": "/assets/topojson/",
 }
-SEQUENCIAL = ["#cde2fb", "#86b6ef", "#3987e5", "#1c5cab", "#0d366b"]
-DIVERGENTE = ["#184f95", "#6da7ec", "#f0efec", "#ef8a85", "#b3261e"]
+SEQUENCIAL = marca.SEQUENCIAL
+DIVERGENTE = marca.DIVERGENTE
 
 
 @functools.cache
@@ -79,7 +79,5 @@ def figura_mapa(
         height=520,
         margin=dict(l=0, r=0, t=0, b=0),
         paper_bgcolor="rgba(0,0,0,0)",
-        font=dict(family="system-ui, sans-serif", size=12, color=TEXTO),
-        separators=",.",
     )
     return fig

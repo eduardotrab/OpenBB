@@ -7,17 +7,16 @@ gray for the comparison curve). One y-axis per panel; legend + hover always on.
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
+from brasil_painel import marca
+from brasil_painel.componentes import tema  # noqa: F401 - registers the template
 from brasil_painel.dados import formato
 from brasil_painel.dados.indicadores import Ponto
 from brasil_painel.dados.mercado import Curvas, Serie
 
-SERIE_1 = "#2a78d6"
-SERIE_2 = "#eb6834"
-SERIE_3 = "#1baf7a"
-SERIE_4 = "#eda100"
-COMPARACAO = "#9a998f"
-TEXTO = "#52514e"
-GRADE = "#e7e6e1"
+SERIE_1, SERIE_2, SERIE_3, SERIE_4 = marca.CATEGORICA[:4]
+COMPARACAO = marca.BRASIL
+TEXTO = marca.TEXTO
+GRADE = marca.BORDA
 
 UNIDADES_FOCUS = {"IPCA": "%", "Selic": "% a.a.", "PIB Total": "%", "Câmbio": "R$/US$"}
 
@@ -26,9 +25,6 @@ def _layout(fig: go.Figure, altura: int) -> go.Figure:
     fig.update_layout(
         height=altura,
         margin=dict(l=48, r=16, t=72, b=32),
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="#ffffff",
-        font=dict(family="system-ui, sans-serif", size=12, color=TEXTO),
         hovermode="x unified",
         legend=dict(orientation="h", yanchor="top", y=0.99, yref="container", x=0.01),
         separators=",.",
@@ -150,6 +146,7 @@ def figura_linhas(
     mensal: bool = False,
     cores: dict[str, str] | None = None,
     casas: int = 2,
+    referencia: str | None = None,
 ) -> go.Figure:
     """Several series on one axis, each labelled at its last point."""
     fig = go.Figure()
@@ -171,7 +168,12 @@ def figura_linhas(
                 y=[p.valor for p in pontos],
                 name=nome,
                 mode="lines",
-                line=dict(width=2, color=cor, shape="hv" if degrau else "linear"),
+                line=dict(
+                    width=2,
+                    color=marca.BRASIL if nome == referencia else cor,
+                    dash="dash" if nome == referencia else "solid",
+                    shape="hv" if degrau else "linear",
+                ),
                 hovertemplate=f"{nome}: %{{y:,.{casas}f}}{sufixo}<extra></extra>",
             )
         )

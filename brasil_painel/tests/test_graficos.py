@@ -149,3 +149,32 @@ def test_end_labels_are_pushed_apart():
     from brasil_painel.componentes.graficos import afastar
 
     assert afastar([100.0, 104.0, 50.0], 14) == [100.0, 114.0, 50.0]
+
+
+def test_figures_use_the_finscope_template():
+    import plotly.io as pio
+
+    from brasil_painel import marca
+    from brasil_painel.componentes import tema
+
+    assert pio.templates.default == "finscope"
+    layout = pio.templates["finscope"].layout
+    assert "Tahoma" in layout.font.family
+    assert list(layout.colorway) == marca.CATEGORICA
+    assert layout.transition.duration == tema.TRANSICAO["duration"]
+
+
+def test_reference_series_is_dashed_and_neutral():
+    import datetime as dt
+
+    from brasil_painel import marca
+    from brasil_painel.componentes.graficos import figura_linhas
+    from brasil_painel.dados.indicadores import Ponto
+
+    pontos = [Ponto(dt.date(2026, 8, 1), 1.0), Ponto(dt.date(2026, 9, 1), 2.0)]
+    fig = figura_linhas(
+        {"Brasil": pontos, "Minas Gerais": pontos}, "%", referencia="Brasil"
+    )
+    brasil, mg = fig.data
+    assert (brasil.line.dash, brasil.line.color) == ("dash", marca.BRASIL)
+    assert mg.line.dash == "solid"
