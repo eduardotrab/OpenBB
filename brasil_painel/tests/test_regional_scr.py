@@ -174,3 +174,17 @@ def test_class_dataset_flags_mei_and_keeps_the_income_band(tmp_path):
     df = scr.agregar_csv(caminho, scr.CLASSE)
     linha = df.iloc[0]
     assert bool(linha.mei) and linha.porte == "Mais de 3 a 5 salários mínimos"
+
+
+def test_store_cache_returns_copies_and_sees_new_files(tmp_path, csv_agosto):
+    import os
+    import time
+
+    df = scr.agregar_csv(csv_agosto)
+    destino = armazem.gravar(df, "scr_uf", scr.SCHEMA, tmp_path)
+    primeira = armazem.ler("scr_uf", tmp_path)
+    primeira["uf"] = "XX"
+    assert set(armazem.ler("scr_uf", tmp_path).uf) == {"MG", "SP"}
+    armazem.gravar(df[df.uf == "MG"], "scr_uf", scr.SCHEMA, tmp_path)
+    os.utime(destino, ns=(time.time_ns(), time.time_ns() + 1_000_000))
+    assert set(armazem.ler("scr_uf", tmp_path).uf) == {"MG"}

@@ -1,7 +1,7 @@
 """Page registry: title, menu group and icon of every FinScope screen."""
 
 from dataclasses import dataclass
-from types import ModuleType
+from typing import Any
 
 from dash import dcc, html
 
@@ -25,7 +25,7 @@ class Pagina:
     titulo: str
     grupo: str | None  # None: reachable by URL but not in the menu
     icone: str
-    modulo: ModuleType
+    modulo: Any  # module or object with layout() and register(app, client)
 
 
 def icone(nome: str) -> html.Span:

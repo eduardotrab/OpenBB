@@ -100,3 +100,13 @@ def classe_rural(programa: str) -> str:
 def ordem(grupo: str) -> list[str]:
     """Classes of a group in display order (as written in the TOML)."""
     return list(configuracao()[grupo])
+
+
+def principais(grupo: str) -> list[str]:
+    """Classes shown as columns (the "not informed" class is shown apart)."""
+    return [c for c in ordem(grupo) if c != NAO_INFORMADO.get(grupo)]
+
+
+def descricao(classe: str) -> str:
+    """Short subtitle of a class column (empty when not configured)."""
+    return configuracao().get("descricoes", {}).get(classe, "")

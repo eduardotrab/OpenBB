@@ -61,7 +61,8 @@ def test_routing_picks_the_page_and_highlights_the_menu():
     corpo, grupos, titulo = pagina("/mundo/")
     assert "mundo-eua" in _ids(corpo)
     assert titulo == "Mundo"
-    assert [link.className for link in _links(grupos)] == [
+    mercado = grupos[0].children[1:]
+    assert [link.className for link in mercado] == [
         "fs-item",
         "fs-item ativo",
         "fs-item",

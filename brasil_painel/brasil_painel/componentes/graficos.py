@@ -199,3 +199,35 @@ def figura_linhas(
     )
     fig.update_yaxes(range=[y0, y1], ticksuffix=sufixo)
     return fig
+
+
+def figura_tendencia(
+    pontos: list[tuple],
+    rotulos: tuple[str, str] = ("Sistema", "Cooperativas"),
+    unidade: str = "%",
+) -> go.Figure:
+    """Small two-line trend for a class column: system vs. cooperatives."""
+    fig = go.Figure()
+    for i, (rotulo, cor) in enumerate(
+        zip(rotulos, (marca.SISTEMA, marca.COOPERATIVAS)), start=1
+    ):
+        validos = [(p[0], p[i]) for p in pontos if p[i] is not None]
+        fig.add_trace(
+            go.Scatter(
+                x=[d for d, _ in validos],
+                y=[v for _, v in validos],
+                name=rotulo,
+                mode="lines",
+                line=dict(width=2, color=cor),
+                hovertemplate=f"{rotulo}: %{{y:,.2f}}{unidade}<extra></extra>",
+            )
+        )
+    fig.update_layout(
+        height=170,
+        margin=dict(l=36, r=8, t=28, b=24),
+        legend=dict(orientation="h", y=1.18, x=0, font=dict(size=11)),
+        hovermode="x unified",
+    )
+    fig.update_xaxes(showgrid=False, tickformat="%m/%y", nticks=4)
+    fig.update_yaxes(ticksuffix=unidade if unidade == "%" else "", nticks=4)
+    return fig

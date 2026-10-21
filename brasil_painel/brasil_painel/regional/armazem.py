@@ -1,5 +1,6 @@
 """Local store of the regional datasets: one Parquet file per dataset."""
 
+import functools
 import os
 from pathlib import Path
 
@@ -52,10 +53,18 @@ def gravar(
 
 
 def ler(nome: str, pasta: Path | None = None) -> pd.DataFrame | None:
-    """Read a dataset, or None when it was never ingested."""
+    """Read a dataset, or None when it was never ingested.
+
+    Cached by file modification time; callers get a copy they may change.
+    """
     caminho = (pasta or diretorio()) / f"{nome}.parquet"
     if not caminho.exists():
         return None
+    return _ler_arquivo(str(caminho), caminho.stat().st_mtime_ns).copy()
+
+
+@functools.lru_cache(maxsize=16)
+def _ler_arquivo(caminho: str, _modificado: int) -> pd.DataFrame:
     return pq.read_table(caminho).to_pandas()
 
 

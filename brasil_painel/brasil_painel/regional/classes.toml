@@ -24,3 +24,17 @@
 [cooperativas]
 sicor_segmentos = ["Cooperativa de Crédito", "Banco Múltiplo Cooperativo"]
 sicoob_no_nome = "SICOOB"
+
+[descricoes]  # subtitle of each class column
+"Varejo" = "renda até 3 salários mínimos"
+"Renda média" = "de 3 a 5 salários mínimos"
+"Média alta" = "de 5 a 20 salários mínimos"
+"Alta renda" = "acima de 20 salários mínimos"
+"MEI" = "pessoas com ocupação MEI"
+"Micro" = "porte micro"
+"Pequena" = "porte pequeno"
+"Média" = "porte médio"
+"Grande" = "porte grande"
+"Pequeno produtor" = "Pronaf"
+"Médio produtor" = "Pronamp"
+"Grande produtor" = "demais programas e sem programa"

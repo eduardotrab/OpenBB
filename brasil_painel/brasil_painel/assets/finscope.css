@@ -181,3 +181,13 @@ input[type="radio"], input[type="checkbox"] { accent-color: var(--fs-turquesa); 
 .fs-filtro-data { width: 150px; }
 .fs-filtros .fs-selo-datas { margin-left: auto; color: var(--fs-texto-suave); text-align: right; }
 @media (max-width: 760px) { .fs-filtro-uf, .fs-filtro-data { width: calc(50% - 6px); } .fs-filtros { flex-wrap: wrap; } }
+
+/* ---- segment screens ---- */
+.fs-tela { display: flex; flex-direction: column; gap: var(--fs-e-4); }
+.fs-barra-tela { display: flex; align-items: center; gap: var(--fs-e-4); flex-wrap: wrap; }
+.fs-filtro-produto { width: 280px; }
+.fs-explicacao { margin: 0; font-size: var(--fs-t-s); color: var(--fs-texto-suave); }
+.fs-contexto { font-size: var(--fs-t-s); color: var(--fs-texto-suave); }
+.fs-mini-titulo { margin: 0; font-size: var(--fs-t-xs); color: var(--fs-texto-suave); text-align: center; }
+.fs-vazio { color: var(--fs-texto-suave); font-size: var(--fs-t-s); text-align: center; margin: var(--fs-e-5) 0; }
+.fs-nota-resto { margin: 0; font-size: var(--fs-t-xs); color: var(--fs-texto-suave); }
