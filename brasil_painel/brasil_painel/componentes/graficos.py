@@ -477,3 +477,48 @@ def figura_mapa_calor(carteira, quotes: dict) -> go.Figure:
     )
     fig.update_layout(height=420, margin=dict(l=0, r=0, t=0, b=0))
     return fig
+
+
+def figura_automatica(df) -> go.Figure | None:
+    """Best-guess chart for any table: lines over time, or bars by category."""
+    import pandas as pd
+
+    from brasil_painel.dados import insights
+
+    data = insights.coluna_data(df)
+    numeros = insights.numericas(df)
+    if not numeros:
+        return None
+    fig = go.Figure()
+    if data:
+        tabela = (
+            df.assign(_data=pd.to_datetime(df[data], errors="coerce"))
+            .dropna(subset=["_data"])
+            .sort_values("_data")
+        )
+        categorias = [
+            c
+            for c in df.columns
+            if insights._texto(df[c]) and c != data and 2 <= df[c].nunique() <= 8
+        ]
+        if categorias:
+            cat, num = categorias[0], numeros[0]
+            for i, (nome, grupo) in enumerate(tabela.groupby(cat)):
+                fig.add_trace(go.Scatter(x=grupo._data, y=grupo[num], name=str(nome), mode="lines",
+                                         line=dict(width=2, color=marca.CATEGORICA[i % len(marca.CATEGORICA)])))  # fmt: skip
+            fig.update_layout(yaxis_title=num)
+        else:
+            for i, num in enumerate(numeros[:4]):
+                fig.add_trace(go.Scatter(x=tabela._data, y=tabela[num], name=num, mode="lines",
+                                         line=dict(width=2, color=marca.CATEGORICA[i])))  # fmt: skip
+    else:
+        rotulos = [c for c in df.columns if insights._texto(df[c])]
+        if not rotulos:
+            return None
+        top = df.nlargest(20, numeros[0])
+        fig.add_trace(go.Bar(x=top[numeros[0]], y=top[rotulos[0]].astype(str), orientation="h",
+                             marker=dict(color=marca.TURQUESA)))  # fmt: skip
+        fig.update_yaxes(autorange="reversed", automargin=True)
+    fig.update_layout(height=380, margin=dict(l=56, r=16, t=40, b=32), hovermode="x unified" if data else "closest",
+                      legend=dict(orientation="h", yanchor="top", y=1.0, yref="container", x=0))  # fmt: skip
+    return fig
