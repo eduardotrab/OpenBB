@@ -49,7 +49,7 @@ def cartao(resumo: Resumo) -> html.Div:
         if resumo.anual
         else formato.data(resumo.data_ref, resumo.mensal)
     )
-    rodape = f"{resumo.fonte} · ref. {referencia}"
+    rodape = f"{resumo.fonte}, dado de {referencia}"
     filhos.append(html.P(rodape, className="rodape"))
     if resumo.defasado:
         filhos.append(html.P("desatualizado", className="selo-defasado"))

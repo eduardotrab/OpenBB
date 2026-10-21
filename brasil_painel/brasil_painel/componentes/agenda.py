@@ -29,7 +29,7 @@ def agenda(
                     ),
                     html.Span(evento.titulo, className="evento"),
                     html.Span(
-                        " · ".join(x for x in (evento.hora, evento.fonte) if x),
+                        ", ".join(x for x in (evento.hora, evento.fonte) if x),
                         className="detalhe",
                     ),
                 ]

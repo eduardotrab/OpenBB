@@ -15,7 +15,7 @@ def layout() -> html.Div:
     """Return the page body."""
     return html.Div(
         [
-            secao("Cenário macro — Brasil", "abertura-cartoes"),
+            secao("Cenário macro do Brasil", "abertura-cartoes"),
             html.Div(
                 [
                     html.Div(
@@ -24,10 +24,10 @@ def layout() -> html.Div:
                                 "Expectativas de mercado (Focus)",
                                 "abertura-focus",
                                 "Mediana das projeções para este ano e o próximo"
-                                " — BCB, pesquisa diária.",
+                                ". Fonte: BCB, pesquisa diária.",
                             ),
                             secao(
-                                "Curva de juros — Tesouro Direto",
+                                "Curva de juros do Tesouro Direto",
                                 "abertura-tesouro",
                                 "Taxa de compra por vencimento: última data"
                                 " vs. 30 dias antes.",
@@ -37,7 +37,7 @@ def layout() -> html.Div:
                     ),
                     html.Aside(
                         [
-                            html.H2("Agenda — próximos 7 dias"),
+                            html.H2("Agenda dos próximos 7 dias"),
                             carregando(html.Div(id="agenda-lista")),
                             html.H2("Notícias"),
                             noticias_ui.filtro(),

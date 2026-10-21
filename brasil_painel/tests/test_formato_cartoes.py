@@ -43,7 +43,7 @@ def test_cartao_shows_value_reference_and_trend():
     assert (
         "13,75" in texto
         and "▼ -1,25 em 12 meses" in texto
-        and "ref. 20/10/2026" in texto
+        and "dado de 20/10/2026" in texto
     )
 
 
@@ -64,14 +64,14 @@ def test_agenda_marks_today():
     texto = _texto(
         agenda(
             [
-                Evento(hoje, "8h", "Copom — ata", "BCB"),
+                Evento(hoje, "8h", "Ata do Copom", "BCB"),
                 Evento(dt.date(2026, 10, 23), "12h", "IPCA-15", "IBGE"),
             ],
             [],
             hoje,
         )
     )
-    assert "hoje" in texto and "sex 23/10" in texto and "Copom — ata" in texto
+    assert "hoje" in texto and "sex 23/10" in texto and "Ata do Copom" in texto
 
 
 def test_cartao_with_decimals_and_percent_change():
@@ -101,4 +101,4 @@ def test_cartao_annual_reference_shows_the_year():
         data_ref=dt.date(2026, 12, 31),
         anual=True,
     )
-    assert "FMI (WEO) · ref. 2026" in _texto(cartao(r))
+    assert "FMI (WEO), dado de 2026" in _texto(cartao(r))

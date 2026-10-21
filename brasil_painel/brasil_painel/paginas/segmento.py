@@ -160,8 +160,8 @@ class Segmento:
             data = next((r.data for r in resumos if r.data), None)
             lugar = NOMES.get(kwargs["uf"], "Brasil") if kwargs["uf"] else "Brasil"
             contexto = (
-                f"{lugar} · {produto or 'todos os produtos'} · carteira em "
-                f"{formato.data(data, mensal=True) if data else '—'} (estoque, SCR.data)"
+                f"{lugar}, {produto or 'todos os produtos'}. Carteira de "
+                f"{formato.data(data, mensal=True) if data else 'mês sem dado'} (estoque, SCR.data)."
             )
             resto = [
                 html.P(

@@ -13,7 +13,7 @@ PUBLIC_PATHS = {"/login", "/assets/finscope.css", "/_favicon.ico"}
 LOGIN_PAGE = """<!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Entrar — FinScope</title>
+<title>Entrar no FinScope</title>
 <link rel="stylesheet" href="/assets/finscope.css"></head>
 <body class="fs-login">
 <section class="fs-login-marca" aria-hidden="true">

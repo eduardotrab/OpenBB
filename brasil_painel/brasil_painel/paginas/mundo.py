@@ -20,7 +20,7 @@ GRAFICOS = [
     (
         "Juros básicos",
         "mundo-juros",
-        "Fed funds efetiva, taxa de depósito do BCE e Selic meta — % a.a.",
+        "Fed funds efetiva, taxa de depósito do BCE e Selic meta, em % ao ano.",
     ),
     (
         "Inflação em 12 meses",

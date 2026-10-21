@@ -63,8 +63,10 @@ def eventos_copom(reunioes: list[list[str]]) -> list[Evento]:
     for _, segundo_dia in reunioes:
         decisao = dt.date.fromisoformat(segundo_dia)
         ata = decisao + dt.timedelta(days=(1 - decisao.weekday()) % 7 or 7)
-        eventos.append(Evento(decisao, "após 18h", "Copom — decisão da Selic", "BCB"))
-        eventos.append(Evento(ata, "8h", "Copom — ata da reunião", "BCB"))
+        eventos.append(
+            Evento(decisao, "após 18h", "Decisão do Copom sobre a Selic", "BCB")
+        )
+        eventos.append(Evento(ata, "8h", "Ata do Copom", "BCB"))
     return eventos
 
 

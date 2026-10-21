@@ -138,4 +138,4 @@ def test_map_callback_draws_states_ranking_and_brazil(loja):
     texto = json.dumps(resposta.get_json(), ensure_ascii=False)
     assert "choropleth" in texto
     assert "linha-brasil" in texto
-    assert "ref. ago/2026" in texto
+    assert "Dado de ago/2026" in texto

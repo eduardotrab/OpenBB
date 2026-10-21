@@ -26,7 +26,7 @@ def _coluna_exemplo(titulo: str, fator: float) -> html.Section:
                 [
                     ("Carteira", 1_000e9 * fator),
                     ("Em dia", 930e9 * fator),
-                    ("Atraso 15–90", 25e9 * fator),
+                    ("Atraso de 15 a 90 dias", 25e9 * fator),
                     ("Inadimplente", 45e9 * fator),
                 ],
                 prefixo="R$ ",

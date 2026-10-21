@@ -48,7 +48,7 @@ class ResumoClasse:
         return [
             ("Carteira", self.carteira),
             ("Em dia", self.em_dia),
-            ("Atraso 15–90 dias", self.atraso_15_90),
+            ("Atraso de 15 a 90 dias", self.atraso_15_90),
             ("Inadimplente", self.inadimplente),
         ]
 

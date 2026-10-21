@@ -78,7 +78,7 @@ def test_income_class_summary(loja):
     assert r.crescimento_12m == pytest.approx(10.0)
     assert r.peso_cartao == pytest.approx(100 / 1050 * 100)
     rotulos = [e for e, _ in r.funil]
-    assert rotulos == ["Carteira", "Em dia", "Atraso 15–90 dias", "Inadimplente"]
+    assert rotulos == ["Carteira", "Em dia", "Atraso de 15 a 90 dias", "Inadimplente"]
     assert dict(r.funil)["Em dia"] == pytest.approx(1050 * 1.1 - 40 - 15)
 
 

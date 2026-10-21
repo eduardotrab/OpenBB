@@ -102,7 +102,7 @@ def tabela_ranking(foto: regional.Retrato, indicador: regional.Indicador) -> htm
                     html.Td(
                         formato.numero(variacao, indicador.casas, sinal=True)
                         if variacao is not None
-                        else "–",
+                        else "sem dado",
                         className="num",
                     ),
                 ],
@@ -162,8 +162,8 @@ def register(app: Dash, client: OpenBBClient) -> None:
             else ""
         )
         cabecalho = [
-            html.Strong(f"ref. {formato.data(foto.data, mensal=True)}"),
-            f" · {brasil} · fonte: {indicador.fonte}",
+            html.Strong(f"Dado de {formato.data(foto.data, mensal=True)}"),
+            f". {brasil}. Fonte: {indicador.fonte}.",
             html.Br(),
             indicador.nota,
         ]

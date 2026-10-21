@@ -47,7 +47,7 @@ def figura_mapa(
             f"{formato.numero(valores[s], casas)} {unidade}",
             (
                 f"Brasil: {formato.numero(brasil, casas)} {unidade}"
-                f" · diferença: {formato.numero(valores[s] - brasil, casas, sinal=True)}"
+                f"<br>Diferença: {formato.numero(valores[s] - brasil, casas, sinal=True)}"
                 if brasil is not None
                 else ""
             ),

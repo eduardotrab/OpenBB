@@ -16,8 +16,8 @@ D = dt.date
 def test_copom_decision_on_second_day_and_minutes_next_tuesday():
     eventos = eventos_copom([["2026-11-03", "2026-11-04"]])
     assert eventos == [
-        Evento(D(2026, 11, 4), "após 18h", "Copom — decisão da Selic", "BCB"),
-        Evento(D(2026, 11, 10), "8h", "Copom — ata da reunião", "BCB"),
+        Evento(D(2026, 11, 4), "após 18h", "Decisão do Copom sobre a Selic", "BCB"),
+        Evento(D(2026, 11, 10), "8h", "Ata do Copom", "BCB"),
     ]
 
 
