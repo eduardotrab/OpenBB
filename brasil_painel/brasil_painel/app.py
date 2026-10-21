@@ -12,6 +12,7 @@ from brasil_painel.dados import abertura, mundo
 from brasil_painel.dados.api import FonteIndisponivel, OpenBBClient
 from brasil_painel.paginas import (
     abertura as pagina_abertura,
+    estilo as pagina_estilo,
     mapa as pagina_mapa,
     mundo as pagina_mundo,
 )
@@ -20,11 +21,12 @@ from brasil_painel.usuarios import UserStore
 TITLE = "Painel Brasil"
 ATUALIZACAO_MS = 15 * 60 * 1000
 
-# path → (menu label, page module)
+# path → (menu label or None for hidden pages, page module)
 PAGINAS = {
     "/": ("Abertura", pagina_abertura),
     "/mundo": ("Mundo", pagina_mundo),
     "/mapa": ("Mapa", pagina_mapa),
+    "/estilo": (None, pagina_estilo),  # internal gallery, not in the menu
 }
 
 
@@ -37,6 +39,7 @@ def menu(caminho: str) -> list[dcc.Link]:
             className="ativo" if href == caminho else "",
         )
         for href, (rotulo, _) in PAGINAS.items()
+        if rotulo
     ]
 
 

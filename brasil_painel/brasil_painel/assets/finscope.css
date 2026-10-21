@@ -51,10 +51,11 @@ body { font-family: var(--fs-fonte); color: var(--fs-texto); background: var(--f
 .fs-funil { display: flex; flex-direction: column; gap: 3px; }
 .fs-funil-linha { display: grid; grid-template-columns: 88px 1fr; align-items: center; gap: var(--fs-e-2); }
 .fs-funil-rotulo { font-size: var(--fs-t-xs); color: var(--fs-texto-suave); }
-.fs-funil-trilho { display: flex; justify-content: center; }
+.fs-funil-trilho { display: flex; justify-content: center; align-items: center; gap: 6px; }
 .fs-funil-barra { background: var(--fs-turquesa); min-height: 22px; border-radius: 2px; display: flex; align-items: center;
-                  justify-content: center; min-width: fit-content; transition: width var(--fs-lento) var(--fs-curva); }
+                  justify-content: center; min-width: 3px; transition: width var(--fs-lento) var(--fs-curva); }
 .fs-funil-texto { font-size: var(--fs-t-xs); font-weight: 700; color: var(--fs-verde-escuro); padding: 0 6px; white-space: nowrap; }
+.fs-funil-texto.fora { padding: 0; font-weight: 400; }
 
 /* ---- comparative bars (cooperatives × system) ---- */
 .fs-barras { display: flex; flex-direction: column; gap: 4px; }
@@ -86,3 +87,9 @@ body { font-family: var(--fs-fonte); color: var(--fs-texto); background: var(--f
                       background-size: 200% 100%; animation: fs-brilho 1.4s linear infinite; }
 .fs-esqueleto-linha:nth-child(2n) { width: 80%; }
 @keyframes fs-brilho { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+/* ---- internal gallery ---- */
+.fs-galeria { display: flex; flex-direction: column; gap: var(--fs-e-5); }
+.fs-amostras { display: flex; flex-wrap: wrap; gap: var(--fs-e-4); }
+.fs-amostra-linha { display: flex; align-items: center; gap: var(--fs-e-2); font-size: var(--fs-t-s); }
+.fs-amostra { width: 28px; height: 28px; border-radius: var(--fs-raio); border: 1px solid var(--fs-borda); }

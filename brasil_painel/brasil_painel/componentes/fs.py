@@ -11,6 +11,7 @@ from dash import html
 from brasil_painel.dados import formato
 
 SETAS = {"sobe": "▲", "desce": "▼", "estavel": "■"}
+ROTULO_DENTRO = 30  # % of the first stage: narrower bars keep the label outside
 
 
 def _tendencia(variacao: float) -> str:
@@ -59,12 +60,16 @@ def kpi(
 
 
 def funil(etapas: list[tuple[str, float]], prefixo: str = "") -> html.Div:
-    """Centered bars, each as a share of the first stage (as in the models)."""
+    """Centered bars, each as a share of the first stage (as in the models).
+
+    Bars keep their true width; a label that does not fit goes beside the bar.
+    """
     base = etapas[0][1] if etapas and etapas[0][1] else 1.0
     linhas = []
     for i, (rotulo, valor) in enumerate(etapas):
         parte = valor / base * 100
         texto = f"{prefixo}{formato.compacto(valor)}"
+        dentro = parte >= ROTULO_DENTRO
         if i:
             texto += f" ({formato.numero(parte, 1)}%)"
         linhas.append(
@@ -72,11 +77,18 @@ def funil(etapas: list[tuple[str, float]], prefixo: str = "") -> html.Div:
                 [
                     html.Span(rotulo, className="fs-funil-rotulo"),
                     html.Div(
-                        html.Div(
-                            html.Span(texto, className="fs-funil-texto"),
-                            className="fs-funil-barra",
-                            style={"width": f"{max(parte, 0):.1f}%"},
-                        ),
+                        [
+                            html.Div(
+                                html.Span(texto, className="fs-funil-texto")
+                                if dentro
+                                else None,
+                                className="fs-funil-barra",
+                                style={"width": f"{max(parte, 0):.1f}%"},
+                            ),
+                            None
+                            if dentro
+                            else html.Span(texto, className="fs-funil-texto fora"),
+                        ],
                         className="fs-funil-trilho",
                     ),
                 ],

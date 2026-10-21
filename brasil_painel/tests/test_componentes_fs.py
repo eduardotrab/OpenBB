@@ -66,6 +66,9 @@ def test_funnel_bars_are_relative_to_the_first_stage():
     barras = _procurar(funil, "fs-funil-barra")
     assert [b.style["width"] for b in barras] == ["100.0%", "95.0%", "5.0%"]
     assert "50 (5,0%)" in _texto(funil)
+    assert len(_procurar(funil, "fora")) == 1, (
+        "only the narrow bar puts its label outside"
+    )
 
 
 def test_comparative_bars_scale_to_the_largest():

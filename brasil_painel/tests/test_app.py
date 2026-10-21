@@ -112,3 +112,19 @@ def test_map_page_is_served_and_routed():
     assert _client().get("/mapa").status_code == 200
     corpo, _ = pagina("/mapa")
     assert {"mapa-grafico", "mapa-ranking", "mapa-evolucao"} <= _ids(corpo)
+
+
+def test_gallery_is_routed_but_hidden_from_the_menu():
+    corpo, links = pagina("/estilo")
+    assert "fs-galeria" in corpo.className
+    assert all(link.href != "/estilo" for link in links)
+
+
+def test_motion_script_is_local_and_respects_reduced_motion():
+    from pathlib import Path
+
+    import brasil_painel
+
+    js = (Path(brasil_painel.__file__).parent / "assets" / "finscope.js").read_text()
+    assert "prefers-reduced-motion" in js
+    assert "http" not in js
