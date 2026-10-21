@@ -10,10 +10,14 @@ from dataclasses import dataclass
 
 import pandas as pd
 
-from brasil_painel.regional import armazem
+from brasil_painel.dados import classes as dados_classes
+from brasil_painel.regional import (
+    armazem,
+    classes as cfg,
+)
 from brasil_painel.regional.ufs import BRASIL
 
-FILTROS_SCR = ("cliente", "segmento")
+FILTROS_SCR = ("cliente", "segmento", "classe", "produto")
 
 
 class DadosAusentes(Exception):
@@ -27,7 +31,7 @@ class Indicador:
     nome: str
     unidade: str
     fonte: str
-    calcular: Callable[[str, str], pd.DataFrame]
+    calcular: Callable[..., pd.DataFrame]
     casas: int = 2
     divergente: bool = False  # above Brazil is worse → diverging scale
     filtros: tuple[str, ...] = ()
@@ -43,8 +47,24 @@ def _ler(nome: str) -> pd.DataFrame:
     return df
 
 
-def _scr(cliente: str, segmento: str) -> pd.DataFrame:
-    df = _ler("scr_uf")
+def _scr(cliente: str, segmento: str, recorte: dict | None = None) -> pd.DataFrame:
+    """Credit rows filtered by client type, segment and, optionally, class/product.
+
+    Class or product filters need the detailed `scr_classe`; otherwise the
+    small per-UF dataset is enough.
+    """
+    recorte = recorte or {}
+    classe, produto = recorte.get("classe"), recorte.get("produto")
+    if classe or produto:
+        df = _ler("scr_classe")
+        if classe:
+            grupo = "pf" if classe in cfg.ordem("pf") else "pj"
+            df = dados_classes.com_classes(grupo)
+            df = df[df.classe == classe]
+        if produto:
+            df = df[df.produto == produto]
+    else:
+        df = _ler("scr_uf")
     if cliente != "todos":
         df = df[df.cliente == cliente]
     if segmento == "cooperativas":
@@ -72,20 +92,26 @@ def _resultado(df: pd.DataFrame, valor: pd.Series) -> pd.DataFrame:
     )
 
 
-def _inadimplencia(cliente: str, segmento: str) -> pd.DataFrame:
+def _inadimplencia(
+    cliente: str, segmento: str, recorte: dict | None = None
+) -> pd.DataFrame:
     df = _com_brasil(
-        _scr(cliente, segmento), ["carteira_ativa", "carteira_inadimplencia"]
+        _scr(cliente, segmento, recorte), ["carteira_ativa", "carteira_inadimplencia"]
     )
     return _resultado(df, df.carteira_inadimplencia / df.carteira_ativa * 100)
 
 
-def _carteira_per_capita(cliente: str, segmento: str) -> pd.DataFrame:
-    df = _com_brasil(_scr(cliente, segmento), ["carteira_ativa"])
+def _carteira_per_capita(
+    cliente: str, segmento: str, recorte: dict | None = None
+) -> pd.DataFrame:
+    df = _com_brasil(_scr(cliente, segmento, recorte), ["carteira_ativa"])
     return _resultado(df, df.carteira_ativa / df.uf.map(_populacao()))
 
 
-def _participacao_coop(cliente: str, _segmento: str) -> pd.DataFrame:
-    scr = _scr(cliente, "todos")
+def _participacao_coop(
+    cliente: str, _segmento: str, recorte: dict | None = None
+) -> pd.DataFrame:
+    scr = _scr(cliente, "todos", recorte)
     total = _com_brasil(scr, ["carteira_ativa"])
     coop = _com_brasil(scr[scr.cooperativa], ["carteira_ativa"])
     df = total.merge(coop, on=["data", "uf"], how="left", suffixes=("", "_coop"))
@@ -93,7 +119,9 @@ def _participacao_coop(cliente: str, _segmento: str) -> pd.DataFrame:
 
 
 def _longo(nome: str, indicador: str, por_habitantes: float | None = None):
-    def calcular(_cliente: str, _segmento: str) -> pd.DataFrame:
+    def calcular(
+        _cliente: str, _segmento: str, _recorte: dict | None = None
+    ) -> pd.DataFrame:
         df = _ler(nome)
         df = df[df.indicador == indicador]
         valor = df.valor
@@ -128,7 +156,7 @@ INDICADORES = {
         "BCB, SCR.data",
         _participacao_coop,
         casas=1,
-        filtros=("cliente",),
+        filtros=("cliente", "classe", "produto"),
     ),
     "pix_pago_pf": Indicador(
         "Pix pago por pessoas físicas, por habitante (mês)",
@@ -165,10 +193,16 @@ INDICADORES = {
 
 
 def serie(
-    indicador: str, cliente: str = "todos", segmento: str = "todos"
+    indicador: str,
+    cliente: str = "todos",
+    segmento: str = "todos",
+    *,
+    classe: str | None = None,
+    produto: str | None = None,
 ) -> pd.DataFrame:
     """Columns data, uf, valor (including "BR")."""
-    return INDICADORES[indicador].calcular(cliente, segmento)
+    recorte = {"classe": classe, "produto": produto}
+    return INDICADORES[indicador].calcular(cliente, segmento, recorte)
 
 
 @dataclass(frozen=True)

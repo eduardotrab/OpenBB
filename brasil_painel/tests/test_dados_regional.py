@@ -100,7 +100,12 @@ def test_missing_dataset_raises_a_clear_error(tmp_path, monkeypatch):
 def test_catalog_flags_polarity():
     assert regional.INDICADORES["inadimplencia"].divergente
     assert not regional.INDICADORES["carteira_per_capita"].divergente
-    assert regional.INDICADORES["inadimplencia"].filtros == ("cliente", "segmento")
+    assert regional.INDICADORES["inadimplencia"].filtros == (
+        "cliente",
+        "segmento",
+        "classe",
+        "produto",
+    )
 
 
 def _callback(cliente_http, saidas, entradas):

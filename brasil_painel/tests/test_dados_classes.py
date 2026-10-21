@@ -119,3 +119,15 @@ def test_rural_summary_is_contracted_flow(loja):
     assert r.share_sicoob == pytest.approx(50.0)
     assert r.ticket_medio == pytest.approx(40.0)
     assert dict(r.finalidades)["Custeio"] == pytest.approx(160.0)
+
+
+def test_map_indicator_by_class_matches_the_class_summary(loja):
+    from brasil_painel.dados import regional
+
+    mapa = regional.serie("inadimplencia", classe="Varejo")
+    mg = mapa[(mapa.uf == "MG") & (mapa.data == AGO)].valor.item()
+    assert mg == pytest.approx(resumo.resumir("pf", "Varejo", uf="MG").inadimplencia)
+    cartao = regional.serie("inadimplencia", produto="Cartão de crédito")
+    assert cartao[
+        (cartao.uf == "MG") & (cartao.data == AGO)
+    ].valor.item() == pytest.approx(10 / 110 * 100)
