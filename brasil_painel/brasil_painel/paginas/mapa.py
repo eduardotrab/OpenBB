@@ -194,7 +194,9 @@ def painel_estado(
     series = {"Brasil": _pontos(df, BRASIL), NOMES[uf]: _pontos(df, uf)}
     figura = figura_linhas(series, indicador.unidade, mensal=True, cores={NOMES[uf]: SERIE_1},
                            casas=indicador.casas, referencia="Brasil")  # fmt: skip
-    figura.update_layout(height=230, margin=dict(l=44, r=12, t=34, b=28), annotations=[])
+    figura.update_layout(
+        height=230, margin=dict(l=44, r=12, t=34, b=28), annotations=[]
+    )
     return html.Div(
         [
             html.H3(NOMES[uf], className="fs-painel-titulo"),

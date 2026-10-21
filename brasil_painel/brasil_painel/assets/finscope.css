@@ -230,3 +230,40 @@ input[type="radio"], input[type="checkbox"] { accent-color: var(--fs-turquesa); 
 .fs-filtro-classe { width: 230px; }
 .controles-mapa .seletor-indicador { min-width: 300px; }
 @media (max-width: 1100px) { .fs-mapa-grade { grid-template-columns: 1fr; } .fs-mapa-grafico { height: 480px; } }
+
+/* ---- legacy cards and sections in the FinScope look (Visão 360° and Mundo) ---- */
+.cartoes { gap: var(--fs-e-3); }
+.cartao { border-radius: var(--fs-raio); border: 1px solid var(--fs-borda); padding: 14px 16px; }
+.cartao h3 { font-size: var(--fs-t-s); font-weight: 400; color: var(--fs-texto-suave); margin-bottom: 4px; }
+.cartao .valor { font-size: var(--fs-t-2xl); color: var(--fs-verde-escuro); line-height: 1.1; }
+.cartao .unidade { font-size: var(--fs-t-m); color: var(--fs-texto-suave); }
+.cartao .variacao { font-size: var(--fs-t-xs); color: var(--fs-texto-suave); }
+.cartao .rodape { font-size: var(--fs-t-xs); color: var(--fs-texto-suave); }
+.cartao-erro { background: #FBF6F5; }
+.cartao-erro .valor { font-size: var(--fs-t-m); color: #8F2323; }
+.cartao-defasado { border-color: var(--fs-atencao); }
+.selo-defasado { background: #FEF3D6; color: #6B4A00; }
+.secao h2 { font-size: var(--fs-t-l); color: var(--fs-verde-escuro); }
+.secao .nota { font-size: var(--fs-t-xs); color: var(--fs-texto-suave); }
+.secao .js-plotly-plot, .secao .dash-graph, .coluna-noticias { border-radius: var(--fs-raio); border-color: var(--fs-borda); }
+.noticias .origem { background: #E0F5F2; color: var(--fs-verde-escuro); }
+.noticias .quando, .agenda .detalhe { color: var(--fs-texto-suave); }
+.agenda .dia.hoje { color: var(--fs-turquesa); }
+.aviso { border-radius: var(--fs-raio); }
+
+/* ---- Visão 360° ---- */
+.fs-faixa { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: var(--fs-e-3);
+            background: var(--fs-superficie); border: 1px solid var(--fs-borda); border-radius: var(--fs-raio); padding: var(--fs-e-4); }
+.fs-faixa .fs-kpi { text-align: left; }
+.fs-faixa .fs-kpi-rotulo { justify-content: flex-start; min-height: 0; }
+.fs-destaques { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--fs-e-4);
+                background: var(--fs-superficie); border: 1px solid var(--fs-borda); border-radius: var(--fs-raio); padding: var(--fs-e-4); }
+.fs-destaque-titulo { margin: 0 0 var(--fs-e-2); font-size: var(--fs-t-s); color: var(--fs-texto-suave); font-weight: 400; }
+.fs-destaque-lista { list-style: none; margin: 0; padding: 0; }
+.fs-destaque-lista li a { display: flex; justify-content: space-between; gap: var(--fs-e-2); padding: 6px 0;
+                          border-bottom: 1px solid #E6EDEE; color: var(--fs-texto); text-decoration: none; font-size: var(--fs-t-s); }
+.fs-destaque-lista li a:hover .fs-destaque-rotulo { text-decoration: underline; }
+.fs-destaque-valor { font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.fs-link { display: inline-block; margin-top: var(--fs-e-2); font-size: var(--fs-t-s); color: var(--fs-verde-escuro); font-weight: 700; }
+.coluna-principal .cartoes { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+.grade-blocos .cartoes { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }

@@ -34,16 +34,7 @@ def filtros_da_tela(filtros: dict | None) -> dict:
     }
 
 
-def _variacao_12m(tendencia: list[tuple], indice: int = 1) -> float | None:
-    """Change of one trend series against its point ≥ 360 days before the last."""
-    validos = [
-        (ponto[0], ponto[indice]) for ponto in tendencia if ponto[indice] is not None
-    ]
-    if not validos:
-        return None
-    ultima_data, ultimo = validos[-1]
-    antes = [v for d, v in validos if d <= ultima_data - dt.timedelta(days=360)]
-    return ultimo - antes[-1] if antes else None
+_variacao_12m = dados_classes.variacao_12m
 
 
 def coluna(resumo: dados_classes.ResumoClasse) -> html.Section:

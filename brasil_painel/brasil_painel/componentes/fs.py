@@ -29,6 +29,7 @@ def kpi(
     variacao: float | None = None,
     comparacao: str = "",
     nota: str = "",
+    sufixo_variacao: str = "",
 ) -> html.Div:
     """Big number with its label, change and an optional note."""
     if valor is None:
@@ -50,7 +51,8 @@ def kpi(
         sentido = _tendencia(variacao)
         filhos.append(
             html.P(
-                f"{SETAS[sentido]} {formato.numero(variacao, casas, sinal=True)} {comparacao}".strip(),
+                f"{SETAS[sentido]} {formato.numero(variacao, casas, sinal=True)}{sufixo_variacao}"
+                f" {comparacao}".strip(),
                 className=f"fs-kpi-variacao {sentido}",
             )
         )

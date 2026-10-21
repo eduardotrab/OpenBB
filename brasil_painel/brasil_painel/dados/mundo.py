@@ -233,10 +233,10 @@ def cartoes(
     dois_anos = hoje - dt.timedelta(days=760)
     diario_12m = dict(unidade="% a.a.", dias=365, max_dias=5, comparacao="em 12 meses")
     mensal_cpi = dict(
-        unidade="%", passos=1, max_dias=80, comparacao="vs. mês anterior", mensal=True
+        unidade="%", passos=1, max_dias=95, comparacao="vs. mês anterior", mensal=True
     )
     mensal_12m = dict(
-        unidade="%", dias=365, max_dias=80, comparacao="vs. 12 meses antes", mensal=True
+        unidade="%", dias=365, max_dias=95, comparacao="vs. 12 meses antes", mensal=True
     )
     cambio = dict(
         dias=30, max_dias=5, comparacao="em 30 dias", casas=4, percentual=True
@@ -252,7 +252,7 @@ def cartoes(
     nome_pib = f"PIB {hoje.year} (projeção)"
     commodity = dict(
         passos=12,
-        max_dias=80,
+        max_dias=95,
         comparacao="em 12 meses",
         mensal=True,
         percentual=True,
