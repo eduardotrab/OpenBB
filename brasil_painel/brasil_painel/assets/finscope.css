@@ -1,0 +1,41 @@
+/* FinScope tokens on the Sicoob identity. Loaded after estilo.css (alphabetical),
+   so the legacy variables below are remapped and the old pages inherit the brand.
+   Tahoma ships with Windows; elsewhere the browser falls back to Verdana/DejaVu. */
+:root {
+  /* brand */
+  --fs-turquesa: #00AE9D;
+  --fs-verde-escuro: #003641;
+  --fs-verde-medio: #7DB61C;
+  --fs-verde-claro: #C9D200;
+  --fs-roxo: #49479D;
+  /* surfaces and text (neutrals tinted toward the dark green) */
+  --fs-fundo: #F2F6F6;
+  --fs-superficie: #FFFFFF;
+  --fs-borda: #D5E0E1;
+  --fs-texto: #003641;
+  --fs-texto-suave: #5B6B70;
+  /* status: always with an icon and a label */
+  --fs-bom: #0CA30C; --fs-atencao: #FAB219; --fs-alerta: #EC835A; --fs-critico: #D03B3B;
+  /* type: one family, scale ~1.25 */
+  --fs-fonte: Tahoma, Verdana, "DejaVu Sans", sans-serif;
+  --fs-t-xs: .75rem; --fs-t-s: .8125rem; --fs-t-m: .9375rem; --fs-t-l: 1.125rem;
+  --fs-t-xl: 1.5rem; --fs-t-2xl: 2rem; --fs-t-3xl: 2.75rem;
+  /* space and shape: frames are the class columns' signature, cards stay flat */
+  --fs-e-1: 4px; --fs-e-2: 8px; --fs-e-3: 12px; --fs-e-4: 16px; --fs-e-5: 24px; --fs-e-6: 32px;
+  --fs-raio-moldura: 14px; --fs-raio: 6px;
+  /* motion */
+  --fs-rapido: 150ms; --fs-medio: 300ms; --fs-lento: 600ms;
+  --fs-curva: cubic-bezier(.2, .7, .2, 1);
+
+  /* legacy names used by estilo.css */
+  --fundo: var(--fs-fundo);
+  --texto: var(--fs-texto);
+  --borda: var(--fs-borda);
+  --destaque: var(--fs-verde-escuro);
+}
+body { font-family: var(--fs-fonte); color: var(--fs-texto); background: var(--fs-fundo); }
+:focus-visible { outline: 2px solid var(--fs-turquesa); outline-offset: 2px; }
+.cartao .valor, .fs-numero { font-variant-numeric: tabular-nums; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; }
+}
