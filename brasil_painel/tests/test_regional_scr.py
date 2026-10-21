@@ -86,8 +86,13 @@ def test_aggregate_zip_reads_every_month(tmp_path, csv_agosto):
     with zipfile.ZipFile(arquivo, "w") as z:
         z.write(csv_agosto, csv_agosto.name)
         z.write(julho, julho.name)
-    df = scr.agregar_zip(arquivo)
+    datasets = scr.agregar_zip(arquivo)
+    df = datasets["scr_uf"]
     assert sorted(df.data.unique()) == [dt.date(2026, 7, 31), dt.date(2026, 8, 31)]
+    classe = datasets["scr_classe"]
+    assert classe.carteira_ativa.sum() == pytest.approx(df.carteira_ativa.sum())
+    assert set(classe.produto) == {"Outros"}  # fixture submodality is "Outros"
+    assert list(classe.columns) == scr.CLASSE.schema.names
 
 
 def test_store_writes_parquet_and_rejects_bad_schema(tmp_path, csv_agosto):
@@ -153,3 +158,19 @@ def test_cli_rejects_unknown_dataset():
 
     with pytest.raises(SystemExit):
         cli.main(["atualizar", "nada"])
+
+
+def test_class_dataset_flags_mei_and_keeps_the_income_band(tmp_path):
+    linhas = [
+        _linha("2026-08-31", "MG", "Cooperativa", "PF", "100,00", "1,00", "0,00"),
+    ]
+    caminho = _csv(tmp_path / "scrdata_202608.csv", linhas)
+    caminho.write_text(
+        caminho.read_text(encoding="utf-8").replace(
+            '"Construção";"Pequeno"', '"MEI";"Mais de 3 a 5 salários mínimos"'
+        ),
+        encoding="utf-8",
+    )
+    df = scr.agregar_csv(caminho, scr.CLASSE)
+    linha = df.iloc[0]
+    assert bool(linha.mei) and linha.porte == "Mais de 3 a 5 salários mínimos"
