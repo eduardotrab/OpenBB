@@ -226,7 +226,14 @@ def figura_tendencia(
     fig.update_layout(
         height=170,
         margin=dict(l=36, r=8, t=30, b=24),
-        legend=dict(orientation="h", yanchor="top", y=1.0, yref="container", x=0, font=dict(size=11)),
+        legend=dict(
+            orientation="h",
+            yanchor="top",
+            y=1.0,
+            yref="container",
+            x=0,
+            font=dict(size=11),
+        ),
         hovermode="x unified",
     )
     fig.update_xaxes(showgrid=False, tickformat="%m/%y", nticks=4)

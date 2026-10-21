@@ -160,6 +160,21 @@ def resumir(
     return _resumo(classe, df[df.classe == classe], data, produto)
 
 
+def resumir_total(
+    rotulo: str = "Brasil",
+    *,
+    uf: str | None = None,
+    produto: str | None = None,
+    data: dt.date | None = None,
+) -> ResumoClasse:
+    """Summary of the whole credit stock (each operation once, MEI included once)."""
+    df = _ler("scr_classe")
+    if uf:
+        df = df[df.uf == uf]
+    data = data or (df.data.max() if not df.empty else None)
+    return _resumo(rotulo, df, data, produto)
+
+
 def todas(grupo: str, **filtros) -> list[ResumoClasse]:
     """Every class of a group in display order (same reference date)."""
     df = com_classes(grupo)
@@ -199,11 +214,17 @@ _FINALIDADES = [
 
 
 def resumir_rural(
-    classe: str, *, uf: str | None = None, data: dt.date | None = None
+    classe: str | None,
+    *,
+    uf: str | None = None,
+    data: dt.date | None = None,
+    rotulo: str = "Brasil",
 ) -> ResumoRural:
-    """Summary of one producer class from SICOR."""
+    """Summary of one producer class from SICOR (None = every producer)."""
     df = _ler("sicor_uf")
-    df = df[df.porte == classe]
+    if classe is not None:
+        df = df[df.porte == classe]
+    classe = classe or rotulo
     if uf:
         df = df[df.uf == uf]
     if df.empty:
