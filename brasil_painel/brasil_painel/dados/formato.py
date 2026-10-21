@@ -29,3 +29,15 @@ def data(valor: dt.date, mensal: bool = False) -> str:
     if mensal:
         return f"{MESES[valor.month - 1]}/{valor.year}"
     return valor.strftime("%d/%m/%Y")
+
+
+# (from, divisor, suffix): below 10 thousand the full integer reads better
+ESCALAS = [(1e12, 1e12, "tri"), (1e9, 1e9, "bi"), (1e6, 1e6, "mi"), (1e4, 1e3, "mil")]
+
+
+def compacto(valor: float, casas: int = 1) -> str:
+    """7.72e12 → '7,7 tri'; 634500 → '634,5 mil'; below 10 thousand, the integer."""
+    for limite, divisor, sufixo in ESCALAS:
+        if abs(valor) >= limite:
+            return f"{numero(valor / divisor, casas)} {sufixo}"
+    return numero(valor, 0)
