@@ -16,7 +16,7 @@ def _client():
 def test_index_responds():
     response = _client().get("/")
     assert response.status_code == 200
-    assert "Painel Brasil" in response.get_data(as_text=True)
+    assert "FinScope" in response.get_data(as_text=True)
 
 
 def test_index_references_only_local_resources():
@@ -53,19 +53,29 @@ def _ids(componente) -> set[str]:
     return ids - {None}
 
 
+def _links(grupos):
+    return [item for g in grupos for item in g.children[1:]]
+
+
 def test_routing_picks_the_page_and_highlights_the_menu():
-    corpo, links = pagina("/mundo/")
+    corpo, grupos, titulo = pagina("/mundo/")
     assert "mundo-eua" in _ids(corpo)
-    assert [link.className for link in links] == ["", "ativo", ""]
-    corpo, links = pagina(None)
+    assert titulo == "Mundo"
+    assert [link.className for link in _links(grupos)] == [
+        "fs-item",
+        "fs-item ativo",
+        "fs-item",
+    ]
+    corpo, grupos, titulo = pagina(None)
     assert "abertura-cartoes" in _ids(corpo)
-    assert links[0].className == "ativo"
+    assert _links(grupos)[0].className == "fs-item ativo"
+    assert grupos[0].children[0].children == "Mercado"
 
 
 def test_unknown_path_shows_not_found():
-    corpo, links = pagina("/nada")
-    assert "não encontrada" in corpo.children
-    assert all(link.className == "" for link in links)
+    corpo, grupos, titulo = pagina("/nada")
+    assert "não existe" in corpo.children
+    assert all(link.className == "fs-item" for link in _links(grupos))
 
 
 def test_world_page_is_served():
@@ -74,10 +84,11 @@ def test_world_page_is_served():
 
 def test_routing_callback_runs_through_dash():
     payload = {
-        "output": "..pagina.children...menu.children..",
+        "output": "..pagina.children...menu.children...titulo-pagina.children..",
         "outputs": [
             {"id": "pagina", "property": "children"},
             {"id": "menu", "property": "children"},
+            {"id": "titulo-pagina", "property": "children"},
         ],
         "inputs": [{"id": "url", "property": "pathname", "value": "/mundo"}],
         "changedPropIds": ["url.pathname"],
@@ -110,14 +121,24 @@ def test_warm_up_touches_slow_sources_and_survives_failures():
 
 def test_map_page_is_served_and_routed():
     assert _client().get("/mapa").status_code == 200
-    corpo, _ = pagina("/mapa")
+    corpo, _, _ = pagina("/mapa")
     assert {"mapa-grafico", "mapa-ranking", "mapa-evolucao"} <= _ids(corpo)
 
 
 def test_gallery_is_routed_but_hidden_from_the_menu():
-    corpo, links = pagina("/estilo")
+    corpo, grupos, _ = pagina("/estilo")
     assert "fs-galeria" in corpo.className
-    assert all(link.href != "/estilo" for link in links)
+    assert all(link.href != "/estilo" for link in _links(grupos))
+
+
+def test_every_menu_icon_exists():
+    from pathlib import Path
+
+    import brasil_painel
+    from brasil_painel.app import PAGINAS
+
+    pasta = Path(brasil_painel.__file__).parent / "assets" / "icones"
+    assert all((pasta / f"{p.icone}.svg").exists() for p in PAGINAS)
 
 
 def test_motion_script_is_local_and_respects_reduced_motion():

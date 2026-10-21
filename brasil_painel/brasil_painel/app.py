@@ -4,12 +4,15 @@ import contextlib
 import threading
 import time
 
-from dash import Dash, Input, Output, dcc, html
+from dash import Dash, Input, Output, State, dcc, html
+from flask_login import current_user
 
+from brasil_painel import navegacao
 from brasil_painel.auth import setup_auth
 from brasil_painel.config import Settings
 from brasil_painel.dados import abertura, mundo
 from brasil_painel.dados.api import FonteIndisponivel, OpenBBClient
+from brasil_painel.navegacao import Pagina
 from brasil_painel.paginas import (
     abertura as pagina_abertura,
     estilo as pagina_estilo,
@@ -18,55 +21,91 @@ from brasil_painel.paginas import (
 )
 from brasil_painel.usuarios import UserStore
 
-TITLE = "Painel Brasil"
+TITLE = "FinScope"
 ATUALIZACAO_MS = 15 * 60 * 1000
 
-# path → (menu label or None for hidden pages, page module)
-PAGINAS = {
-    "/": ("Abertura", pagina_abertura),
-    "/mundo": ("Mundo", pagina_mundo),
-    "/mapa": ("Mapa", pagina_mapa),
-    "/estilo": (None, pagina_estilo),  # internal gallery, not in the menu
-}
-
-
-def menu(caminho: str) -> list[dcc.Link]:
-    """Navigation links; the current page is highlighted."""
-    return [
-        dcc.Link(
-            rotulo,
-            href=href,
-            className="ativo" if href == caminho else "",
-        )
-        for href, (rotulo, _) in PAGINAS.items()
-        if rotulo
-    ]
+PAGINAS = [
+    Pagina("/", "Visão 360°", "Mercado", "radar", pagina_abertura),
+    Pagina("/mundo", "Mundo", "Mercado", "globo", pagina_mundo),
+    Pagina("/mapa", "Mapa", "Mercado", "mapa", pagina_mapa),
+    Pagina("/estilo", "Galeria", None, "radar", pagina_estilo),  # internal
+]
+POR_CAMINHO = {p.caminho: p for p in PAGINAS}
 
 
 def pagina(caminho: str | None) -> tuple:
-    """Body and menu for a path; unknown paths get a not-found message."""
+    """Body, menu and title for a path; unknown paths get a not-found message."""
     caminho = (caminho or "/").rstrip("/") or "/"
-    if caminho not in PAGINAS:
-        return html.P("Página não encontrada.", className="aviso"), menu(caminho)
-    return PAGINAS[caminho][1].layout(), menu(caminho)
+    atual = POR_CAMINHO.get(caminho)
+    if atual is None:
+        corpo = html.P(
+            "Esta tela não existe. Escolha uma opção no menu.", className="aviso"
+        )
+        return corpo, navegacao.menu(PAGINAS, caminho), "Página não encontrada"
+    return atual.modulo.layout(), navegacao.menu(PAGINAS, caminho), atual.titulo
+
+
+def _usuario() -> str:
+    """Logged-in username (empty when login is disabled, as in tests)."""
+    try:
+        return current_user.id if current_user.is_authenticated else ""
+    except (AttributeError, RuntimeError):
+        return ""
 
 
 def build_layout() -> html.Div:
-    """Return the page shell: header with menu, page body and refresh timer."""
+    """Return the shell: sidebar, top bar, page body and refresh timer."""
     return html.Div(
         [
             dcc.Location(id="url"),
-            html.Header(
+            dcc.Store(id="lateral-recolhida", storage_type="local"),
+            html.Aside(
                 [
-                    html.H1(TITLE),
-                    html.Nav(id="menu", className="menu"),
-                    html.A("Sair", href="/logout", className="sair"),
+                    html.Div(
+                        [
+                            html.Span(TITLE, className="fs-marca"),
+                            html.Button(
+                                navegacao.icone("recolher"),
+                                id="recolher",
+                                className="fs-recolher",
+                                title="Recolher ou abrir o menu",
+                                **{"aria-label": "Recolher ou abrir o menu"},
+                            ),
+                        ],
+                        className="fs-lateral-topo",
+                    ),
+                    html.Nav(id="menu", className="fs-menu", **{"aria-label": "Telas"}),
                 ],
-                className="topo",
+                className="fs-lateral",
             ),
-            html.Main(id="pagina", className="conteudo"),
+            html.Div(
+                [
+                    html.Header(
+                        [
+                            html.H1(id="titulo-pagina", className="fs-titulo"),
+                            html.Div(id="filtros-globais", className="fs-filtros"),
+                            html.Div(
+                                [
+                                    html.Span(_usuario(), className="fs-usuario"),
+                                    html.A(
+                                        [navegacao.icone("sair"), html.Span("Sair")],
+                                        href="/logout",
+                                        className="fs-sair",
+                                    ),
+                                ],
+                                className="fs-conta",
+                            ),
+                        ],
+                        className="fs-topo",
+                    ),
+                    html.Main(id="pagina", className="conteudo"),
+                ],
+                className="fs-corpo",
+            ),
             dcc.Interval(id="atualizar", interval=ATUALIZACAO_MS),
-        ]
+        ],
+        id="casca",
+        className="fs-casca",
     )
 
 
@@ -76,13 +115,28 @@ def register_callbacks(app: Dash, client: OpenBBClient) -> None:
     @app.callback(
         Output("pagina", "children"),
         Output("menu", "children"),
+        Output("titulo-pagina", "children"),
         Input("url", "pathname"),
     )
     def rotear(caminho):
         return pagina(caminho)
 
-    for _, modulo in PAGINAS.values():
-        modulo.register(app, client)
+    for item in PAGINAS:
+        item.modulo.register(app, client)
+
+    # Collapsing the sidebar runs in the browser and is remembered locally.
+    app.clientside_callback(
+        """
+        function (cliques, salvo) {
+            var recolhida = cliques ? !salvo : Boolean(salvo);
+            return [recolhida, recolhida ? "fs-casca recolhida" : "fs-casca"];
+        }
+        """,
+        Output("lateral-recolhida", "data"),
+        Output("casca", "className"),
+        Input("recolher", "n_clicks"),
+        State("lateral-recolhida", "data"),
+    )
 
 
 def aquecer(client: OpenBBClient, intervalo: float | None = None) -> threading.Thread:
