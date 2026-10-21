@@ -87,3 +87,10 @@ def test_columns_pick_the_provider_alternative():
     }  # fmt: skip
     assert explorador.colunas(openapi, "/api/v1/x", "imf") == [("b", "string", "")]
     assert explorador.colunas(openapi, "/api/v1/x") == [("a", "number", "")]
+
+
+def test_open_and_brazilian_providers_come_first():
+    funcao = explorador.Funcao(
+        "/x", ("x",), "X", "", "", dict.fromkeys(["fred", "oecd", "bcb", "imf"], [])
+    )
+    assert funcao.provedores == ["bcb", "imf", "fred", "oecd"]

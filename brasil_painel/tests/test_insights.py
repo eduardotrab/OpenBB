@@ -79,3 +79,11 @@ def test_automatic_chart_picks_lines_or_bars():
     barras = pd.DataFrame({"name": ["x", "y"], "price": [3.0, 1.0]})
     assert figura_automatica(barras).data[0].type == "bar"
     assert figura_automatica(pd.DataFrame({"name": ["x"]})) is None
+
+
+def test_constant_columns_and_rates_crossing_zero():
+    df = pd.DataFrame({"date": pd.date_range("2025-01-01", periods=6, freq="MS"),
+                       "value": [-0.02, 0.01, 0.03, 0.02, 0.04, 0.05], "unit_multiplier": [100] * 6})  # fmt: skip
+    assert insights.numericas(df) == ["value"]
+    frases = " ".join(insights.analisar(df).frases)
+    assert "unit_multiplier" not in frases and "No período" not in frases

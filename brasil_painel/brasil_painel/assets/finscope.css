@@ -342,3 +342,40 @@ input[type="radio"], input[type="checkbox"] { accent-color: var(--fs-turquesa); 
 .fs-lista-bolsa th, .fs-lista-bolsa td { padding: 6px 10px; }
 .fs-grade-produtos.fs-meio { grid-template-columns: 1fr 1fr; }
 .fs-cartao-tabela.fs-pad { padding: var(--fs-e-3); }
+
+/* ---- OpenBB explorer ---- */
+.fs-busca { font: inherit; padding: 9px 12px; border: 1px solid var(--fs-borda); border-radius: var(--fs-raio); min-width: 320px; }
+.fs-trilha { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.fs-trilha-item { font: inherit; background: none; border: 0; color: var(--fs-verde-escuro); cursor: pointer; padding: 4px 6px; border-radius: var(--fs-raio); }
+.fs-trilha-item:hover { background: #E0F5F2; }
+.fs-trilha-sep { color: var(--fs-texto-suave); }
+.fs-exp-grade { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: var(--fs-e-4); align-items: start; }
+@media (max-width: 900px) { .fs-exp-grade { grid-template-columns: 1fr; } }
+.fs-exp-lista { background: var(--fs-superficie); border: 1px solid var(--fs-borda); border-radius: var(--fs-raio); padding: var(--fs-e-2); max-height: 70vh; overflow-y: auto; display: flex; flex-direction: column; }
+.fs-exp-item { font: inherit; text-align: left; display: flex; justify-content: space-between; gap: var(--fs-e-2); background: none; border: 0;
+               border-bottom: 1px solid #E6EDEE; padding: 8px 10px; cursor: pointer; color: var(--fs-texto); width: 100%; }
+.fs-exp-item:hover { background: #F0F7F6; }
+.fs-exp-item.pasta .fs-exp-nome::before { content: "▸ "; color: var(--fs-turquesa); }
+.fs-exp-nome { font-weight: 700; }
+.fs-exp-conta { font-size: var(--fs-t-xs); color: var(--fs-texto-suave); }
+.fs-exp-titulo { margin: 4px 8px; font-size: var(--fs-t-xs); color: var(--fs-texto-suave); }
+.fs-exp-painel { background: var(--fs-superficie); border: 2px solid var(--fs-turquesa); border-radius: var(--fs-raio-moldura); padding: var(--fs-e-4); }
+.fs-exp-painel h2 { margin: 0 0 4px; text-transform: none; color: var(--fs-verde-escuro); }
+.fs-exp-form { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--fs-e-3); margin: var(--fs-e-3) 0; }
+.fs-exp-campo { display: flex; flex-direction: column; gap: 4px; }
+.fs-exp-rotulo { font-size: var(--fs-t-s); color: var(--fs-verde-escuro); font-weight: 700; }
+.fs-exp-ajuda { margin: 0; font-size: var(--fs-t-xs); color: var(--fs-texto-suave); }
+.fs-entrada { font: inherit; font-size: var(--fs-t-s); padding: 7px 10px; border: 1px solid var(--fs-borda); border-radius: var(--fs-raio); }
+.fs-exp-acoes { display: flex; gap: var(--fs-e-2); flex-wrap: wrap; align-items: center; }
+.fs-botao.secundario { background: #fff; color: var(--fs-verde-escuro); border: 1px solid var(--fs-verde-escuro); }
+.fs-botao.secundario:hover { background: #E0F5F2; }
+.fs-exp-selo { background: #E0F5F2; color: var(--fs-verde-escuro); font-weight: 700; padding: 4px 10px; border-radius: 999px; font-size: var(--fs-t-s); }
+.fs-exp-insights { margin: 0; padding-left: 20px; font-size: var(--fs-t-s); line-height: 1.6; }
+.fs-modal { position: fixed; inset: 0; background: rgba(0, 54, 65, .55); z-index: 20; display: flex; align-items: center; justify-content: center; }
+.fs-modal[style*="none"] { display: none !important; }
+.fs-modal-caixa { background: #fff; border-radius: var(--fs-raio-moldura); padding: var(--fs-e-5); width: min(560px, 92vw); display: flex; flex-direction: column; gap: var(--fs-e-3); }
+.fs-modal-caixa h2 { margin: 0; color: var(--fs-verde-escuro); }
+.fs-upload { border: 2px dashed var(--fs-turquesa); border-radius: var(--fs-raio); padding: var(--fs-e-5); text-align: center; color: var(--fs-verde-escuro); cursor: pointer; }
+.fs-exp-painel .fs-explicacao { margin: 6px 0 var(--fs-e-3); }
+.fs-exp-item .fs-exp-nome { overflow-wrap: anywhere; }
+.fs-cartao-tabela .dash-filter--case { display: none; }

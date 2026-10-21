@@ -201,5 +201,6 @@ def test_every_screen_of_the_roadmap_so_far_is_routed():
         "/produtos",
         "/boletim",
         "/bolsa",
+        "/explorador",
     ):
         assert caminho in POR_CAMINHO, caminho

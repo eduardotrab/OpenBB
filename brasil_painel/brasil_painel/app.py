@@ -20,6 +20,7 @@ from brasil_painel.paginas import (
     bolsa as pagina_bolsa,
     comparativo as pagina_comparativo,
     estilo as pagina_estilo,
+    explorador as pagina_explorador,
     mapa as pagina_mapa,
     mundo as pagina_mundo,
     produtos as pagina_produtos,
@@ -44,6 +45,13 @@ PAGINAS = [
     Pagina("/produtos", "Produtos", "Produtos", "produtos", pagina_produtos),
     Pagina("/boletim", "Boletim Econômico", "Boletim", "boletim", pagina_boletim),
     Pagina("/bolsa", "Bolsa", "Bolsa", "bolsa", pagina_bolsa),
+    Pagina(
+        "/explorador",
+        "Explorador OpenBB",
+        "Explorador",
+        "explorador",
+        pagina_explorador,
+    ),
     Pagina("/estilo", "Galeria", None, "radar", pagina_estilo),  # internal
 ]
 POR_CAMINHO = {p.caminho: p for p in PAGINAS}

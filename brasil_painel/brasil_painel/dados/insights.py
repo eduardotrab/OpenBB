@@ -69,11 +69,11 @@ def _texto(serie: pd.Series) -> bool:
 
 
 def numericas(df: pd.DataFrame) -> list[str]:
-    """Numeric columns (at most 6), ignoring identifiers that look like years or codes."""
+    """Numeric columns (at most 6) that vary; constants such as unit multipliers are left out."""
     cols = [
         c
         for c in df.columns
-        if pd.api.types.is_numeric_dtype(df[c]) and df[c].notna().any()
+        if pd.api.types.is_numeric_dtype(df[c]) and df[c].nunique() > 1
     ]
     return cols[:6]
 
@@ -121,7 +121,8 @@ def analisar(df: pd.DataFrame) -> Insights:
         if serie.empty:
             continue
         frase = f"{col}: último {_fmt(serie.iloc[-1])}, média {_fmt(serie.mean())}, de {_fmt(serie.min())} a {_fmt(serie.max())}."
-        if data and len(serie) >= 3 and serie.iloc[0]:
+        # a % change only makes sense for a positive level, not for rates that cross zero
+        if data and len(serie) >= 3 and serie.min() > 0:
             variacao = (serie.iloc[-1] / serie.iloc[0] - 1) * 100
             if math.isfinite(variacao):
                 direcao = "subiu" if variacao > 0 else "caiu"

@@ -12,6 +12,9 @@ import requests
 
 PREFIXO = "/api/v1/"
 PESADOS = {"oecd"}  # first call loads ~1.6 GB into the API (see 04-aprendizados)
+# Default order of the provider list: Brazilian sources, then open ones; heavy or keyed last.
+PREFERIDOS = ("bcb", "ibge", "tesouro", "cvm", "receita", "imf", "ecb", "federal_reserve", "us_treasury", "sec", "cboe",
+              "finra", "cftc", "nasdaq", "tmx", "jodi", "deribit", "famafrench", "government_us", "padrão")  # fmt: skip
 TIPOS = {"text", "date", "number", "boolean", "tabs", "endpoint"}
 
 
@@ -44,7 +47,16 @@ class Funcao:
     @property
     def provedores(self) -> list[str]:
         """Providers available for this function."""
-        return sorted(self.variantes)
+
+        def ordem(p: str) -> tuple:
+            return (
+                PREFERIDOS.index(p)
+                if p in PREFERIDOS
+                else len(PREFERIDOS) + (p in PESADOS),
+                p,
+            )
+
+        return sorted(self.variantes, key=ordem)
 
     def pesada(self, provedor: str) -> bool:
         """Whether running with this provider is known to be heavy for the API."""
