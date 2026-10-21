@@ -90,11 +90,11 @@ def classe_pj(porte: str, mei: bool = False) -> str:
 
 
 def classe_rural(programa: str) -> str:
-    """Return the producer size from the SICOR program name (Pronaf, Pronamp, others)."""
-    for classe, prefixos in configuracao()["rural"].items():
-        if any(programa.upper().startswith(p) for p in prefixos):
+    """Return the producer size from the SICOR program code (Pronaf, Pronamp, others)."""
+    for classe, codigos in configuracao()["rural"].items():
+        if programa in codigos:
             return classe
-    return next(c for c, p in configuracao()["rural"].items() if not p)
+    return next(c for c, codigos in configuracao()["rural"].items() if not codigos)
 
 
 def ordem(grupo: str) -> list[str]:

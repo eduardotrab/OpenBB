@@ -4,10 +4,11 @@ import argparse
 import sys
 import time
 
-from brasil_painel.regional import armazem, ibge, maquininhas, pix, scr
+from brasil_painel.regional import armazem, ibge, maquininhas, pix, scr, sicor
 
 DATASETS = {
     "scr": scr.atualizar,
+    "sicor": sicor.atualizar,
     "pix": pix.atualizar,
     "maquininhas": maquininhas.atualizar,
     "desemprego": ibge.atualizar_desemprego,

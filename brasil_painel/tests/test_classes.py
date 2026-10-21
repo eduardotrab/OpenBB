@@ -123,10 +123,10 @@ def test_income_classes(porte, classe):
 def test_company_and_producer_classes():
     assert classes.classe_pj("Pequeno") == "Pequena"
     assert classes.classe_pj("Pequeno", mei=True) == "MEI"
-    assert classes.classe_rural("PRONAF - PROGRAMA NA...") == "Pequeno produtor"
-    assert classes.classe_rural("PRONAMP - PROGRAMA N...") == "Médio produtor"
-    assert classes.classe_rural("SEM PROGRAMA") == "Grande produtor"
-    assert classes.classe_rural("FUNCAFÉ (PROGRAMA DE...") == "Grande produtor"
+    assert classes.classe_rural("0001") == "Pequeno produtor"
+    assert classes.classe_rural("0050") == "Médio produtor"
+    assert classes.classe_rural("0999") == "Grande produtor"
+    assert classes.classe_rural("0070") == "Grande produtor"  # Funcafé
 
 
 def test_display_order_follows_the_file():

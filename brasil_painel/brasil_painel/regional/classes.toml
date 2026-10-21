@@ -16,10 +16,10 @@
 "Grande" = ["Grande"]
 "Não informado" = ["Indisponível"]
 
-[rural]  # producers by credit program (SICOR program name prefix)
-"Pequeno produtor" = ["PRONAF"]
-"Médio produtor" = ["PRONAMP"]
-"Grande produtor" = []  # every other program, including "SEM PROGRAMA"
+[rural]  # producers by SICOR program code (names come truncated from the API)
+"Pequeno produtor" = ["0001"]  # PRONAF
+"Médio produtor" = ["0050"]    # PRONAMP
+"Grande produtor" = []         # every other program, including 0999 "SEM PROGRAMA"
 
 [cooperativas]
 sicor_segmentos = ["Cooperativa de Crédito", "Banco Múltiplo Cooperativo"]
