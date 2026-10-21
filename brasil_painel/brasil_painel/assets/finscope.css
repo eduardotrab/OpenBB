@@ -93,3 +93,39 @@ body { font-family: var(--fs-fonte); color: var(--fs-texto); background: var(--f
 .fs-amostras { display: flex; flex-wrap: wrap; gap: var(--fs-e-4); }
 .fs-amostra-linha { display: flex; align-items: center; gap: var(--fs-e-2); font-size: var(--fs-t-s); }
 .fs-amostra { width: 28px; height: 28px; border-radius: var(--fs-raio); border: 1px solid var(--fs-borda); }
+
+/* ---- login (plain HTML page served by Flask) ---- */
+.fs-login { margin: 0; min-height: 100vh; display: grid; grid-template-columns: minmax(0, 5fr) minmax(360px, 4fr); background: var(--fs-fundo); }
+.fs-login-marca { position: relative; overflow: hidden; background-color: var(--fs-verde-escuro); color: #fff;
+  padding: 56px; display: flex; flex-direction: column; justify-content: flex-end; gap: var(--fs-e-3);
+  /* triangle grid echoing the brand's geometric background */
+  background-image:
+    linear-gradient(60deg, rgba(255,255,255,.045) 1px, transparent 1px),
+    linear-gradient(-60deg, rgba(255,255,255,.045) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255,255,255,.035) 1px, transparent 1px);
+  background-size: 92px 160px, 92px 160px, 92px 80px; }
+/* one large cropped triangle as texture: it must not read as the Sicoob symbol */
+.fs-login-marca::before { content: ""; position: absolute; right: -180px; top: -120px; width: 620px; height: 540px;
+  background: var(--fs-turquesa); clip-path: polygon(0 0, 100% 0, 50% 100%); opacity: .12; }
+.fs-login-nome { margin: 0; font-size: 3.5rem; font-weight: 700; letter-spacing: -.01em; line-height: 1; }
+.fs-login-lema { margin: 0; max-width: 34ch; font-size: var(--fs-t-l); line-height: 1.45; color: #CFE3E3; }
+.fs-login-assinatura { margin: var(--fs-e-5) 0 0; font-size: var(--fs-t-s); color: var(--fs-verde-claro); font-weight: 700; }
+.fs-login-area { display: flex; align-items: center; justify-content: center; padding: var(--fs-e-6) var(--fs-e-4); }
+.fs-login-form { width: 100%; max-width: 340px; display: flex; flex-direction: column; gap: var(--fs-e-2); }
+.fs-login-form h1 { margin: 0 0 var(--fs-e-4); font-size: var(--fs-t-xl); color: var(--fs-verde-escuro); }
+.fs-login-form label { font-size: var(--fs-t-s); color: var(--fs-texto-suave); margin-top: var(--fs-e-2); }
+.fs-login-form input { font: inherit; padding: 10px 12px; border: 1px solid var(--fs-borda); border-radius: var(--fs-raio);
+  background: #fff; color: var(--fs-texto); }
+.fs-login-form input:focus { outline: 2px solid var(--fs-turquesa); outline-offset: 1px; border-color: var(--fs-turquesa); }
+.fs-login-form button { margin-top: var(--fs-e-5); font: inherit; font-weight: 700; padding: 12px; border: 0; border-radius: var(--fs-raio);
+  background: var(--fs-verde-escuro); color: #fff; cursor: pointer; transition: background var(--fs-rapido); }
+.fs-login-form button:hover { background: #0B4A57; }
+.fs-login-erro { margin: 0; padding: 10px 12px; border-radius: var(--fs-raio); background: #FBEAEA; color: #8F2323; font-size: var(--fs-t-s); }
+.fs-login-ajuda { margin: var(--fs-e-4) 0 0; font-size: var(--fs-t-xs); color: var(--fs-texto-suave); }
+@media (max-width: 760px) {
+  .fs-login { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+  .fs-login-marca { padding: 28px 20px; min-height: 0; }
+  .fs-login-marca::before { display: none; }
+  .fs-login-nome { font-size: 2.25rem; }
+  .fs-login-lema, .fs-login-assinatura { display: none; }
+}

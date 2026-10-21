@@ -129,3 +129,13 @@ def test_every_page_requires_login_and_opens_after_it(client):
     )
     assert response.headers["Location"] == "/mundo"
     assert client.get("/mundo").status_code == 200
+
+
+def test_login_page_is_finscope_and_its_stylesheet_is_public(client):
+    html = client.get("/login").get_data(as_text=True)
+    assert "FinScope" in html and "/assets/finscope.css" in html
+    assert client.get("/assets/finscope.css").status_code == 200
+    errado = client.post("/login", data={"usuario": "ana", "senha": "x"}).get_data(
+        as_text=True
+    )
+    assert 'role="alert"' in errado

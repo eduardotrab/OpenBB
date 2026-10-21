@@ -8,21 +8,29 @@ from flask_login import LoginManager, UserMixin, current_user, login_user, logou
 
 from brasil_painel.usuarios import UserStore
 
-PUBLIC_PATHS = {"/login", "/assets/estilo.css", "/_favicon.ico"}
+PUBLIC_PATHS = {"/login", "/assets/finscope.css", "/_favicon.ico"}
 
 LOGIN_PAGE = """<!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Entrar — Painel Brasil</title>
-<link rel="stylesheet" href="/assets/estilo.css"></head>
-<body><header class="topo"><h1>Painel Brasil</h1></header>
-<main class="conteudo login">
-<form method="post" action="/login">
-<h2>Entrar</h2>{erro}
-<label>Usuário <input name="usuario" autocomplete="username" required autofocus></label>
-<label>Senha <input name="senha" type="password" autocomplete="current-password" required></label>
+<title>Entrar — FinScope</title>
+<link rel="stylesheet" href="/assets/finscope.css"></head>
+<body class="fs-login">
+<section class="fs-login-marca" aria-hidden="true">
+<p class="fs-login-nome">FinScope</p>
+<p class="fs-login-lema">Crédito, mercado e economia do Brasil numa tela só, com dados públicos.</p>
+<p class="fs-login-assinatura">Sicoob</p>
+</section>
+<main class="fs-login-area">
+<form method="post" action="/login" class="fs-login-form">
+<h1>Entrar no FinScope</h1>{erro}
+<label for="usuario">Usuário</label>
+<input id="usuario" name="usuario" autocomplete="username" required autofocus>
+<label for="senha">Senha</label>
+<input id="senha" name="senha" type="password" autocomplete="current-password" required>
 <input type="hidden" name="next" value="{next}">
 <button type="submit">Entrar</button>
+<p class="fs-login-ajuda">Sem acesso? Peça um usuário a quem administra o FinScope.</p>
 </form></main></body></html>"""
 
 
@@ -49,7 +57,9 @@ def _safe_next(target: str | None) -> str:
 
 
 def _login_page(next_url: str, erro: str = "", status: int = 200) -> Response:
-    erro_html = f'<p class="erro">{escape(erro)}</p>' if erro else ""
+    erro_html = (
+        f'<p class="fs-login-erro" role="alert">{escape(erro)}</p>' if erro else ""
+    )
     body = LOGIN_PAGE.format(erro=erro_html, next=escape(next_url))
     return Response(body, status=status, mimetype="text/html")
 
@@ -89,7 +99,11 @@ def setup_auth(
         if store.verify(username, request.form.get("senha", "")):
             login_user(User(username))
             return redirect(next_url)
-        return _login_page(next_url, "Usuário ou senha inválidos.", status=401)
+        return _login_page(
+            next_url,
+            "Usuário ou senha incorretos. Confira e tente de novo.",
+            status=401,
+        )
 
     @server.route("/logout")
     def logout():
