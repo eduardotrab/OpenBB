@@ -1,0 +1,26 @@
+# Client classes of the FinScope segment screens (plan 10). Edit to change the cuts;
+# values are the labels published by the BCB (SCR.data `porte`, SICOR programs).
+
+[pf]  # individuals by monthly income, in minimum wages (SM)
+"Varejo" = ["Até 1 salário mínimo", "Mais de 1 a 2 salários mínimos", "Mais de 2 a 3 salários mínimos"]
+"Renda média" = ["Mais de 3 a 5 salários mínimos"]
+"Média alta" = ["Mais de 5 a 10 salários mínimos", "Mais de 10 a 20 salários mínimos"]
+"Alta renda" = ["Acima de 20 salários mínimos"]
+"Não informada" = ["Indisponível", "Sem rendimento"]
+
+[pj]  # companies by size; "MEI" comes from individuals whose occupation is MEI
+"MEI" = ["MEI"]
+"Micro" = ["Micro"]
+"Pequena" = ["Pequeno"]
+"Média" = ["Médio"]
+"Grande" = ["Grande"]
+"Não informado" = ["Indisponível"]
+
+[rural]  # producers by credit program (SICOR program name prefix)
+"Pequeno produtor" = ["PRONAF"]
+"Médio produtor" = ["PRONAMP"]
+"Grande produtor" = []  # every other program, including "SEM PROGRAMA"
+
+[cooperativas]
+sicor_segmentos = ["Cooperativa de Crédito", "Banco Múltiplo Cooperativo"]
+sicoob_no_nome = "SICOOB"
