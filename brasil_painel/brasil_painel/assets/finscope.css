@@ -282,3 +282,52 @@ input[type="radio"], input[type="checkbox"] { accent-color: var(--fs-turquesa); 
   .fs-barras { grid-template-columns: minmax(0, 1fr) auto; }
   .fs-barra-rotulo { grid-column: 1 / -1; }
 }
+
+/* ---- economic bulletin (also the print layout) ---- */
+.fs-botao { font: inherit; font-weight: 700; padding: 9px 16px; border: 0; border-radius: var(--fs-raio);
+            background: var(--fs-verde-escuro); color: #fff; cursor: pointer; }
+.fs-botao:hover { background: #0B4A57; }
+.fs-bol-pagina { background: var(--fs-verde-escuro); color: #E6F1F1; border-radius: var(--fs-raio-moldura); padding: 28px 32px;
+                 margin-bottom: var(--fs-e-5); display: flex; flex-direction: column; gap: var(--fs-e-4);
+                 background-image: linear-gradient(60deg, rgba(255,255,255,.035) 1px, transparent 1px),
+                                   linear-gradient(-60deg, rgba(255,255,255,.035) 1px, transparent 1px);
+                 background-size: 92px 160px; }
+.fs-bol-topo { display: flex; align-items: center; justify-content: space-between; gap: var(--fs-e-4); flex-wrap: wrap; }
+.fs-bol-titulo { margin: 0; font-size: 1.9rem; color: #fff; }
+.fs-bol-selo { background: #fff; color: var(--fs-verde-escuro); font-weight: 700; padding: 6px 14px; border-radius: 999px; font-size: var(--fs-t-s); }
+.fs-bol-edicao { margin: 0; color: var(--fs-verde-claro); font-size: var(--fs-t-s); }
+.fs-bol-grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--fs-e-3); }
+.fs-bol-grade.dupla { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.fs-bol-cartao { background: #0E4A55; border: 1px solid #1D5E68; border-radius: var(--fs-raio); padding: var(--fs-e-4); }
+.fs-bol-cartao h3 { margin: 0 0 var(--fs-e-2); font-size: var(--fs-t-m); color: #fff; }
+.fs-bol-cabecalho { display: flex; align-items: baseline; justify-content: space-between; background: #fff; color: var(--fs-verde-escuro);
+                    margin: calc(-1 * var(--fs-e-4)) calc(-1 * var(--fs-e-4)) var(--fs-e-3); padding: 10px var(--fs-e-4); border-radius: var(--fs-raio) var(--fs-raio) 0 0; }
+.fs-bol-cabecalho h3 { margin: 0; color: var(--fs-verde-escuro); font-size: var(--fs-t-l); }
+.fs-bol-cabecalho span { font-size: var(--fs-t-xs); color: var(--fs-texto-suave); }
+.fs-bol-linha { display: grid; grid-template-columns: 44px auto 1fr; align-items: baseline; gap: var(--fs-e-2); padding: 8px 0; border-top: 1px solid #1D5E68; }
+.fs-bol-ano { font-size: var(--fs-t-xs); color: #A8C6C6; }
+.fs-bol-valor { margin: 0; font-size: 1.75rem; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; }
+.fs-bol-tendencia { font-size: var(--fs-t-xs); color: #CFE3E3; text-align: right; }
+.fs-bol-tendencia.sobe { color: var(--fs-verde-claro); }
+.fs-bol-legenda, .fs-bol-rodape, .fs-bol-fonte { margin: 0; font-size: var(--fs-t-xs); color: #A8C6C6; }
+.fs-bol-var { margin: 4px 0; font-size: var(--fs-t-s); color: #CFE3E3; }
+.fs-bol-subtitulo { margin: var(--fs-e-2) 0 0; color: #fff; font-size: var(--fs-t-m); }
+.fs-bol-cartao.pequeno .fs-bol-valor { font-size: 1.4rem; }
+.fs-bol-tabela { width: 100%; border-collapse: collapse; font-size: var(--fs-t-s); }
+.fs-bol-tabela th, .fs-bol-tabela td { padding: 7px 4px; border-bottom: 1px solid #1D5E68; text-align: left; }
+.fs-bol-tabela thead th { color: #A8C6C6; font-weight: 400; font-size: var(--fs-t-xs); }
+.fs-bol-tabela tbody th { color: #fff; }
+.fs-bol-tabela .num { text-align: right; font-variant-numeric: tabular-nums; color: #E6F1F1; }
+@media print {
+  .fs-lateral, .fs-topo, .fs-bol-acoes { display: none !important; }
+  .fs-casca, .fs-casca.recolhida { display: block; }
+  .conteudo { padding: 0; }
+  .fs-bol-pagina { break-after: page; margin: 0; border-radius: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+@media print {
+  body, .fs-corpo, .conteudo { background: #fff !important; }
+  .fs-bol-pagina:last-child { break-after: auto; }
+  .fs-bol-grade { grid-template-columns: repeat(2, 1fr); }
+  .fs-bol-grade.dupla { grid-template-columns: 1fr 1fr; }
+  #bol-conteudo > div { display: block; }
+}
