@@ -4,7 +4,7 @@ from dash import Dash, Input, Output, dcc, html
 
 from brasil_painel.componentes import noticias as noticias_ui
 from brasil_painel.componentes.agenda import agenda as agenda_ui
-from brasil_painel.componentes.blocos import aviso, grafico, secao
+from brasil_painel.componentes.blocos import aviso, carregando, grafico, secao
 from brasil_painel.componentes.cartoes import cartoes
 from brasil_painel.componentes.graficos import figura_curva, figura_focus
 from brasil_painel.dados import abertura, agenda, noticias
@@ -38,10 +38,10 @@ def layout() -> html.Div:
                     html.Aside(
                         [
                             html.H2("Agenda — próximos 7 dias"),
-                            dcc.Loading(html.Div(id="agenda-lista"), type="dot"),
+                            carregando(html.Div(id="agenda-lista")),
                             html.H2("Notícias"),
                             noticias_ui.filtro(),
-                            dcc.Loading(html.Div(id="noticias-lista"), type="dot"),
+                            carregando(html.Div(id="noticias-lista")),
                         ],
                         className="coluna-noticias secao",
                     ),

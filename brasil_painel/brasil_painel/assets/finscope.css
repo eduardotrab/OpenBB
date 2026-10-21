@@ -175,3 +175,9 @@ body { font-family: var(--fs-fonte); color: var(--fs-texto); background: var(--f
   .fs-titulo { font-size: var(--fs-t-l); }
   .conteudo { padding: 12px 16px; }
 }
+input[type="radio"], input[type="checkbox"] { accent-color: var(--fs-turquesa); }
+.fs-filtro { font-size: var(--fs-t-s); }
+.fs-filtro-uf { width: 220px; }
+.fs-filtro-data { width: 150px; }
+.fs-filtros .fs-selo-datas { margin-left: auto; color: var(--fs-texto-suave); text-align: right; }
+@media (max-width: 760px) { .fs-filtro-uf, .fs-filtro-data { width: calc(50% - 6px); } .fs-filtros { flex-wrap: wrap; } }

@@ -149,3 +149,33 @@ def test_motion_script_is_local_and_respects_reduced_motion():
     js = (Path(brasil_painel.__file__).parent / "assets" / "finscope.js").read_text()
     assert "prefers-reduced-motion" in js
     assert "http" not in js
+
+
+def test_global_filters_reach_the_store(monkeypatch, tmp_path):
+    monkeypatch.setenv("PAINEL_DADOS_DIR", str(tmp_path))
+    payload = {
+        "output": "..filtros.data...selo-topo.children..",
+        "outputs": [
+            {"id": "filtros", "property": "data"},
+            {"id": "selo-topo", "property": "children"},
+        ],
+        "inputs": [
+            {"id": "filtro-uf", "property": "value", "value": "MG"},
+            {"id": "filtro-data", "property": "value", "value": "2026-08-31"},
+        ],
+        "changedPropIds": ["filtro-uf.value"],
+    }
+    resposta = _client().post("/_dash-update-component", json=payload)
+    assert resposta.get_json()["response"]["filtros"]["data"] == {
+        "uf": "MG",
+        "data": "2026-08-31",
+    }
+    assert "ago/2026" in str(resposta.get_json()["response"]["selo-topo"])
+
+
+def test_uf_options_start_with_brazil():
+    from brasil_painel.componentes import filtros
+
+    opcoes = filtros.opcoes_uf()
+    assert opcoes[0] == {"label": "Brasil", "value": "BR"}
+    assert len(opcoes) == 28

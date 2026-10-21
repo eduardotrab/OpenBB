@@ -2,7 +2,7 @@
 
 from dash import Dash, Input, Output, dcc, html, no_update
 
-from brasil_painel.componentes.blocos import aviso, grafico
+from brasil_painel.componentes.blocos import aviso, carregando, grafico
 from brasil_painel.componentes.graficos import SERIE_1, figura_linhas
 from brasil_painel.componentes.mapa import CONFIG_MAPA, figura_mapa
 from brasil_painel.dados import formato, regional
@@ -62,9 +62,8 @@ def layout() -> html.Div:
                     html.Div(id="mapa-cabecalho", className="nota"),
                     html.Div(
                         [
-                            dcc.Loading(
-                                dcc.Graph(id="mapa-grafico", config=CONFIG_MAPA),
-                                type="dot",
+                            carregando(
+                                dcc.Graph(id="mapa-grafico", config=CONFIG_MAPA)
                             ),
                             html.Div(id="mapa-ranking", className="ranking"),
                         ],
@@ -80,7 +79,7 @@ def layout() -> html.Div:
                         "Clique num estado do mapa para compará-lo com o Brasil.",
                         className="nota",
                     ),
-                    dcc.Loading(html.Div(id="mapa-evolucao"), type="dot"),
+                    carregando(html.Div(id="mapa-evolucao")),
                 ],
                 className="secao",
             ),

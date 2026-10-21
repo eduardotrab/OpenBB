@@ -9,6 +9,7 @@ from flask_login import current_user
 
 from brasil_painel import navegacao
 from brasil_painel.auth import setup_auth
+from brasil_painel.componentes import filtros
 from brasil_painel.config import Settings
 from brasil_painel.dados import abertura, mundo
 from brasil_painel.dados.api import FonteIndisponivel, OpenBBClient
@@ -83,7 +84,7 @@ def build_layout() -> html.Div:
                     html.Header(
                         [
                             html.H1(id="titulo-pagina", className="fs-titulo"),
-                            html.Div(id="filtros-globais", className="fs-filtros"),
+                            html.Div(filtros.controles(), className="fs-filtros"),
                             html.Div(
                                 [
                                     html.Span(_usuario(), className="fs-usuario"),
@@ -120,6 +121,16 @@ def register_callbacks(app: Dash, client: OpenBBClient) -> None:
     )
     def rotear(caminho):
         return pagina(caminho)
+
+    @app.callback(
+        Output("filtros", "data"),
+        Output("selo-topo", "children"),
+        Input("filtro-uf", "value"),
+        Input("filtro-data", "value"),
+    )
+    def guardar_filtros(uf, data):
+        valores = {"uf": uf or filtros.PADRAO["uf"], "data": data or ""}
+        return valores, filtros.selo(valores)
 
     for item in PAGINAS:
         item.modulo.register(app, client)
