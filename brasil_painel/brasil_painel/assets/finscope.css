@@ -379,3 +379,13 @@ input[type="radio"], input[type="checkbox"] { accent-color: var(--fs-turquesa); 
 .fs-exp-painel .fs-explicacao { margin: 6px 0 var(--fs-e-3); }
 .fs-exp-item .fs-exp-nome { overflow-wrap: anywhere; }
 .fs-cartao-tabela .dash-filter--case { display: none; }
+
+/* ---- Oportunidades ---- */
+.fs-linha-clicavel { cursor: pointer; }
+.fs-linha-clicavel:hover th, .fs-linha-clicavel:hover td { background: #F0F7F6; }
+.fs-radio { display: flex; gap: var(--fs-e-4); font-size: var(--fs-t-s); }
+.fs-radio label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+.fs-radio input { accent-color: var(--fs-turquesa); }
+.fs-matriz td.fs-destaque { font-weight: 700; color: var(--fs-verde-escuro); }
+.fs-matriz-nichos tbody th { white-space: normal; min-width: 200px; }
+.fs-matriz-nichos td { white-space: nowrap; }

@@ -370,6 +370,31 @@ def figura_share_produtos(resumos, brasil: float | None) -> go.Figure:
     return fig
 
 
+def figura_espaco(rotulos: list[str], valores: list[float]) -> go.Figure:
+    """Room to grow (R$) of the top niches, largest on top."""
+    rotulos, valores = rotulos[::-1], valores[::-1]
+    fig = go.Figure(
+        go.Bar(
+            x=valores,
+            y=rotulos,
+            orientation="h",
+            marker=dict(color=marca.COOPERATIVAS),
+            text=[f"R$ {formato.compacto(v)}" for v in valores],
+            textposition="outside",
+            hovertemplate="%{y}: R$ %{x:,.0f}<extra></extra>",
+        )
+    )
+    fig.update_layout(
+        height=60 + 30 * len(rotulos),
+        margin=dict(l=8, r=40, t=40, b=24),
+        showlegend=False,
+    )
+    fig.update_yaxes(automargin=True)
+    fig.update_xaxes(range=[0, max(valores, default=1) * 1.2], showticklabels=False)
+    fig.update_traces(cliponaxis=False)
+    return fig
+
+
 QUEDA = "#B4432C"
 
 

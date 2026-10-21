@@ -132,6 +132,11 @@ def layout() -> html.Div:
     )
 
 
+def nota(texto: str) -> html.P:
+    """Warning in the explorer (`aviso` would prefix it with "source unavailable")."""
+    return html.P(texto[:1].upper() + texto[1:], className="aviso")
+
+
 def trilha(caminho: list[str]) -> list:
     """Clickable path: Explorador › economy › cpi."""
     itens = [
@@ -362,8 +367,8 @@ def register(app: Dash, client: OpenBBClient) -> None:
         if f.pesada(provedor):
             campos.insert(
                 0,
-                aviso(
-                    "esta fonte carrega muitos dados na memória da API; prefira outra fonte se houver"
+                nota(
+                    "Esta fonte carrega muitos dados na memória da API; prefira outra fonte se houver"
                 ),
             )
         return campos or html.P("Esta função não tem parâmetros.", className="fs-vazio")
@@ -387,9 +392,7 @@ def register(app: Dash, client: OpenBBClient) -> None:
         except explorador.FaltaCredencial:
             return html.Div(
                 [
-                    aviso(
-                        "esta fonte exige uma chave de acesso que o FinScope não tem"
-                    ),
+                    nota("Esta fonte exige uma chave de acesso que o FinScope não tem"),
                     html.P(
                         'Use "Enviar minha base" para analisar um arquivo seu com estas colunas, ou '
                         '"Ver com dados de exemplo" para conhecer a função.',
@@ -398,7 +401,7 @@ def register(app: Dash, client: OpenBBClient) -> None:
                 ]  # fmt: skip
             ), None
         except explorador.ErroExecucao as error:
-            return aviso(str(error)), None
+            return nota(str(error)), None
         df = pd.json_normalize(linhas)
         return resultado(df, "Dados da API"), df.head(MAX_LINHAS).to_dict("records")
 
@@ -453,7 +456,7 @@ def register(app: Dash, client: OpenBBClient) -> None:
         try:
             df = insights.ler_envio(conteudo, nome or "base.csv")
         except insights.BaseInvalida as error:
-            return aviso(str(error)), no_update, no_update, no_update
+            return nota(str(error)), no_update, no_update, no_update
         esperadas = [
             c
             for c, _, _ in explorador.colunas(
@@ -463,14 +466,14 @@ def register(app: Dash, client: OpenBBClient) -> None:
         faltando = insights.validar(df, esperadas) if esperadas else []
         if esperadas and len(faltando) == len(esperadas):
             return (
-                aviso(
-                    f"nenhuma coluna do modelo foi encontrada (esperadas: {', '.join(esperadas[:8])})"
+                nota(
+                    f"Nenhuma coluna do modelo foi encontrada (esperadas: {', '.join(esperadas[:8])})"
                 ),
                 no_update,
                 no_update,
                 no_update,
             )
-        nota = (
+        ausentes = (
             html.P(
                 f"Colunas do modelo ausentes: {', '.join(faltando)}.",
                 className="fs-explicacao",
@@ -480,7 +483,7 @@ def register(app: Dash, client: OpenBBClient) -> None:
         )
         return (
             None,
-            html.Div([nota, resultado(df, f"Sua base ({nome}), não gravada")]),
+            html.Div([ausentes, resultado(df, f"Sua base ({nome}), não gravada")]),
             df.head(MAX_LINHAS).to_dict("records"),
             OCULTO,
         )

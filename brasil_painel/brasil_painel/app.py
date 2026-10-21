@@ -23,6 +23,7 @@ from brasil_painel.paginas import (
     explorador as pagina_explorador,
     mapa as pagina_mapa,
     mundo as pagina_mundo,
+    oportunidades as pagina_oportunidades,
     produtos as pagina_produtos,
     rural as pagina_rural,
 )
@@ -41,6 +42,9 @@ PAGINAS = [
     Pagina("/rural", "Rural", "Segmentos", "rural", pagina_rural),
     Pagina(
         "/comparativo", "Comparativo", "Segmentos", "comparativo", pagina_comparativo
+    ),
+    Pagina(
+        "/oportunidades", "Oportunidades", "Decisão", "decisao", pagina_oportunidades
     ),
     Pagina("/produtos", "Produtos", "Produtos", "produtos", pagina_produtos),
     Pagina("/boletim", "Boletim Econômico", "Boletim", "boletim", pagina_boletim),
