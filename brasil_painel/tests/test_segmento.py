@@ -68,3 +68,37 @@ def test_people_callback_returns_one_column_per_income_class(loja):
     assert "Sem carteira com estes filtros." in texto  # Renda média has no rows
     assert "sem faixa/porte informado" in texto
     assert "ago/2026" in json.dumps(resposta["pessoas-contexto"], ensure_ascii=False)
+
+
+def test_rural_callback_has_three_producer_columns(tmp_path, monkeypatch):
+    from brasil_painel.regional import sicor
+
+    monkeypatch.setenv("PAINEL_DADOS_DIR", str(tmp_path))
+    linhas = [
+        dict(data=dt.date(2026, 8, 1), uf="MG", porte=porte, atividade="Agrícola", cooperativa=True, sicoob=True,
+             valor_custeio=100.0, valor_investimento=50.0, valor_comercializacao=0.0, valor_industrializacao=0.0,
+             contratos=3.0)
+        for porte in ("Pequeno produtor", "Grande produtor")
+    ]  # fmt: skip
+    armazem.gravar(pd.DataFrame(linhas), "sicor_uf", sicor.SCHEMA)
+    http = create_app(Settings(users_file=None)).server.test_client()
+    payload = {
+        "output": "..rural-colunas.children...rural-contexto.children..",
+        "outputs": [
+            {"id": "rural-colunas", "property": "children"},
+            {"id": "rural-contexto", "property": "children"},
+        ],
+        "inputs": [
+            {
+                "id": "filtros",
+                "property": "data",
+                "value": {"uf": "BR", "data": "2026-08-31"},
+            }
+        ],
+        "changedPropIds": [],
+    }
+    resposta = http.post("/_dash-update-component", json=payload).get_json()["response"]
+    assert len(resposta["rural-colunas"]["children"]) == 3
+    texto = json.dumps(resposta, ensure_ascii=False)
+    assert "Sem contratos com estes filtros." in texto  # medium producer has no rows
+    assert "Contratado em ago/2026" in texto

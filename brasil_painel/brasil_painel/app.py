@@ -19,6 +19,7 @@ from brasil_painel.paginas import (
     estilo as pagina_estilo,
     mapa as pagina_mapa,
     mundo as pagina_mundo,
+    rural as pagina_rural,
 )
 from brasil_painel.paginas.segmento import EMPRESAS, PESSOAS
 from brasil_painel.usuarios import UserStore
@@ -32,6 +33,7 @@ PAGINAS = [
     Pagina("/mapa", "Mapa", "Mercado", "mapa", pagina_mapa),
     Pagina("/pessoas", "Pessoas", "Segmentos", "pessoas", PESSOAS),
     Pagina("/empresas", "Empresas", "Segmentos", "empresas", EMPRESAS),
+    Pagina("/rural", "Rural", "Segmentos", "rural", pagina_rural),
     Pagina("/estilo", "Galeria", None, "radar", pagina_estilo),  # internal
 ]
 POR_CAMINHO = {p.caminho: p for p in PAGINAS}

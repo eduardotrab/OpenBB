@@ -207,6 +207,7 @@ def figura_tendencia(
     unidade: str = "%",
 ) -> go.Figure:
     """Small two-line trend for a class column: system vs. cooperatives."""
+    sufixo = unidade if unidade == "%" else f" {unidade}"
     fig = go.Figure()
     for i, (rotulo, cor) in enumerate(
         zip(rotulos, (marca.SISTEMA, marca.COOPERATIVAS)), start=1
@@ -219,15 +220,15 @@ def figura_tendencia(
                 name=rotulo,
                 mode="lines",
                 line=dict(width=2, color=cor),
-                hovertemplate=f"{rotulo}: %{{y:,.2f}}{unidade}<extra></extra>",
+                hovertemplate=f"{rotulo}: %{{y:,.2f}}{sufixo}<extra></extra>",
             )
         )
     fig.update_layout(
         height=170,
-        margin=dict(l=36, r=8, t=28, b=24),
-        legend=dict(orientation="h", y=1.18, x=0, font=dict(size=11)),
+        margin=dict(l=36, r=8, t=30, b=24),
+        legend=dict(orientation="h", yanchor="top", y=1.0, yref="container", x=0, font=dict(size=11)),
         hovermode="x unified",
     )
     fig.update_xaxes(showgrid=False, tickformat="%m/%y", nticks=4)
-    fig.update_yaxes(ticksuffix=unidade if unidade == "%" else "", nticks=4)
+    fig.update_yaxes(ticksuffix=sufixo, nticks=4)
     return fig

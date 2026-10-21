@@ -91,7 +91,9 @@ def coluna(resumo: dados_classes.ResumoClasse) -> html.Section:
                 [
                     html.P("Inadimplência no tempo", className="fs-mini-titulo"),
                     dcc.Graph(
-                        figure=figura_tendencia(resumo.tendencia), config=CONFIG_MINI
+                        figure=figura_tendencia(resumo.tendencia),
+                        config=CONFIG_MINI,
+                        style={"height": "170px"},
                     ),
                 ]
             ),
