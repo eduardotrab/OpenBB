@@ -16,6 +16,7 @@ from brasil_painel.dados.api import FonteIndisponivel, OpenBBClient
 from brasil_painel.navegacao import Pagina
 from brasil_painel.paginas import (
     abertura as pagina_abertura,
+    comparativo as pagina_comparativo,
     estilo as pagina_estilo,
     mapa as pagina_mapa,
     mundo as pagina_mundo,
@@ -34,6 +35,9 @@ PAGINAS = [
     Pagina("/pessoas", "Pessoas", "Segmentos", "pessoas", PESSOAS),
     Pagina("/empresas", "Empresas", "Segmentos", "empresas", EMPRESAS),
     Pagina("/rural", "Rural", "Segmentos", "rural", pagina_rural),
+    Pagina(
+        "/comparativo", "Comparativo", "Segmentos", "comparativo", pagina_comparativo
+    ),
     Pagina("/estilo", "Galeria", None, "radar", pagina_estilo),  # internal
 ]
 POR_CAMINHO = {p.caminho: p for p in PAGINAS}

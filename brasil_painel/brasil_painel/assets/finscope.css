@@ -203,3 +203,14 @@ input[type="radio"], input[type="checkbox"] { accent-color: var(--fs-turquesa); 
   .fs-kpi-valor { font-size: var(--fs-t-xl); }
   .fs-kpis { gap: var(--fs-e-2); }
 }
+
+/* ---- comparison matrix ---- */
+.fs-cartao-tabela { background: var(--fs-superficie); border: 1px solid var(--fs-borda); border-radius: var(--fs-raio); overflow-x: auto; }
+.fs-matriz { width: 100%; border-collapse: collapse; font-size: var(--fs-t-s); }
+.fs-matriz th, .fs-matriz td { padding: 8px 12px; border-bottom: 1px solid #E6EDEE; text-align: left; white-space: nowrap; }
+.fs-matriz thead th { font-weight: 400; color: var(--fs-texto-suave); font-size: var(--fs-t-xs); vertical-align: bottom; white-space: normal; }
+.fs-matriz .num { text-align: right; font-variant-numeric: tabular-nums; }
+.fs-matriz .vazio { color: var(--fs-texto-suave); }
+.fs-matriz tbody th { font-weight: 700; color: var(--fs-verde-escuro); }
+.fs-matriz .fs-linha-brasil th, .fs-matriz .fs-linha-brasil td { background: #EAF1F1; font-weight: 700; border-bottom: 2px solid var(--fs-borda); }
+.fs-matriz .fs-grupo-linha { background: var(--fs-fundo); color: var(--fs-texto-suave); font-size: var(--fs-t-xs); font-weight: 400; padding-top: 12px; }

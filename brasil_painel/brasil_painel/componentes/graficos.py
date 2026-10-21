@@ -239,3 +239,64 @@ def figura_tendencia(
     fig.update_xaxes(showgrid=False, tickformat="%m/%y", nticks=4)
     fig.update_yaxes(ticksuffix=sufixo, nticks=4)
     return fig
+
+
+CORES_GRUPO = {"Pessoas": marca.TURQUESA, "Empresas": marca.ROXO}
+
+
+def figura_posicionamento(linhas) -> go.Figure:
+    """Risk × growth of every class; bubble area = portfolio; Brazil as dashed lines."""
+    brasil = next(item.resumo for item in linhas if item.grupo == "Brasil")
+    classes_ = [
+        item for item in linhas if item.grupo != "Brasil" and item.resumo.carteira
+    ]
+    maior = max((item.resumo.carteira for item in classes_), default=1)
+    fig = go.Figure()
+    for grupo, cor in CORES_GRUPO.items():
+        itens = [item.resumo for item in classes_ if item.grupo == grupo]
+        fig.add_trace(
+            go.Scatter(
+                x=[r.inadimplencia for r in itens],
+                y=[r.crescimento_12m for r in itens],
+                mode="markers+text",
+                name=grupo,
+                text=[r.classe for r in itens],
+                textposition="top center",
+                textfont=dict(size=11, color=marca.TEXTO),
+                marker=dict(
+                    size=[12 + 38 * (r.carteira / maior) ** 0.5 for r in itens],
+                    color=cor,
+                    opacity=0.85,
+                    line=dict(color=marca.SUPERFICIE, width=2),
+                ),
+                customdata=[[formato.compacto(r.carteira)] for r in itens],
+                hovertemplate="<b>%{text}</b><br>Inadimplência: %{x:.2f}%"
+                "<br>Crescimento 12 meses: %{y:.1f}%<br>Carteira: R$ %{customdata[0]}<extra></extra>",
+            )
+        )
+    if brasil.inadimplencia is not None:
+        fig.add_vline(
+            x=brasil.inadimplencia, line=dict(color=marca.BRASIL, dash="dash", width=1)
+        )
+    if brasil.crescimento_12m is not None:
+        fig.add_hline(
+            y=brasil.crescimento_12m,
+            line=dict(color=marca.BRASIL, dash="dash", width=1),
+        )
+        fig.add_annotation(
+            x=1, xref="paper", y=brasil.crescimento_12m, text="Brasil", showarrow=False,
+            xanchor="right", yanchor="bottom", font=dict(size=11, color=marca.BRASIL),
+        )  # fmt: skip
+    for x, y, texto, ancora in (
+        (0, 1, "cresce com risco menor", "left"),
+        (1, 0, "cresce menos com risco maior", "right"),
+    ):
+        fig.add_annotation(
+            x=x, y=y, xref="paper", yref="paper", text=texto, showarrow=False,
+            xanchor=ancora, yanchor="top" if y else "bottom", font=dict(size=11, color=marca.TEXTO_SUAVE),
+        )  # fmt: skip
+    fig.update_layout(height=430, margin=dict(l=56, r=16, t=40, b=48), hovermode="closest",
+                      legend=dict(orientation="h", yanchor="top", y=1.0, yref="container", x=0))  # fmt: skip
+    fig.update_xaxes(title="Inadimplência (> 90 dias)", ticksuffix="%")
+    fig.update_yaxes(title="Crescimento da carteira em 12 meses", ticksuffix="%")
+    return fig
