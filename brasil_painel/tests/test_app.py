@@ -180,3 +180,19 @@ def test_uf_options_start_with_brazil():
     opcoes = filtros.opcoes_uf()
     assert opcoes[0] == {"label": "Brasil", "value": "BR"}
     assert len(opcoes) == 28
+
+
+def test_every_screen_of_the_roadmap_so_far_is_routed():
+    from brasil_painel.app import POR_CAMINHO
+
+    for caminho in (
+        "/",
+        "/mundo",
+        "/mapa",
+        "/pessoas",
+        "/empresas",
+        "/rural",
+        "/comparativo",
+        "/produtos",
+    ):
+        assert caminho in POR_CAMINHO, caminho

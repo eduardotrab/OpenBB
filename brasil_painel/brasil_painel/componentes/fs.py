@@ -101,7 +101,7 @@ def funil(etapas: list[tuple[str, float]], prefixo: str = "") -> html.Div:
 
 
 def barras_comparativas(
-    itens: list[tuple[str, float, str]], prefixo: str = ""
+    itens: list[tuple[str, float, str]], prefixo: str = "", percentual: bool = False
 ) -> html.Div:
     """Horizontal bars (label, value, role) scaled to the largest value.
 
@@ -122,7 +122,9 @@ def barras_comparativas(
                         className="fs-barra-trilho",
                     ),
                     html.Span(
-                        f"{prefixo}{formato.compacto(valor)}",
+                        f"{formato.numero(valor, 1)}%"
+                        if percentual
+                        else f"{prefixo}{formato.compacto(valor)}",
                         className="fs-barra-valor",
                     ),
                 ],

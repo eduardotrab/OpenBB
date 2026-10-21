@@ -267,3 +267,18 @@ input[type="radio"], input[type="checkbox"] { accent-color: var(--fs-turquesa); 
 .fs-link { display: inline-block; margin-top: var(--fs-e-2); font-size: var(--fs-t-s); color: var(--fs-verde-escuro); font-weight: 700; }
 .coluna-principal .cartoes { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
 .grade-blocos .cartoes { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+
+/* ---- products ---- */
+.fs-grade-produtos { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: var(--fs-e-4); align-items: start; margin-top: var(--fs-e-3); }
+@media (max-width: 1100px) { .fs-grade-produtos { grid-template-columns: 1fr; } }
+.fs-cartao-grafico { background: var(--fs-superficie); border: 1px solid var(--fs-borda); border-radius: var(--fs-raio); padding: var(--fs-e-2); }
+.fs-cartao-grafico.fs-pad { padding: var(--fs-e-4); }
+.fs-filtro-modalidade { min-width: 420px; flex: 1 1 420px; max-width: 640px; }
+
+/* comparative bars share one grid, so every bar starts at the same x */
+.fs-barras { display: grid; grid-template-columns: max-content minmax(0, 1fr) auto; gap: 4px var(--fs-e-2); align-items: center; }
+.fs-barra-linha { display: contents; }
+@container (max-width: 250px) {
+  .fs-barras { grid-template-columns: minmax(0, 1fr) auto; }
+  .fs-barra-rotulo { grid-column: 1 / -1; }
+}

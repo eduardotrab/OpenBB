@@ -20,6 +20,7 @@ from brasil_painel.paginas import (
     estilo as pagina_estilo,
     mapa as pagina_mapa,
     mundo as pagina_mundo,
+    produtos as pagina_produtos,
     rural as pagina_rural,
 )
 from brasil_painel.paginas.segmento import EMPRESAS, PESSOAS
@@ -38,6 +39,7 @@ PAGINAS = [
     Pagina(
         "/comparativo", "Comparativo", "Segmentos", "comparativo", pagina_comparativo
     ),
+    Pagina("/produtos", "Produtos", "Produtos", "produtos", pagina_produtos),
     Pagina("/estilo", "Galeria", None, "radar", pagina_estilo),  # internal
 ]
 POR_CAMINHO = {p.caminho: p for p in PAGINAS}

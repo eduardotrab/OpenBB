@@ -213,6 +213,8 @@ def figura_tendencia(
         zip(rotulos, (marca.SISTEMA, marca.COOPERATIVAS)), start=1
     ):
         validos = [(p[0], p[i]) for p in pontos if p[i] is not None]
+        if not validos:
+            continue
         fig.add_trace(
             go.Scatter(
                 x=[d for d, _ in validos],
@@ -299,4 +301,70 @@ def figura_posicionamento(linhas) -> go.Figure:
                       legend=dict(orientation="h", yanchor="top", y=1.0, yref="container", x=0))  # fmt: skip
     fig.update_xaxes(title="Inadimplência (> 90 dias)", ticksuffix="%")
     fig.update_yaxes(title="Crescimento da carteira em 12 meses", ticksuffix="%")
+    return fig
+
+
+def figura_ranking_juros(juros, limite: int = 25) -> go.Figure:
+    """Lenders by rate (lowest first); the Sicoob bank in turquoise, the median dashed."""
+    linhas = juros.ranking[:limite]
+    if juros.sicoob_posicao and juros.sicoob_posicao > limite:
+        linhas = linhas + [r for r in juros.ranking if r[0] == juros.sicoob_posicao]
+    nomes = [f"{pos}º {nome.title()[:34]}" for pos, nome, _ in linhas]
+    cores = [
+        marca.COOPERATIVAS if "SICOOB" in nome.upper() else "#A9BDC0"
+        for _, nome, _ in linhas
+    ]
+    fig = go.Figure(
+        go.Bar(
+            x=[t for *_, t in linhas],
+            y=nomes,
+            orientation="h",
+            marker=dict(color=cores),
+            text=[f"{formato.numero(t, 2)}%" for *_, t in linhas],
+            textposition="outside",
+            hovertemplate="%{y}: %{x:.2f}% a.m.<extra></extra>",
+        )
+    )
+    if juros.mediana is not None:
+        fig.add_vline(
+            x=juros.mediana, line=dict(color=marca.BRASIL, dash="dash", width=1)
+        )
+        fig.add_annotation(x=juros.mediana, y=0, yref="paper", text="mediana", showarrow=False,
+                           yanchor="top", yshift=-18, font=dict(size=11, color=marca.BRASIL))  # fmt: skip
+    fig.update_layout(height=max(320, 22 * len(linhas) + 80), margin=dict(l=8, r=40, t=12, b=48),
+                      showlegend=False, bargap=0.25)  # fmt: skip
+    fig.update_yaxes(autorange="reversed", automargin=True, tickfont=dict(size=11))
+    maior = max((t for *_, t in linhas), default=1)
+    fig.update_xaxes(ticksuffix="%", showgrid=True, range=[0, maior * 1.18])
+    fig.update_traces(cliponaxis=False)
+    return fig
+
+
+def figura_share_produtos(resumos, brasil: float | None) -> go.Figure:
+    """Cooperatives' share of each product, Brazil total share dashed."""
+    itens = sorted(resumos, key=lambda r: r.share_coop or 0)
+    fig = go.Figure(
+        go.Bar(
+            x=[r.share_coop for r in itens],
+            y=[r.classe for r in itens],
+            orientation="h",
+            marker=dict(color=marca.COOPERATIVAS),
+            text=[f"{formato.numero(r.share_coop or 0, 1)}%" for r in itens],
+            textposition="outside",
+            hovertemplate="%{y}: %{x:.1f}%<extra></extra>",
+        )
+    )
+    if brasil is not None:
+        fig.add_vline(x=brasil, line=dict(color=marca.BRASIL, dash="dash", width=1))
+        fig.add_annotation(x=brasil, y=0, yref="paper", text="média de todas as carteiras", showarrow=False,
+                           yanchor="top", yshift=-18, font=dict(size=11, color=marca.BRASIL))  # fmt: skip
+    fig.update_layout(
+        height=60 + 30 * len(itens),
+        margin=dict(l=8, r=40, t=12, b=48),
+        showlegend=False,
+    )
+    fig.update_yaxes(automargin=True)
+    maior = max((r.share_coop or 0 for r in itens), default=1)
+    fig.update_xaxes(ticksuffix="%", range=[0, maior * 1.2])
+    fig.update_traces(cliponaxis=False)
     return fig

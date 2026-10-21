@@ -88,7 +88,7 @@ def main() -> None:
     p.add_argument("--espera", type=float, default=8)
     p.add_argument("--cookie", action="append", default=[])
     args = p.parse_args()
-    with tempfile.TemporaryDirectory() as perfil:
+    with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as perfil:
         chromium = subprocess.Popen(  # noqa: S603 - fixed local browser binary
             [shutil.which("chromium") or "chromium", "--headless", "--no-sandbox", "--disable-gpu",
              "--hide-scrollbars", f"--remote-debugging-port={PORTA}", f"--user-data-dir={perfil}",
