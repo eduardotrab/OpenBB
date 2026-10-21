@@ -6,6 +6,7 @@ import time
 
 from brasil_painel.regional import (
     armazem,
+    b3,
     cartoes,
     ibge,
     juros,
@@ -24,6 +25,7 @@ DATASETS = {
     "populacao": ibge.atualizar_populacao,
     "juros": juros.atualizar,
     "cartoes": cartoes.atualizar,
+    "b3": b3.atualizar,
 }
 
 
