@@ -200,6 +200,7 @@ def test_every_screen_of_the_roadmap_so_far_is_routed():
         "/comparativo",
         "/oportunidades",
         "/cooperativas",
+        "/termometro",
         "/produtos",
         "/boletim",
         "/bolsa",

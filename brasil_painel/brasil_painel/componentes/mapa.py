@@ -40,15 +40,20 @@ def figura_mapa(
     divergente: bool = False,
     destaque: str | None = None,
     altura: int = 520,
+    maior_melhor: bool = False,
+    referencia: str = "Brasil",
 ) -> go.Figure:
-    """Color each state by its value; hover shows Brazil and the difference."""
+    """Color each state by its value; hover shows the reference (Brazil) and the difference.
+
+    `maior_melhor` flips the diverging ramp (green above the reference).
+    """
     siglas = list(valores)
     customdata = [
         [
             NOMES[s],
             f"{formato.numero(valores[s], casas)} {unidade}",
             (
-                f"Brasil: {formato.numero(brasil, casas)} {unidade}"
+                f"{referencia}: {formato.numero(brasil, casas)} {unidade}"
                 f"<br>Diferença: {formato.numero(valores[s] - brasil, casas, sinal=True)}"
                 if brasil is not None
                 else ""
@@ -63,7 +68,9 @@ def figura_mapa(
             locations=[CODIGOS[s] for s in siglas],
             z=[valores[s] for s in siglas],
             zmid=brasil if divergente else None,
-            colorscale=DIVERGENTE if divergente else SEQUENCIAL,
+            colorscale=(DIVERGENTE[::-1] if maior_melhor else DIVERGENTE)
+            if divergente
+            else SEQUENCIAL,
             marker=dict(line=dict(color="#ffffff", width=0.6)),
             customdata=customdata,
             hovertemplate="<b>%{customdata[0]}</b><br>%{customdata[1]}"

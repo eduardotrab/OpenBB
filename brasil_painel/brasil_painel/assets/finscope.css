@@ -394,3 +394,6 @@ input[type="radio"], input[type="checkbox"] { accent-color: var(--fs-turquesa); 
 .fs-mun-perfil { margin-top: var(--fs-e-4); }
 .fs-mun-perfil .fs-matriz-perfil { max-width: 960px; }
 .fs-matriz .fs-linha-sicoob th, .fs-matriz .fs-linha-sicoob td { background: #E0F5F2; }
+.fs-term-pesos { background: var(--fs-superficie); border: 1px solid var(--fs-borda); border-radius: var(--fs-raio); padding: var(--fs-e-3) var(--fs-e-4); }
+.fs-term-pesos summary { cursor: pointer; font-weight: 700; color: var(--fs-verde-escuro); }
+.fs-term-nota { font-size: 2.4rem; font-weight: 700; color: var(--fs-verde-escuro); }

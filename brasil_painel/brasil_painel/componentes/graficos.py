@@ -427,6 +427,46 @@ def figura_participacao_sistemas(
     return fig
 
 
+def figura_contribuicoes(
+    rotulos: list[str], pontos: list[float], detalhes: list[str]
+) -> go.Figure:
+    """Points each component adds to (green) or takes from (red) a score of 50."""
+    rotulos, pontos, detalhes = rotulos[::-1], pontos[::-1], detalhes[::-1]
+    fig = go.Figure(
+        go.Bar(
+            x=pontos,
+            y=rotulos,
+            orientation="h",
+            marker=dict(
+                color=[
+                    marca.DIVERGENTE[0] if p >= 0 else marca.DIVERGENTE[-1]
+                    for p in pontos
+                ]
+            ),
+            text=[formato.numero(p, 1, sinal=True) for p in pontos],
+            textposition="outside",
+            customdata=detalhes,
+            hovertemplate="%{y}<br>%{customdata}<br>%{x:+.1f} pontos<extra></extra>",
+        )
+    )
+    maior = max((abs(p) for p in pontos), default=1) or 1
+    fig.add_vline(x=0, line=dict(color=marca.BRASIL, width=1))
+    fig.update_layout(
+        height=60 + 40 * len(rotulos),
+        margin=dict(l=8, r=40, t=12, b=24),
+        showlegend=False,
+        bargap=0.35,
+    )
+    fig.update_yaxes(automargin=True)
+    fig.update_xaxes(
+        range=[-maior * 1.35, maior * 1.35],
+        zeroline=False,
+        title=dict(text="pontos", font=dict(size=11)),
+    )
+    fig.update_traces(cliponaxis=False)
+    return fig
+
+
 QUEDA = "#B4432C"
 
 

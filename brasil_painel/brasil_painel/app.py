@@ -27,6 +27,7 @@ from brasil_painel.paginas import (
     oportunidades as pagina_oportunidades,
     produtos as pagina_produtos,
     rural as pagina_rural,
+    termometro as pagina_termometro,
 )
 from brasil_painel.paginas.segmento import EMPRESAS, PESSOAS
 from brasil_painel.usuarios import UserStore
@@ -50,6 +51,7 @@ PAGINAS = [
     Pagina(
         "/cooperativas", "Cooperativas", "Decisão", "cooperativas", pagina_cooperativas
     ),
+    Pagina("/termometro", "Termômetro", "Decisão", "termometro", pagina_termometro),
     Pagina("/produtos", "Produtos", "Produtos", "produtos", pagina_produtos),
     Pagina("/boletim", "Boletim Econômico", "Boletim", "boletim", pagina_boletim),
     Pagina("/bolsa", "Bolsa", "Bolsa", "bolsa", pagina_bolsa),

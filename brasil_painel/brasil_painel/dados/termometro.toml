@@ -1,0 +1,44 @@
+# Thermometer components: label, short label (chart), unit, direction ("menor" or "maior" is better) and initial weight.
+# Weights are relative (they are normalized to sum 1) and can be changed on the screen.
+
+[inadimplencia]
+curto = "Inadimplência"
+rotulo = "Inadimplência (> 90 dias)"
+unidade = "%"
+melhor = "menor"
+peso = 20
+
+[inadimplencia_12m]
+curto = "Inadimplência em 12 meses"
+rotulo = "Variação da inadimplência em 12 meses"
+unidade = "p.p."
+melhor = "menor"
+peso = 15
+
+[atraso_3m]
+curto = "Atraso de 15 a 90 dias"
+rotulo = "Alta do atraso de 15 a 90 dias em 3 meses"
+unidade = "p.p."
+melhor = "menor"
+peso = 15
+
+[desemprego]
+curto = "Desemprego"
+rotulo = "Desemprego"
+unidade = "%"
+melhor = "menor"
+peso = 10
+
+[pix_pj]
+curto = "Pix das empresas"
+rotulo = "Crescimento do Pix recebido por empresas"
+unidade = "%"
+melhor = "maior"
+peso = 20
+
+[carteira]
+curto = "Carteira de crédito"
+rotulo = "Crescimento da carteira de crédito em 12 meses"
+unidade = "%"
+melhor = "maior"
+peso = 20
