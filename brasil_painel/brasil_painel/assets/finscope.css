@@ -393,3 +393,4 @@ input[type="radio"], input[type="checkbox"] { accent-color: var(--fs-turquesa); 
 #mun-contexto { margin-bottom: var(--fs-e-3); }
 .fs-mun-perfil { margin-top: var(--fs-e-4); }
 .fs-mun-perfil .fs-matriz-perfil { max-width: 960px; }
+.fs-matriz .fs-linha-sicoob th, .fs-matriz .fs-linha-sicoob td { background: #E0F5F2; }

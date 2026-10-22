@@ -395,6 +395,38 @@ def figura_espaco(rotulos: list[str], valores: list[float]) -> go.Figure:
     return fig
 
 
+def figura_participacao_sistemas(
+    share: dict[str, float], destaque: str = "Sicoob"
+) -> go.Figure:
+    """Share of each cooperative system in the singulars' assets; the highlighted one in turquoise."""
+    nomes, valores = list(share)[::-1], list(share.values())[::-1]
+    fig = go.Figure(
+        go.Bar(
+            x=valores,
+            y=nomes,
+            orientation="h",
+            marker=dict(
+                color=[
+                    marca.COOPERATIVAS if n == destaque else "#A9BDC0" for n in nomes
+                ]
+            ),
+            text=[f"{formato.numero(v, 1)}%" for v in valores],
+            textposition="outside",
+            hovertemplate="%{y}: %{x:.1f}%<extra></extra>",
+        )
+    )
+    fig.update_layout(
+        height=60 + 34 * len(nomes),
+        margin=dict(l=8, r=40, t=12, b=24),
+        showlegend=False,
+        bargap=0.3,
+    )
+    fig.update_yaxes(automargin=True)
+    fig.update_xaxes(range=[0, max(valores, default=1) * 1.2], ticksuffix="%")
+    fig.update_traces(cliponaxis=False)
+    return fig
+
+
 QUEDA = "#B4432C"
 
 

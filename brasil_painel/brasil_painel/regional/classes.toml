@@ -25,6 +25,18 @@
 sicor_segmentos = ["Cooperativa de Crédito", "Banco Múltiplo Cooperativo"]
 sicoob_no_nome = "SICOOB"
 
+[sistemas]  # cooperative system by a word in the IF.data name (first match wins)
+"Sicoob" = "SICOOB"
+"Sicredi" = "SICREDI"
+"Cresol" = "CRESOL"
+"Unicred" = "UNICRED"
+"Ailos" = "AILOS"
+"CrediSIS" = "CREDISIS"
+"Uniprime" = "UNIPRIME"
+
+[sistemas_excecoes]  # CNPJ base (8 digits) → system, for names without the brand.
+# Fill only with the official affiliation (central's list); never guess.
+
 [descricoes]  # subtitle of each class column
 "Varejo" = "renda até 3 salários mínimos"
 "Renda média" = "de 3 a 5 salários mínimos"

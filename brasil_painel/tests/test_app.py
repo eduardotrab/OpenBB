@@ -199,6 +199,7 @@ def test_every_screen_of_the_roadmap_so_far_is_routed():
         "/rural",
         "/comparativo",
         "/oportunidades",
+        "/cooperativas",
         "/produtos",
         "/boletim",
         "/bolsa",

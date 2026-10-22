@@ -10,6 +10,7 @@ from brasil_painel.regional import (
     cartoes,
     estban,
     ibge,
+    ifdata,
     juros,
     maquininhas,
     pix,
@@ -30,6 +31,7 @@ DATASETS = {
     "juros": juros.atualizar,
     "cartoes": cartoes.atualizar,
     "b3": b3.atualizar,
+    "ifdata": ifdata.atualizar,
 }
 
 

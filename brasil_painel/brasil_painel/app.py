@@ -19,6 +19,7 @@ from brasil_painel.paginas import (
     boletim as pagina_boletim,
     bolsa as pagina_bolsa,
     comparativo as pagina_comparativo,
+    cooperativas as pagina_cooperativas,
     estilo as pagina_estilo,
     explorador as pagina_explorador,
     mapa as pagina_mapa,
@@ -45,6 +46,9 @@ PAGINAS = [
     ),
     Pagina(
         "/oportunidades", "Oportunidades", "Decisão", "decisao", pagina_oportunidades
+    ),
+    Pagina(
+        "/cooperativas", "Cooperativas", "Decisão", "cooperativas", pagina_cooperativas
     ),
     Pagina("/produtos", "Produtos", "Produtos", "produtos", pagina_produtos),
     Pagina("/boletim", "Boletim Econômico", "Boletim", "boletim", pagina_boletim),
