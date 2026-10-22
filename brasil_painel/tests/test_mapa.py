@@ -52,3 +52,41 @@ def test_map_figure_sequential_has_no_midpoint():
 
 def test_map_graph_loads_topojson_locally():
     assert mapa.CONFIG_MAPA["topojsonURL"] == "/assets/topojson/"
+
+
+def test_municipal_meshes_cover_the_ibge_list_and_are_clockwise():
+    nomes = json.loads(malha.LISTA.read_text())
+    codigos = set()
+    for arquivo in malha.PASTA_MUNICIPIOS.glob("*.json"):
+        for feicao in json.loads(arquivo.read_text())["features"]:
+            codigos.add(feicao["properties"]["codarea"])
+            g = feicao["geometry"]
+            poligonos = (
+                [g["coordinates"]] if g["type"] == "Polygon" else g["coordinates"]
+            )
+            assert all(malha._area(p[0]) < 0 for p in poligonos), feicao["properties"]
+    # recently installed municipalities reach the list before the mesh
+    # (5101837, Boa Esperança do Norte, MT, in 2026)
+    assert (
+        len(nomes) > 5500 and codigos <= set(nomes) and len(set(nomes) - codigos) <= 3
+    )
+    assert nomes["3106200"] == ["Belo Horizonte", "MG"]
+
+
+def test_municipal_map_grays_missing_and_centres_growth_on_the_median():
+    fig = mapa.figura_mapa_municipios(
+        "AC",
+        {"1200401": 10.0, "1200013": -4.0},
+        {"1200401": "Rio Branco"},
+        2.0,
+        "%",
+        crescimento=True,
+        destaque="1200401",
+    )
+    fundo, dados, contorno = fig.data
+    assert len(fundo.locations) == 22 and list(dados.locations) == [
+        "1200013",
+        "1200401",
+    ]
+    assert dados.zmin + dados.zmax == 4.0  # symmetric around the median
+    assert list(contorno.locations) == ["1200401"]

@@ -1,6 +1,7 @@
 """Credit and activity map by state, always against the Brazil figure.
 
-Clicking a state sets the global UF filter, so every other screen follows it.
+Clicking a state sets the global UF filter, so every other screen follows it;
+with a state chosen, its municipalities appear below (`mapa_municipios`).
 """
 
 import datetime as dt
@@ -14,6 +15,7 @@ from brasil_painel.componentes.mapa import CONFIG_MAPA, figura_mapa
 from brasil_painel.dados import formato, regional
 from brasil_painel.dados.api import OpenBBClient
 from brasil_painel.dados.indicadores import Ponto
+from brasil_painel.paginas import mapa_municipios
 from brasil_painel.paginas.segmento import TODOS, filtros_da_tela
 from brasil_painel.regional import classes as cfg
 from brasil_painel.regional.ufs import BRASIL, NOMES, SIGLAS
@@ -115,6 +117,7 @@ def layout() -> html.Div:
                 ],
                 className="fs-mapa-grade",
             ),
+            mapa_municipios.bloco(),
         ],
         className="fs-tela",
     )
@@ -242,6 +245,7 @@ def _serie(chave, cliente, segmento, classe, produto, data: dt.date | None):
 
 def register(app: Dash, client: OpenBBClient) -> None:
     """Callbacks of the map page."""
+    mapa_municipios.register(app)
 
     @app.callback(
         Output("mapa-cliente", "style"),

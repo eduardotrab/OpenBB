@@ -20,6 +20,17 @@ SCHEMA_LONGO = pa.schema(
     ]
 )
 
+# Municipal long format: `municipio` is the 7-digit IBGE code.
+SCHEMA_MUNICIPAL = pa.schema(
+    [
+        ("data", pa.date32()),
+        ("municipio", pa.string()),
+        ("uf", pa.string()),
+        ("indicador", pa.string()),
+        ("valor", pa.float64()),
+    ]
+)
+
 
 class SchemaInvalido(ValueError):
     """The data does not match the dataset contract; nothing was written."""
@@ -72,4 +83,11 @@ def ordenar_longo(df: pd.DataFrame) -> pd.DataFrame:
     """Columns and row order of the long format."""
     return df[SCHEMA_LONGO.names].sort_values(
         ["indicador", "uf", "data"], ignore_index=True
+    )
+
+
+def ordenar_municipal(df: pd.DataFrame) -> pd.DataFrame:
+    """Columns and row order of the municipal format."""
+    return df[SCHEMA_MUNICIPAL.names].sort_values(
+        ["indicador", "municipio", "data"], ignore_index=True
     )

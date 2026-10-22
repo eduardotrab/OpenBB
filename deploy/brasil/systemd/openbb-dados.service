@@ -12,4 +12,5 @@ ExecStart="@PROJECT_DIR@/openbb/.venv/bin/painel-dados" atualizar
 Nice=10
 # DuckDB is capped at 512 MB; this guards the machine if a source misbehaves.
 MemoryMax=1500M
-TimeoutStartSec=1h
+# the first full load (SICOR month by month) is long; daily runs are incremental
+TimeoutStartSec=2h

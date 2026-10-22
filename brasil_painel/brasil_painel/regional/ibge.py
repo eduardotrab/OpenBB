@@ -69,3 +69,39 @@ def atualizar_desemprego(anos=None, pasta=None, client=None) -> pd.DataFrame:
 def atualizar_populacao(anos=None, pasta=None, client=None) -> pd.DataFrame:
     """Store the population estimate by UF and Brazil (for per-capita figures)."""
     return _atualizar("populacao", pasta, client)
+
+
+# dataset → (table, variable, scale): population (people) and GDP (R$ thousand)
+MUNICIPAIS = {"populacao": (6579, 9324, 1), "pib": (5938, 37, 1000)}
+NOME_MUNICIPAL = "ibge_municipio"
+
+
+def longo_municipal(
+    linhas: list[dict], indicador: str, escala: float = 1
+) -> pd.DataFrame:
+    """Rows of `ibge/aggregates` at level N6 in the municipal format."""
+    registros = [
+        {
+            "data": data_do_periodo(r["period"], False),
+            "municipio": str(r["location_id"]),
+            "uf": SIGLAS[int(str(r["location_id"])[:2])],
+            "indicador": indicador,
+            "valor": float(r["value"]) * escala,
+        }
+        for r in linhas
+        if r.get("value") is not None
+    ]
+    return armazem.ordenar_municipal(pd.DataFrame(registros))
+
+
+def atualizar_municipios(anos=None, pasta=None, client=None) -> pd.DataFrame:
+    """Store the latest population estimate and GDP of every municipality."""
+    client = client or OpenBBClient(Settings.from_env().api_url, ttl_segundos=0)
+    partes = []
+    for indicador, (tabela, variavel, escala) in MUNICIPAIS.items():
+        linhas = client.get("ibge/aggregates", table=str(tabela), variables=str(variavel),
+                            periods="-1", level="N6", locations="all")  # fmt: skip
+        partes.append(longo_municipal(linhas, indicador, escala))
+    df = armazem.ordenar_municipal(pd.concat(partes, ignore_index=True))
+    armazem.gravar(df, NOME_MUNICIPAL, armazem.SCHEMA_MUNICIPAL, pasta)
+    return df

@@ -389,3 +389,7 @@ input[type="radio"], input[type="checkbox"] { accent-color: var(--fs-turquesa); 
 .fs-matriz td.fs-destaque { font-weight: 700; color: var(--fs-verde-escuro); }
 .fs-matriz-nichos tbody th { white-space: normal; min-width: 200px; }
 .fs-matriz-nichos td { white-space: nowrap; }
+.fs-matriz-perfil th[scope=row] { white-space: normal; font-weight: 400; color: var(--fs-texto); }
+#mun-contexto { margin-bottom: var(--fs-e-3); }
+.fs-mun-perfil { margin-top: var(--fs-e-4); }
+.fs-mun-perfil .fs-matriz-perfil { max-width: 960px; }

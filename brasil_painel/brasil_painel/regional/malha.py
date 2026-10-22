@@ -1,6 +1,8 @@
 """IBGE state mesh for the map, stored in the package (the map must open offline).
 
 Regenerate with `python -m brasil_painel.regional.malha` (needs internet once).
+The municipal meshes (one file per state) and the IBGE list of municipalities
+are stored the same way.
 """
 
 import json
@@ -14,6 +16,13 @@ URL = (
     "?intrarregiao=UF&formato=application/vnd.geo%2Bjson&qualidade=minima"
 )
 ARQUIVO = Path(__file__).resolve().parent.parent / "dados" / "malha_uf.json"
+URL_MUNICIPIOS_UF = (
+    "https://servicodados.ibge.gov.br/api/v3/malhas/estados/{uf}"
+    "?intrarregiao=municipio&formato=application/vnd.geo%2Bjson&qualidade=minima"
+)
+URL_LISTA = "https://servicodados.ibge.gov.br/api/v1/localidades/municipios"
+PASTA_MUNICIPIOS = ARQUIVO.parent / "malha_municipios"
+LISTA = ARQUIVO.parent / "municipios.json"
 
 
 def _area(anel: list) -> float:
@@ -56,6 +65,29 @@ def gerar(destino: Path = ARQUIVO) -> Path:
     return destino
 
 
+def gerar_municipios(pasta: Path = PASTA_MUNICIPIOS, lista: Path = LISTA) -> int:
+    """Municipal mesh of every state plus the code → (name, UF) list; returns how many."""
+    resposta = requests.get(URL_LISTA, timeout=120)
+    resposta.raise_for_status()
+    nomes = {}
+    for m in resposta.json():
+        uf = (m.get("microrregiao") or {}).get("mesorregiao", {}).get("UF", {}).get(
+            "sigla"
+        ) or m["regiao-imediata"]["regiao-intermediaria"]["UF"]["sigla"]
+        nomes[str(m["id"])] = [m["nome"], uf]
+    lista.write_text(json.dumps(nomes, ensure_ascii=False, separators=(",", ":")))
+    pasta.mkdir(exist_ok=True)
+    for uf in sorted({uf for _, uf in nomes.values()}):
+        resposta = requests.get(URL_MUNICIPIOS_UF.format(uf=uf), timeout=120)
+        resposta.raise_for_status()
+        (pasta / f"{uf}.json").write_text(
+            json.dumps(rebobinar(resposta.json()), separators=(",", ":"))
+        )
+    return len(nomes)
+
+
 if __name__ == "__main__":
     print(gerar())  # noqa: T201
+    if "--municipios" in sys.argv:
+        print(gerar_municipios())  # noqa: T201
     sys.exit(0)
