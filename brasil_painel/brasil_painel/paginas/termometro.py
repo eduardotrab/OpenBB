@@ -36,8 +36,8 @@ def layout() -> html.Div:
             html.P(
                 "Nota de 0 a 100 por estado. Cada indicador vira a distância do estado à média dos 27 estados, com o "
                 "sinal de melhor ou pior; a nota é 50 mais a soma ponderada. Acima de 50, o estado está melhor que a "
-                "média nesse conjunto. Não é uma probabilidade: cada barra mostra quantos pontos o indicador somou ou "
-                "tirou.",
+                "média nesse conjunto. A nota é relativa: se todos os estados piorarem juntos, ela não muda. Não é "
+                "uma probabilidade: cada barra mostra quantos pontos o indicador somou ou tirou.",
                 className="fs-explicacao",
             ),
             html.Details(
